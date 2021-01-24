@@ -1,0 +1,25 @@
+name: "ecometab-r-training"
+navbar:
+  title: "NERRS Ecosystem Metabolism R Training"
+  type: inverse
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "R Basics"
+      href: rbasics.html
+    - text: "The Odum method"
+      href: odum.html
+    - text: "Detiding"
+      href: detiding.html
+    - text: "Understanding metabolism"
+      href: understanding.html
+output_dir: "."
+output:
+  html_document:
+    theme: spacelab
+    highlight: textmate
+    toc: true
+    toc_float: 
+       collapsed: true
+       
+    

@@ -1,0 +1,48 @@
+# NERRS Ecosystem Metabolism R Training
+
+[R](https://www.r-project.org/) is a language for statistical computing as well as a general purpose programming language. R has become one of the primary languages used in data science and for data analysis across many of the natural sciences. This training workshop will provide attendees with the foundation for using R to calculate and interpret ecosystem metabolism with NERRS data. 
+
+## Course objectives
+
+This course is designed to expose you to the fundamentals of using R for estimating ecosystem metabolism wiht NERRS data.  A specific focus will be on using monitoring data from the [NERRS CDMO](https://cdmo.baruch.sc.edu/) with functions from the [SWMPr]() and [WtRegDO]() packages.  SWMPr provides simple functions to retrieve, organize, and analyze SWMP data and WtRegDO provides the functions for estimating metabolism.  You will not be experts by the end of the course, but you will have a solid foundation for continued learning.  By the end of this course you will be able to or have the resources to find out how to:
+
+* Use R to import and organize SWMP data
+* Use the WtRegDO package to detide dissolved oxygen time series
+* Use the WtRegOD package to estimate ecosystem metabolism using the Odum open water method
+* Use R to understand and interpret ecosystem metabolism
+
+## Pre-workshop survey
+
+Please fill out the [pre-workshop survey](https://forms.gle/XaA4558exJxdg6DV8) to help the organizers with planning. 
+
+## Agenda
+
+There will be four training events each two weeks apart. All trainings will be remote using RStudio Cloud and GoToMeeting webinar services.  __All times are in Eastern__.
+
+__Training 1, March 2nd:__
+
+* __1:00 - 2:30__ R Basics wiht SWMPr
+
+__Training 2, March 16th:__
+
+* __1:00 - 2:30__ Detiding dissolved oxygen time series
+
+__Training 3, March 30th:__
+
+* __1:00 - 2:30__ Estimating ecosystem metabolism using the Odum open water method
+
+__Training 4, April 13th:__
+
+* __1:00 - 2:30__ Understanding and interpreting ecosystem metabolism
+
+## Software requirements
+
+Please make sure you are prepared to attend the training before the first day. The [setup instructions](setup.html) will guide you through the process.  Please contact the instructor with any questions or issues related to setup.  
+
+## Instructor
+
+[Marcus Beck](https://fawda123.github.io/CV/Beck_CV.pdf) ([mbeck@tbep.org](mailto:mbeck@tbep.org)) - Marcus is the Program Scientist for the Tampa Bay Estuary Program and is developing data analysis and visualization methods for Bay health indicators.  He received his BS in Zoology from the University of Florida in 2007 and his MSc and PhD in Conservation Biology from the University of Minnesota in 2009 and 2013. Marcus has experience researching environmental indicators and developing open science products to support environmental decision-making.  He has over ten years of experience using and developing software in the R Statistical Programming Language and is the lead developer for the [SWMPr](https://journal.r-project.org/archive/2016/RJ-2016-015/index.html) R package to retrieve, organize, and analyze NERRS data from the SWMP network.
+
+## Source content
+
+All source materials for this website can be accessed at https://github.com/tbep-tech/ecometab-r-training
