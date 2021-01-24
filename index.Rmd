@@ -13,7 +13,7 @@ This course is designed to expose you to the fundamentals of using R for estimat
 
 ## Pre-workshop survey
 
-Please fill out the [pre-workshop survey](https://forms.gle/XaA4558exJxdg6DV8) to help the organizers with planning. 
+Please fill out the [pre-workshop survey](https://forms.gle/hdPK9koJkmvsFXk67) to help the organizers with planning. 
 
 ## Agenda
 
