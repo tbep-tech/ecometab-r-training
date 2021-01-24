@@ -17,7 +17,7 @@ Please fill out the [pre-workshop survey](https://forms.gle/XaA4558exJxdg6DV8) t
 
 ## Agenda
 
-There will be four training events each two weeks apart. All trainings will be remote using RStudio Cloud and GoToMeeting webinar services.  __All times are in Eastern__.
+There will be four training events, each two weeks apart. All trainings will be remote using RStudio Cloud and GoToMeeting webinar services.  __All times are in Eastern__.
 
 __Training 1, March 2nd:__
 
@@ -46,3 +46,6 @@ Please make sure you are prepared to attend the training before the first day. T
 ## Source content
 
 All source materials for this website can be accessed at https://github.com/tbep-tech/ecometab-r-training
+
+ [![build](https://github.com/tbep-tech/ecometab-r-training/workflows/build/badge.svg)](https://github.com/tbep-tech/ecometab-r-training/actions) This site is built automatically with GitHub Actions. Last site build `r Sys.time()`.
+

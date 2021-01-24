@@ -25,6 +25,17 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -343,7 +354,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Rookery Bay R Training</a>
+      <a class="navbar-brand" href="index.html">NERRS Ecosystem Metabolism R Training</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -351,16 +362,16 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="usingr.html">What, why, and how of R</a>
+  <a href="rbasics.html">R Basics</a>
 </li>
 <li>
-  <a href="wrangleplot.html">Wrangling and plotting</a>
+  <a href="detiding.html">Detiding</a>
 </li>
 <li>
-  <a href="workingcdmo.html">Working with CDMO data</a>
+  <a href="odum.html">The Odum method</a>
 </li>
 <li>
-  <a href="mapping.html">Spatial analysis and mapping</a>
+  <a href="understanding.html">Understanding metabolism</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -378,16 +389,17 @@ div.tocify {
 </div>
 
 
-<div id="rookery-bay-r-training" class="section level1">
-<h1>Rookery Bay R Training</h1>
-<p><a href="https://www.r-project.org/">R</a> is a language for statistical computing as well as a general purpose programming language. R has become one of the primary languages used in data science and for data analysis across many of the natural sciences. This training workshop will provide attendees with the foundations for continued learning of R and for analysis of a range of data types.</p>
+<div id="nerrs-ecosystem-metabolism-r-training" class="section level1">
+<h1>NERRS Ecosystem Metabolism R Training</h1>
+<p><a href="https://www.r-project.org/">R</a> is a language for statistical computing as well as a general purpose programming language. R has become one of the primary languages used in data science and for data analysis across many of the natural sciences. This training workshop will provide attendees with the foundation for using R to calculate and interpret ecosystem metabolism with NERRS data.</p>
 <div id="course-objectives" class="section level2">
 <h2>Course objectives</h2>
-<p>This course is designed to expose you to the fundamentals of using R for reproducible data analysis workflows. A specific focus will be on using monitoring data from the <a href="https://cdmo.baruch.sc.edu/">NERRS CDMO</a> for novel analyses and storytelling to increase the impact of these valuable sources of information. You will not be experts by the end of the course, but you will have a solid foundation for continued learning. By the end of this course you will be able to or have the resources to find out how to:</p>
+<p>This course is designed to expose you to the fundamentals of using R for estimating ecosystem metabolism wiht NERRS data. A specific focus will be on using monitoring data from the <a href="https://cdmo.baruch.sc.edu/">NERRS CDMO</a> with functions from the <a href="">SWMPr</a> and <a href="">WtRegDO</a> packages. SWMPr provides simple functions to retrieve, organize, and analyze SWMP data and WtRegDO provides the functions for estimating metabolism. You will not be experts by the end of the course, but you will have a solid foundation for continued learning. By the end of this course you will be able to or have the resources to find out how to:</p>
 <ul>
-<li>Use R to import and organize data</li>
-<li>Create plots using R packages for exploratory data analysis</li>
-<li>Use R to work with CDMO SWMP data</li>
+<li>Use R to import and organize SWMP data</li>
+<li>Use the WtRegDO package to detide dissolved oxygen time series</li>
+<li>Use the WtRegOD package to estimate ecosystem metabolism using the Odum open water method</li>
+<li>Use R to understand and interpret ecosystem metabolism</li>
 </ul>
 </div>
 <div id="pre-workshop-survey" class="section level2">
@@ -396,27 +408,27 @@ div.tocify {
 </div>
 <div id="agenda" class="section level2">
 <h2>Agenda</h2>
-<p>Training will occur remotely on Monday <strong>June 29th</strong> and Tuesday <strong>June 30th</strong>, login information will be sent by email.</p>
-<p><strong>Day 1, June 29th: </strong></p>
+<p>There will be four training events each two weeks apart. All trainings will be remote using RStudio Cloud and GoToMeeting webinar services. <strong>All times are in Eastern</strong>.</p>
+<p><strong>Training 1, March 2nd:</strong></p>
 <ul>
-<li><p><strong>1:00 - 2:00</strong> The what, why, and how of R</p>
-<p>BREAK</p></li>
-<li><p><strong>2:15 - 3:15</strong> Importing and wrangling data with the tidyverse</p>
-<p>BREAK</p></li>
-<li><p><strong>3:30 - 4:30</strong> Plotting data with ggplot2</p></li>
+<li><strong>1:00 - 2:30</strong> R Basics wiht SWMPr</li>
 </ul>
-<p><strong>Day 2, June 30th:</strong></p>
+<p><strong>Training 2, March 16th:</strong></p>
 <ul>
-<li><p><strong>1:00 - 2:00</strong> Importing and wrangling CDMO SWMP data into R</p>
-<p>BREAK</p></li>
-<li><p><strong>2:15 - 3:15</strong> Analyzing CDMO SWMP data in R</p>
-<p>BREAK</p></li>
-<li><p><strong>3:30 - 4:30</strong> Spatial data analysis with simple features</p></li>
+<li><strong>1:00 - 2:30</strong> Detiding dissolved oxygen time series</li>
+</ul>
+<p><strong>Training 3, March 30th:</strong></p>
+<ul>
+<li><strong>1:00 - 2:30</strong> Estimating ecosystem metabolism using the Odum open water method</li>
+</ul>
+<p><strong>Training 4, April 13th:</strong></p>
+<ul>
+<li><strong>1:00 - 2:30</strong> Understanding and interpreting ecosystem metabolism</li>
 </ul>
 </div>
 <div id="software-requirements" class="section level2">
 <h2>Software requirements</h2>
-<p>Please make sure you have the required software installed on your computer, specifically <a href="https://rstudio.com/products/rstudio/download/">RStudio</a> and <a href="https://mirrors.nics.utk.edu/cran/">R</a>. The <a href="setup.html">setup instructions</a> will guide you through the installation process. Take note of the required R packages that you must also download and install. Please contact the instructor with any questions or issues related to setup.</p>
+<p>Please make sure you are prepared to attend the training before the first day. The <a href="setup.html">setup instructions</a> will guide you through the process. Please contact the instructor with any questions or issues related to setup.</p>
 </div>
 <div id="instructor" class="section level2">
 <h2>Instructor</h2>
@@ -424,7 +436,7 @@ div.tocify {
 </div>
 <div id="source-content" class="section level2">
 <h2>Source content</h2>
-<p>All source materials for this website can be accessed at <a href="https://github.com/tbep-tech/rookery-bay-training" class="uri">https://github.com/tbep-tech/rookery-bay-training</a></p>
+<p>All source materials for this website can be accessed at <a href="https://github.com/tbep-tech/ecometab-r-training" class="uri">https://github.com/tbep-tech/ecometab-r-training</a></p>
 </div>
 </div>
 
@@ -439,7 +451,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -478,7 +490,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0

@@ -7,10 +7,10 @@ navbar:
       href: index.html
     - text: "R Basics"
       href: rbasics.html
-    - text: "The Odum method"
-      href: odum.html
     - text: "Detiding"
       href: detiding.html
+    - text: "The Odum method"
+      href: odum.html
     - text: "Understanding metabolism"
       href: understanding.html
 output_dir: "."
