@@ -22,11 +22,9 @@ jobs:
           install.packages(c("rmarkdown", "dplyr"))
         shell: Rscript {0}
       - name: Render site
-        run: |
-          Rscript -e "rmarkdown::render_site(encoding = 'UTF-8')"
+        run: Rscript -e "rmarkdown::render_site(encoding = 'UTF-8')"
       - name: Render Readme
-        run: |
-          rmarkdown::render('README.RMD')
+        run: Rscript -e 'rmarkdown::render("README.Rmd")'
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
