@@ -4,7 +4,7 @@
 
 ## Course objectives
 
-This course is designed to expose you to the fundamentals of using R for estimating ecosystem metabolism wiht NERRS data.  A specific focus will be on using monitoring data from the [NERRS CDMO](https://cdmo.baruch.sc.edu/) with functions from the [SWMPr]() and [WtRegDO]() packages.  SWMPr provides simple functions to retrieve, organize, and analyze SWMP data and WtRegDO provides the functions for estimating metabolism.  You will not be experts by the end of the course, but you will have a solid foundation for continued learning.  By the end of this course you will be able to or have the resources to find out how to:
+This course is designed to expose you to the fundamentals of using R for estimating ecosystem metabolism wiht NERRS data.  A specific focus will be on using monitoring data from the [NERRS CDMO](https://cdmo.baruch.sc.edu/) with functions from the [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/WtRegDO) packages.  SWMPr provides simple functions to retrieve, organize, and analyze SWMP data and WtRegDO provides the functions for estimating metabolism.  You will not be experts by the end of the course, but you will have a solid foundation for continued learning.  By the end of this course you will be able to or have the resources to find out how to:
 
 * Use R to import and organize SWMP data
 * Use the WtRegDO package to detide dissolved oxygen time series
@@ -42,7 +42,7 @@ Please make sure you are prepared to attend the training before the first day. T
 
 ## Instructor
 
-[Marcus Beck](https://fawda123.github.io/CV/Beck_CV.pdf) ([mbeck@tbep.org](mailto:mbeck@tbep.org)) - Marcus is the Program Scientist for the Tampa Bay Estuary Program and is developing data analysis and visualization methods for Bay health indicators.  He received his BS in Zoology from the University of Florida in 2007 and his MSc and PhD in Conservation Biology from the University of Minnesota in 2009 and 2013. Marcus has experience researching environmental indicators and developing open science products to support environmental decision-making.  He has over ten years of experience using and developing software in the R Statistical Programming Language and is the lead developer for the [SWMPr](https://journal.r-project.org/archive/2016/RJ-2016-015/index.html) R package to retrieve, organize, and analyze NERRS data from the SWMP network.
+[Marcus Beck](https://fawda123.github.io/CV/Beck_CV.pdf) ([mbeck@tbep.org](mailto:mbeck@tbep.org)) - Marcus is the Program Scientist for the Tampa Bay Estuary Program and is developing data analysis and visualization methods for Bay health indicators.  He received his BS in Zoology from the University of Florida in 2007 and his MSc and PhD in Conservation Biology from the University of Minnesota in 2009 and 2013. Marcus has experience researching environmental indicators and developing open science products to support environmental decision-making.
 
 ## Source content
 
