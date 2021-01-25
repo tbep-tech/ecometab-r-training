@@ -15,6 +15,7 @@ This course is designed to expose you to the fundamentals of using R for estimat
 
 Please fill out the [pre-workshop survey](https://forms.gle/hdPK9koJkmvsFXk67) to help the organizers with planning. 
 
+
 ## Agenda
 
 There will be four training events, each two weeks apart. All trainings will be remote using RStudio Cloud and GoToMeeting webinar services.  __All times are in Eastern__.
