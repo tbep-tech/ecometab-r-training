@@ -4,11 +4,11 @@
 
 ## Course objectives
 
-This course is designed to expose you to the fundamentals of using R for estimating ecosystem metabolism wiht NERRS data.  A specific focus will be on using monitoring data from the [NERRS CDMO](https://cdmo.baruch.sc.edu/) with functions from the [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/WtRegDO) packages.  SWMPr provides simple functions to retrieve, organize, and analyze SWMP data and WtRegDO provides the functions for estimating metabolism.  You will not be experts by the end of the course, but you will have a solid foundation for continued learning.  By the end of this course you will be able to or have the resources to find out how to:
+This course is designed to expose you to the fundamentals of using R for estimating ecosystem metabolism with NERRS data.  A specific focus will be on using monitoring data from the [NERRS CDMO](https://cdmo.baruch.sc.edu/) with functions from the [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/WtRegDO) packages.  SWMPr provides simple functions to retrieve, organize, and analyze SWMP data and WtRegDO provides the functions for estimating metabolism.  You will not be experts by the end of the course, but you will have a solid foundation for continued learning.  By the end of this course you will be able to or have the resources to find out how to:
 
 * Use R to import and organize SWMP data
 * Use the WtRegDO package to detide dissolved oxygen time series
-* Use the WtRegOD package to estimate ecosystem metabolism using the Odum open water method
+* Use the WtRegDO package to estimate ecosystem metabolism using the Odum open water method
 * Use R to understand and interpret ecosystem metabolism
 
 ## Pre-workshop survey
