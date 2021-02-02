@@ -1,7 +1,12 @@
 on:
   push:
-    paths:
-      - '**.Rmd'
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
 
 name: build
 
@@ -22,7 +27,7 @@ jobs:
           install.packages(c("rmarkdown", "dplyr"))
         shell: Rscript {0}
       - name: Render site
-        run: Rscript -e "source('R/buildfile.R')"
+        run: Rscript -e "source('R/sitebuild.R')"
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
