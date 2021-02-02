@@ -11,7 +11,7 @@
 
 
 
-<title>odum.utf8</title>
+<title>setup.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -402,8 +402,94 @@ div.tocify {
 </div>
 
 
-<div id="the-odum-method" class="section level1">
-<h1>The Odum method</h1>
+<div id="set-up-on-your-computer" class="section level1">
+<h1>Set Up On Your Computer</h1>
+<p>Thanks for your interest in learning R. For the workshop, we will be using <a href="https://www.rstudio.com/">RStudio</a> as our interface to R. In order to participate in this workshop you will need to make sure you have R and RStudio installed on your computer.</p>
+<p>Thanks to the <a href="https://owi.usgs.gov/R/training.html">USGS-R Training group</a> and <a href="https://datacarpentry.org/R-ecology-lesson/index.html">Data Carpentry</a> for making their installation materials available. The following instructions come directly from their materials, with a few minor edits to help you get all set up for the workshop.</p>
+</div>
+<div id="install-r-and-rstudio" class="section level1">
+<h1>Install R and RStudio</h1>
+<p><strong>R</strong> and <strong>RStudio</strong> are separate downloads and installations. R is the underlying statistical computing environment, but using R alone is no fun. RStudio is a graphical integrated development environment (IDE) that makes using R much easier and more interactive. <em>You need to install R before you install RStudio</em>.</p>
+<div id="windows-download-and-install-r" class="section level2">
+<h2><em>Windows</em>: Download and install R</h2>
+<p>Go to <a href="https://cran.rstudio.com/bin/windows/base/">CRAN and download</a> the R installer for Windows. Make sure to choose the latest stable version (v4.0.0 as of April 2020).</p>
+<p>Once the installer downloads, Right-click on it and select “Run as administrator”.</p>
+<p>Type in your credentials and click yes (or if you don’t have administrator access have your IT rep install with Admin privileges).</p>
+<p><img src="figure/install_open_as_admin.png#inline-img" title="run as admin" /></p>
+<p>You can click next through the standard dialogs and accept most defaults. But at the destination screen, please verify that it is installing it to C:\Program Files\R</p>
+<p><img src="figure/install_destination.png#inline-img" title="install destination screen" /></p>
+<p>At the “Select Components” screen, you can accept the default and install both 32-bit and 64-bit versions.</p>
+<p><img src="figure/install_arch_window.png#inline-img" title="select architecture" /></p>
+<p>At this screen, uncheck ‘Create a desktop icon’ because non-admin users in Windows will be unable to delete it.</p>
+<p><img src="figure/install_tasks.png#inline-img" title="uncheck desktop icon" /></p>
+</div>
+<div id="windows-download-and-install-rstudio" class="section level2">
+<h2><em>Windows</em>: Download and install RStudio</h2>
+<p><a href="https://www.rstudio.com/products/rstudio/download/"></a></p>
+<p>Double-click the installer. It will ask for your administrator credentials to install (you might need to have your IT rep install again).</p>
+<p>Accept all the default options for the RStudio install.</p>
+<p><img src="figure/install_rstudio.png#inline-img" title="RStudio install screen" /></p>
+</div>
+<div id="macos-download-and-install-r" class="section level2">
+<h2><em>macOS</em>: Download and install R</h2>
+<ul>
+<li>Download and install R from the CRAN website for Mac <a href="https://cran.r-project.org/bin/macosx/">here</a>.</li>
+<li>Select the <code>.pkg</code> file for the latest R version</li>
+<li>Double click on the downloaded file to install R</li>
+<li>It is also a good idea to install <a href="https://www.xquartz.org/">XQuartz</a> (needed by some packages)</li>
+</ul>
+</div>
+<div id="macos-download-and-install-rstudio" class="section level2">
+<h2><em>macOS</em>: Download and install RStudio</h2>
+<ul>
+<li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio</a> download page</li>
+<li>Under Installers select <strong>RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit)</strong> (where x, y, and z represent version numbers)</li>
+<li>Double click the file to install RStudio</li>
+<li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
+</ul>
+</div>
+</div>
+<div id="check-install" class="section level1">
+<h1>Check Install</h1>
+<div id="open-rstudio" class="section level2">
+<h2>Open RStudio</h2>
+<p>Once installed, RStudio should be accessible from the start menu. Start up RStudio. Once running it should look something like:</p>
+<p><img src="figure/rstudio.png#inline-img" title="RStudio window" /></p>
+</div>
+<div id="find-console-window" class="section level2">
+<h2>Find “Console” window</h2>
+<p>By default the console window will be on the left side of RStudio. Find that window. It will looking something like:</p>
+<p><img src="figure/rstudio_console.png#inline-img" title="RStudio console" /></p>
+</div>
+<div id="copy-and-paste-the-code" class="section level2">
+<h2>Copy and paste the code</h2>
+<p>Click in the window and paste in the code from below:</p>
+<pre class="r"><code>version$version.string</code></pre>
+</div>
+<div id="verify-your-installed-r-version" class="section level2">
+<h2>Verify your installed R version</h2>
+<p>Ideally you should be running the latest stable release (<code>v3.5.1</code> as of Sept 2018). If you have an older version, please install the newest version using the instructions above.</p>
+<p>Here is what my R version looks like.</p>
+<pre><code>## [1] &quot;R version 4.0.0 (2020-04-24)&quot;</code></pre>
+</div>
+</div>
+<div id="add-packages" class="section level1">
+<h1>Add Packages</h1>
+<p>Install packages available for all R users from <a href="https://cran.r-project.org/">CRAN</a> by pasting the following code into RStudio and hitting <code>ENTER</code>.</p>
+<pre class="r"><code>install.packages(c(&quot;SWMPr&quot;, &quot;tidyverse&quot;, &quot;remotes&quot;))
+remotes::install_github(&quot;fawda123/WtRegDO&quot;)</code></pre>
+<p>If you see something like this:</p>
+<p><img src="figure/personal_library_dialog.png#inline-img" title="dialog box behind" /></p>
+<p>That’s OK! There’s a dialog box hiding behind RStudio asking if you want to create a personal folder in your Documents folder. Click <em>Yes</em>. It will look something like this when done:</p>
+<p><img src="figure/general_pkg_output.png#inline-img" title="console output" /></p>
+</div>
+<div id="grab-the-sample-datasets" class="section level1">
+<h1>Grab the sample datasets</h1>
+<p>Download the zipped file of all the data from this <a href="data/779980.zip">link</a>. Place this zipped folder in a location on your computer that you can access for the workshop. There is no need to unzip the folder.</p>
+</div>
+<div id="download-the-lesson-r-scripts" class="section level1">
+<h1>Download the lesson R scripts</h1>
+<p>Download the zipped file of all the R scripts used for each lesson from this <a href="scripts.zip">link</a>. Unzip the content into a folder on your computer that you can access for the workshop.</p>
 </div>
 
 
