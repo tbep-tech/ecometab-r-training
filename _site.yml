@@ -11,8 +11,14 @@ navbar:
       href: detiding.html
     - text: "The Odum method"
       href: odum.html
-    - text: "Understanding metabolism"
-      href: understanding.html
+    - text: "Using metabolism"
+      href: using.html
+  right:
+    - text: "Data and resources"
+      icon: fa-list
+      href: Data_and_Resources.html
+    - icon: fa-github fa-lg
+      href: https://github.com/tbep-tech/ecometab-r-training
 output_dir: "."
 output:
   html_document:

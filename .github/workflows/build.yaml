@@ -22,7 +22,7 @@ jobs:
           install.packages(c("rmarkdown", "dplyr"))
         shell: Rscript {0}
       - name: Render site
-        run: Rscript -e "rmarkdown::render_site(encoding = 'UTF-8')"
+        run: Rscript -e "source('R/buildfile.R')"
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"

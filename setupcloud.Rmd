@@ -1,0 +1,25 @@
+# Set Up RStudio Cloud
+
+Thanks for your interest in learning R.  For the workshop, we will be using [RStudio](https://www.rstudio.com/) as our interface to R. [RStudio Cloud](https://rstudio.cloud/) allows you to access RStudio and R for free using a web browser.  You will not have to install the software on your personal computer.
+
+Please note that RStudio Cloud works well for teaching, but installing the software on your own computer is strongly recommended for using R after the workshop.  Please see the instructions [here](setup.html) to install on your personal computer.   
+
+To use Rstudio Cloud, copy this link and paste it in a web browser: <https://rstudio.cloud/project/2139967> 
+
+This URL is the link to all of the course materials hosted on RStudio Cloud as a project.  If you do not have an RStudio Cloud account, you will see this screen when you first visit the URL: 
+
+![](figure/cloudsignup.PNG#inline-img "rstudio cloud sign in")
+
+<br></br>
+
+You can [setup an account](https://login.rstudio.cloud/register?redirect=https%3A%2F%2Fclient.login.rstudio.cloud%2Foauth%2Flogin%3Fshow_auth%3D0%26show_login%3D1%26show_setup%3D1) for free using a login you create or through a third-party (Google or GitHub).  
+
+After your account is setup, you should a screen that looks something like this:
+
+![](figure/tempproj.PNG#inline-img "temporary project")
+
+<br></br>
+
+You'll see that this is a <b><span style="color:red">TEMPORARY PROJECT</span></b> under your account, so make sure to make it a permanent project by clicking the button on top.  This will save any changes you make to this project under your account. 
+
+This project includes all of the files for the course website, so there is a lot of stuff. For each training module, you'll want to pull up the appropriate R script to follow along (e.g., `R_Basics.R`).

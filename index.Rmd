@@ -15,7 +15,6 @@ This course is designed to expose you to the fundamentals of using R for estimat
 
 Please fill out the [pre-workshop survey](https://forms.gle/hdPK9koJkmvsFXk67) to help the organizers with planning. 
 
-
 ## Agenda
 
 There will be four training events, each two weeks apart. All trainings will be remote using RStudio Cloud and GoToMeeting webinar services.  __All times are in Eastern__.
@@ -39,6 +38,20 @@ __Training 4, April 13th:__
 ## Software requirements
 
 Please make sure you are prepared to attend the training before the first day. The [setup instructions](setup.html) will guide you through the process.  Please contact the instructor with any questions or issues related to setup.  
+
+## Software requirements
+
+This training will use RStudio and R. Please make sure that you are ready to use the required software prior to the workshop.  __We will not be available for installation issues or questions the day of the workshop__.  There are two options for setup:
+
+1. Use RStudio Cloud to access from a web browser following the [setup instructions](setupcloud.html). 
+
+     OR 
+     
+1. Install RStudio and R on your personal computer following the [setup instructions](setup.html). 
+
+## Data and resources
+
+Please view the [Data and Resources](Data_and_Resources.html) page for data used in the training and additional links for R learning material.  A [live coding](https://tinyurl.com/live-ecometab){target="_blank"} link is also available.
 
 ## Instructor
 
