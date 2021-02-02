@@ -37,7 +37,7 @@ __Training 4, April 13th:__
 
 ## Software requirements
 
-This training will use RStudio and R. Please make sure that you are ready to use the required software prior to the workshop.  __We will not be available for installation issues or questions the day of the workshop__.  There are two options for setup:
+This trainings will use RStudio and R. Please make sure that you are ready to use the required software prior to the workshop.  __We will not be available for installation issues or questions on training days__.  There are two options for setup:
 
 1. Use RStudio Cloud to access from a web browser following the [setup instructions](setupcloud.html). 
 
