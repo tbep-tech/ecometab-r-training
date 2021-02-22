@@ -41,6 +41,7 @@ This is a list of the data sources used in this workshop. For live-coding, pleas
 #### *R eBooks/Courses*
 
 * [Jenny Bryan's **Stat545.com**](http://stat545.com/){target="_blank"}
+* [Jenny Bryan's **WTF about R**](https://rstats.wtf/){target="_blank"}
 * [Garrett Grolemund and Hadley Wickham's **R For Data Science**](http://r4ds.had.co.nz/){target="_blank"}
 * [Chester Ismay and Albert Y. Kim's **Modern DiveR**](https://ismayc.github.io/moderndiver-book/){target="_blank"}
 * [Julia Silge and David Robinson **Text Mining with R**](http://tidytextmining.com/){target="_blank"}
