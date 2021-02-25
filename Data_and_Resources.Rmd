@@ -18,7 +18,7 @@ This is a list of the data sources used in this workshop. For live-coding, pleas
  - Full Dataset as a [zipped folder](data/779980.zip). Inside you'll find several SWMP files from Apalachicola and Sapelo Island NERRS, as downloaded from the CDMO zipped downloads feature of the advanced query system ([here](http://cdmo.baruch.sc.edu/aqs/zips.cfm)).
  
  - All R scripts used in the lessons as a [zipped folder](scripts.zip).  Inside you'll find these files: 
-    - [R_Basics.R](rbasics.R)
+    - [rbasics.R](rbasics.R)
     - [detiding.R](detiding.R)
     - [odum.R](odum.R)
     - [using.R](using.R)

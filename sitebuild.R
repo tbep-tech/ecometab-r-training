@@ -2,7 +2,6 @@
 torm <- list.files(pattern = '\\.R$', recursive = F)
 torm <- torm[!torm %in% c('index.R', 'sitebuild.R')]
 file.remove(torm)
-file.remove('data/data.zip')
 rmarkdown::clean_site()
 
 # build
