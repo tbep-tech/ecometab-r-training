@@ -35,6 +35,22 @@ __Training 4, April 13th:__
 
 * __1:00 - 2:30__ Understanding and interpreting ecosystem metabolism
 
+## Housekeeping for training days
+
+There are a few housekeeping items to go over each training session.  
+
+1. First and most importantly, please mute your microphones.  If you have a question, first type it into the chat and one of our moderators should assist you.  I will pause at different points in the lecture to request verbal questions.  
+
+1. Please use RStudio Cloud or your own installation of RStudio during this workshop.  The setup instructions for RStudio Cloud are [here](setupcloud.html) and for RStudio installation [here](setup.html).  You may use one or the other, but we recommend RStudio Cloud for the training. 
+
+1. We have a [live coding](https://tinyurl.com/ecometab-live){target="_blank"} link that we'll be using as we go through the lessons. If you get lost, you can copy/paste code from this link into RStudio. 
+
+1. All training content is on this website.  We will be covering the content directly on the website, so if you get lost you can view the agenda to see which lesson we're covering and find where we're at by scrolling through the content. 
+
+1. Each lesson has it's own R script that is linked at the top. If you are not using the live coding link, you can download the lesson R script and use that directly. 
+
+All exercises and breaks will be timed to make sure that we stay on schedule. We'll display a timer on the screen to track progress. Each lesson will also be recorded so you can review at a later date. 
+
 ## Software requirements
 
 This trainings will use RStudio and R. Please make sure that you are ready to use the required software prior to the workshop.  __We will not be available for installation issues or questions on training days__.  There are two options for setup:
