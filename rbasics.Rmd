@@ -169,7 +169,7 @@ remotes::install_github("fawda123/WtRegDO")
 1. Load the packages after they've installed. Do not load `remotes`, it was only needed to install `WtRegDO` from GitHub.
 
     ```{r, message = F, warning = F, results = 'hide'}
-library("tidyerse")
+library("tidyverse")
 library("SWMPr")
 library("WtRegDO")
     ```
