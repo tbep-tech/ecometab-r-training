@@ -6,7 +6,7 @@
 
 This course is designed to expose you to the fundamentals of using R for estimating ecosystem metabolism with NERRS data.  A specific focus will be on using monitoring data from the [NERRS CDMO](https://cdmo.baruch.sc.edu/) with functions from the [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/WtRegDO) packages.  SWMPr provides simple functions to retrieve, organize, and analyze SWMP data and WtRegDO provides the functions for estimating metabolism.  You will not be experts by the end of the course, but you will have a solid foundation for continued learning.  By the end of this course you will be able to or have the resources to find out how to:
 
-* Use R to import and organize SWMP data
+* Use R and SWMPr to import and organize SWMP data
 * Use the WtRegDO package to detide dissolved oxygen time series
 * Use the WtRegDO package to estimate ecosystem metabolism using the Odum open water method
 * Use R to understand and interpret ecosystem metabolism
@@ -21,7 +21,7 @@ There will be four training events, each two weeks apart. All trainings will be 
 
 __Training 1, March 2nd:__
 
-* __1:00 - 2:30__ R Basics with SWMPr
+* __1:00 - 2:30__ R Basics
 
 __Training 2, March 16th:__
 
@@ -43,7 +43,7 @@ There are a few housekeeping items to go over each training session.
 
 1. Please use RStudio Cloud or your own installation of RStudio during this workshop.  The setup instructions for RStudio Cloud are [here](setupcloud.html) and for RStudio installation [here](setup.html).  You may use one or the other, but we recommend RStudio Cloud for the training. 
 
-1. We have a [live coding](https://tinyurl.com/ecometab-live){target="_blank"} link that we'll be using as we go through the lessons. If you get lost, you can copy/paste code from this link into RStudio. 
+1. We have a [live coding](https://tinyurl.com/live-ecometab){target="_blank"} link that we'll be using as we go through the lessons. If you get lost, you can copy/paste code from this link into RStudio. 
 
 1. All training content is on this website.  We will be covering the content directly on the website, so if you get lost you can view the agenda to see which lesson we're covering and find where we're at by scrolling through the content. 
 

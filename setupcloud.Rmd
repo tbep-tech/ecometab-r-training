@@ -22,4 +22,4 @@ After your account is setup, you should a screen that looks something like this:
 
 You'll see that this is a <b><span style="color:red">TEMPORARY PROJECT</span></b> under your account, so make sure to make it a permanent project by clicking the button on top.  This will save any changes you make to this project under your account. 
 
-This project includes all of the files for the course website, so there is a lot of stuff. For each training module, you'll want to pull up the appropriate R script to follow along (e.g., `R_Basics.R`).
+This project includes all of the files for the course website, so there is a lot of stuff. For each training module, you'll want to pull up the appropriate R script to follow along (e.g., `rbasics.R`).
