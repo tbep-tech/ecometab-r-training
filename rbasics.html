@@ -364,7 +364,7 @@ div.tocify {
 <div id="r-basics" class="section level1">
 <h1>R Basics</h1>
 <p>Get the lesson R script: <a href="rbasics.R">rbasics.R</a></p>
-<p>Get the lesson data: <a href="data/data.zip">download zip</a></p>
+<p>Get the lesson data: <a href="data/779980.zip">download zip</a></p>
 <div id="lesson-outline" class="section level2">
 <h2>Lesson Outline</h2>
 <ul>
@@ -406,7 +406,7 @@ div.tocify {
 </div>
 <div id="rstudio" class="section level2">
 <h2>RStudio</h2>
-<p>In the old days, the only way to use R was directly from the Console - this is a bare bones way of running R only with direct input of commands. Now, <a href="https://www.rstudio.com/" target="_blank">RStudio</a> is the go-to Interactive Development Environment (IDE) for R. Think of it like a car that is built around an engine. It is integrated with the console (engine) and includes many other features to improve the user’s experience, such as version control, debugging, dynamic documents, package manager and creation, and code highlighting and completion.</p>
+<p>In the old days, the only way to use R was directly from the Console - this is a bare bones way of running R only with direct input of commands. Now, <a href="https://www.rstudio.com/" target="_blank">RStudio</a> is the go-to Interactive Development Environment (IDE) for R. Think of it like a car that is built around an engine. It is integrated with the R console (engine) and includes many other features to improve the user’s experience, such as code highlighting and completion, package manager and creation, version control, debugging, and dynamic documents.</p>
 <p>Let’s get familiar with RStudio before we go on.</p>
 <div id="open-r-and-rstudio" class="section level3">
 <h3>Open R and RStudio</h3>
@@ -455,32 +455,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1]  7.956512  9.731036  8.559103  9.195456 11.381129  9.856394  9.262413
-##   [8]  9.476258 13.631114 10.010634  9.185655  7.638387  7.969466  7.255372
-##  [15] 12.414422 15.012187  8.193791 10.694918  9.985647 12.171181 11.180846
-##  [22] 10.380113 10.192158  8.087847  9.170997 10.406474 11.403467  9.158880
-##  [29]  6.277906 12.331683  8.841983  8.705343 10.298038 12.526071  6.340199
-##  [36]  6.579909  9.575059 11.669170  6.923738 10.913696 11.657819  8.665382
-##  [43]  9.886181  9.792289 11.942832  6.919427 11.031360 13.904634 10.381284
-##  [50]  8.315509 11.668495  8.645228  7.901203  8.138186 12.854383  8.950461
-##  [57]  7.805867 12.363147 11.449174  9.137461  9.953220 10.872747 12.095591
-##  [64]  9.744791 13.654608 11.221522 10.830747  9.325865 10.320707  9.092027
-##  [71] 10.006678  9.498697 11.741851 11.777592 14.366474  9.432223  8.340635
-##  [78] 11.611379 10.411454  9.481236 10.576670 10.471526  6.123797 10.809157
-##  [85] 11.396301  9.109376  8.664272 10.508003 12.379490  9.531638 12.356695
-##  [92] 11.877388  8.913484 12.097308 11.414306  6.704472 10.006945 12.154266
-##  [99]  9.329866  8.946441</code></pre>
+<pre><code>##   [1]  7.764169  9.776020 13.628564 13.054515 11.307033  9.287821 13.432484
+##   [8] 11.723666 10.210168  9.947574  8.522892 11.181820  9.415364 12.615769
+##  [15]  6.661652 10.876023 13.154867 10.945140 15.423615 13.022875  7.265695
+##  [22] 11.612989 10.995136 11.526962 11.800422 10.216987  9.924970 12.604537
+##  [29] 10.384093 12.519277 12.831892  9.564200  9.885521  8.085555 13.108103
+##  [36]  9.462209 10.953206 13.534145  9.506673 12.217185  8.153635  7.568842
+##  [43] 11.452555  8.742696 10.831541  9.888905 10.043955  8.337507 10.527015
+##  [50]  7.423102 14.201209 10.174389  8.300393 11.216454  9.962507  9.563884
+##  [57] 12.024570  8.286544  8.322980  9.118320  5.055663  3.630363  9.148102
+##  [64]  9.172114  8.060325  7.538846 10.282186  5.875700  9.812850 10.531771
+##  [71] 10.139154 12.435384  9.647032 10.151109 13.930866 11.324335  7.633259
+##  [78] 10.215610  9.570612 12.606874  9.601245 13.965500  9.458894 11.492731
+##  [85]  8.737196  8.197703  8.443521 10.394082  9.848697 13.118993  8.700841
+##  [92] 11.317136  8.401772 10.491016 10.212413 12.255714  9.141678  9.291019
+##  [99] 13.291878  8.190918</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] -0.07679618</code></pre>
+<pre><code>## [1] 0.01023243</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 13.29102</code></pre>
+<pre><code>## [1] -10.02683</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it in an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] -12.48069</code></pre>
+<pre><code>## [1] 3.867382</code></pre>
 <div id="what-is-the-environment" class="section level3">
 <h3>What is the environment?</h3>
 <p>There are two outcomes when you run code. First, the code will simply print output directly in the console. Second, there is no output because you have stored it as a variable using <code>&lt;-</code>. Output that is stored is actually saved in the <code>environment</code>. The environment is the collection of named objects that are stored in memory for your current R session. Anything stored in memory will be accessible by it’s name without running the original script that was used to create it.</p>
@@ -617,7 +617,7 @@ mydf</code></pre>
 <div id="getting-your-data-into-r" class="section level2">
 <h2>Getting your data into R</h2>
 <p>It is the rare case when you manually enter your data in R, not to mention impractical for most datasets. Most data analysis workflows typically begin with importing a dataset from an external source. Literally, this means committing a dataset to memory (i.e., storing it as a variable) as one of R’s data structure formats.</p>
-<p>Flat data files (text only, rectangular format) present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files. We’ll be using <code>read_excel()</code> function from the readxl package that comes with the tidyverse.</p>
+<p>Flat data files (text only, rectangular format) present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files. In this lesson, we’ll be using <code>read_csv()</code> function from the readr package that comes with the tidyverse. Later we’ll use the SWMPr package to import SWMP data.</p>
 </div>
 <div id="the-working-directory" class="section level2">
 <h2>The working directory</h2>
