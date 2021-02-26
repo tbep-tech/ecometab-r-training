@@ -363,6 +363,493 @@ div.tocify {
 
 <div id="r-basics" class="section level1">
 <h1>R Basics</h1>
+<p>Get the lesson R script: <a href="rbasics.R">rbasics.R</a></p>
+<p>Get the lesson data: <a href="data/data.zip">download zip</a></p>
+<div id="lesson-outline" class="section level2">
+<h2>Lesson Outline</h2>
+<ul>
+<li><a href="#goals-and-motivation">Goals and Motivation</a></li>
+<li><a href="#rstudio">RStudio</a></li>
+<li><a href="#r-language-fundamentals">R language fundamentals</a></li>
+<li><a href="#data-structures-in-r">Data structures in R</a></li>
+<li><a href="#getting-your-data-into-r">Getting your data into R</a></li>
+</ul>
+</div>
+<div id="lesson-exercises" class="section level2">
+<h2>Lesson Exercises</h2>
+<ul>
+<li><a href="#exercise-1">Exercise 1</a></li>
+<li><a href="#exercise-2">Exercise 2</a></li>
+<li><a href="#exercise-3">Exercise 3</a></li>
+</ul>
+</div>
+<div id="goals-and-motivation" class="section level2">
+<h2>Goals and Motivation</h2>
+<p><a href="https://www.r-project.org/" target="_blank">R</a> is a language for statistical computing as well as a general purpose programming language. Increasingly, it has become one of the primary languages used in data science and for data analysis across many of the natural sciences.</p>
+<p>The goals of this training are to expose you to fundamentals and to develop an appreciation of what’s possible with this software. We also provide resources that you can use for follow-up learning on your own. You should be able to answer these questions at the end of this session:</p>
+<ul>
+<li>What is R and why should I use it?</li>
+<li>Why would I use RStudio?</li>
+<li>How can I write, save, and run scripts in RStudio?</li>
+<li>Where can I go for help?</li>
+<li>What are the basic data structures in R?</li>
+<li>How do I import data?</li>
+</ul>
+<div id="why-should-i-invest-time-in-r" class="section level3">
+<h3>Why should I invest time in R?</h3>
+<p>There are many programming languages available and each has it’s specific benefits. R was originally created as a statistical programming language but now it is largely viewed as a ‘data science’ language. Why would you invest time in learning R compared to other languages?</p>
+<ul>
+<li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/" target="_blank">Stack Overflow blog</a>, <a href="http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html" target="_blank">IEEE rating</a></li>
+</ul>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2021-02-26, there are 17191 supplemental packages for R on CRAN!</p>
+</div>
+</div>
+<div id="rstudio" class="section level2">
+<h2>RStudio</h2>
+<p>In the old days, the only way to use R was directly from the Console - this is a bare bones way of running R only with direct input of commands. Now, <a href="https://www.rstudio.com/" target="_blank">RStudio</a> is the go-to Interactive Development Environment (IDE) for R. Think of it like a car that is built around an engine. It is integrated with the console (engine) and includes many other features to improve the user’s experience, such as version control, debugging, dynamic documents, package manager and creation, and code highlighting and completion.</p>
+<p>Let’s get familiar with RStudio before we go on.</p>
+<div id="open-r-and-rstudio" class="section level3">
+<h3>Open R and RStudio</h3>
+<p>If you haven’t done so, download and install RStudio from the link above. After it’s installed, find the RStudio shortcut and fire it up (just watch for now). You should see something like this:</p>
+<p><img src="figure/rstudio.png" /></p>
+<p>There are four panes in RStudio:</p>
+<ul>
+<li><strong>Source</strong>: Your primary window for writing code to send to the console, this is where you write and save R “scripts”</li>
+<li><strong>Console</strong>: This is where code is executed in R - you should almost never write code here.</li>
+<li><strong>Environment, History, etc.</strong>: A tabbed window showing your working environment, code execution history, and other useful things</li>
+<li><strong>Files, plots, etc.</strong>: A tabbed window showing a file explorer, a plot window, list of installed packages, help files, and viewer</li>
+</ul>
+</div>
+<div id="scripting" class="section level3">
+<h3>Scripting</h3>
+<p>In most cases, you will not enter and execute code directly in the console. Code can be written in a script and then sent directly to the console when you’re ready to run it. The key difference here is that a script can be saved and shared.</p>
+<p>Open a new script from the File menu…</p>
+<p><img src="figure/rstudio_script.jpg" /></p>
+</div>
+<div id="executing-code-in-rstudio" class="section level3">
+<h3>Executing code in RStudio</h3>
+<p>After you write code in your script, it can be sent to the Console to run the code in R. Anything you write in the script will not be run or saved in R until it is sent to the console. There are two ways to do this. First, you can hit the <code>Run</code> button at the top right of the scripting window. Second, you can use <code>ctrl+enter</code> (<code>cmd+enter</code> on a Mac). Both approaches will send the selected line to the console, then move to the next line in your script. You can also highlight and send an entire block of code.</p>
+<p><img src="figure/rstudio_run.jpg" /></p>
+</div>
+</div>
+<div id="exercise-1" class="section level2">
+<h2>Exercise 1</h2>
+<p>This exercise will make sure R and RStudio are working and that you can get around the basics in RStudio.</p>
+<ol style="list-style-type: decimal">
+<li><p>Start RStudio if using a version you installed OR navigate to <a href="https://rstudio.cloud/project/2140348" target="_blank">https://rstudio.cloud/project/2140348</a> if using RStudio Cloud. To start both R and RStudio requires only firing up RStudio. RStudio should be available from All Programs at the Start Menu. Fire up RStudio.</p></li>
+<li><p>If you’re not using RStudio Cloud, create a new project (File menu, New project, New directory, New project, Directory Name…). Name it “r_workshop”. We will use this for the rest of the workshop.</p></li>
+<li><p>Create a new “R Script” in the Source Pane, save that file into your newly created project and name it “first_script.R”. It’ll just be a blank text file at this point.</p></li>
+<li><p>Add in a comment line to separate this section. It should look something like: <code># Exercise 1: Just Getting used to RStudio and Scripts</code>. Add some additional code that you can send to the console, e.g., try <code>1 + 1</code>.</p></li>
+<li><p>Lastly, we need to get this project set up with some example data for our exercises (if you’re using RStudio Cloud, ignore this step). You should have downloaded this already, but if not, the data are available <a href="data/779980.zip">here</a>. The data are in a zipped folder. Download the file to your computer (anywhere). Create a folder in your new project named <code>data</code> and extract the files into this location (there are several files).</p></li>
+</ol>
+</div>
+<div id="r-language-fundamentals" class="section level2">
+<h2>R language fundamentals</h2>
+<p>R is built around functions. These are commands that do specific things based on what you provide. The basic syntax of a function follows the form: <code>function_name(arg1, arg2, ...)</code>.</p>
+<p>With the base install, you will gain access to many functions (2688, to be exact). Some examples:</p>
+<pre class="r"><code># print
+print(&#39;hello world!&#39;)</code></pre>
+<pre><code>## [1] &quot;hello world!&quot;</code></pre>
+<pre class="r"><code># sequence
+seq(1, 10)</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<pre class="r"><code># random numbers
+rnorm(100, mean = 10, sd = 2)</code></pre>
+<pre><code>##   [1]  7.956512  9.731036  8.559103  9.195456 11.381129  9.856394  9.262413
+##   [8]  9.476258 13.631114 10.010634  9.185655  7.638387  7.969466  7.255372
+##  [15] 12.414422 15.012187  8.193791 10.694918  9.985647 12.171181 11.180846
+##  [22] 10.380113 10.192158  8.087847  9.170997 10.406474 11.403467  9.158880
+##  [29]  6.277906 12.331683  8.841983  8.705343 10.298038 12.526071  6.340199
+##  [36]  6.579909  9.575059 11.669170  6.923738 10.913696 11.657819  8.665382
+##  [43]  9.886181  9.792289 11.942832  6.919427 11.031360 13.904634 10.381284
+##  [50]  8.315509 11.668495  8.645228  7.901203  8.138186 12.854383  8.950461
+##  [57]  7.805867 12.363147 11.449174  9.137461  9.953220 10.872747 12.095591
+##  [64]  9.744791 13.654608 11.221522 10.830747  9.325865 10.320707  9.092027
+##  [71] 10.006678  9.498697 11.741851 11.777592 14.366474  9.432223  8.340635
+##  [78] 11.611379 10.411454  9.481236 10.576670 10.471526  6.123797 10.809157
+##  [85] 11.396301  9.109376  8.664272 10.508003 12.379490  9.531638 12.356695
+##  [92] 11.877388  8.913484 12.097308 11.414306  6.704472 10.006945 12.154266
+##  [99]  9.329866  8.946441</code></pre>
+<pre class="r"><code># average 
+mean(rnorm(100))</code></pre>
+<pre><code>## [1] -0.07679618</code></pre>
+<pre class="r"><code># sum
+sum(rnorm(100))</code></pre>
+<pre><code>## [1] 13.29102</code></pre>
+<p>Very often you will see functions used like this:</p>
+<pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
+<p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it in an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
+<pre class="r"><code>my_random_sum</code></pre>
+<pre><code>## [1] -12.48069</code></pre>
+<div id="what-is-the-environment" class="section level3">
+<h3>What is the environment?</h3>
+<p>There are two outcomes when you run code. First, the code will simply print output directly in the console. Second, there is no output because you have stored it as a variable using <code>&lt;-</code>. Output that is stored is actually saved in the <code>environment</code>. The environment is the collection of named objects that are stored in memory for your current R session. Anything stored in memory will be accessible by it’s name without running the original script that was used to create it.</p>
+<p>With this, you have the very basics of how we write R code and save objects that can be used later.</p>
+</div>
+<div id="packages" class="section level3">
+<h3>Packages</h3>
+<p>The base install of R is quite powerful, but you will soon have a need or desire to go beyond this. Packages provide this ability. They are a standardized way of extending R with new methods, techniques, and programming functionality. There is a lot to say about packages regarding finding them, using them, etc., but for now let’s focus just on the basics.</p>
+</div>
+<div id="cran" class="section level3">
+<h3>CRAN</h3>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/" target="_blank">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2021-02-26, there are 17191 packages on CRAN!</p>
+</div>
+<div id="installing-packages" class="section level3">
+<h3>Installing packages</h3>
+<p>When a package gets installed, that means the source code is downloaded and put into your library. A default library location is set for you so no need to worry about that. In fact, on Windows most of this is pretty automatic. Let’s give it a shot.</p>
+</div>
+</div>
+<div id="exercise-2" class="section level2">
+<h2>Exercise 2</h2>
+<p>We’re going to install some packages from CRAN that will give us the tools for our workshop today. We’ll use the tidyverse, SWMPr, and WtRegDO packages (the remotes package is only needed to install WtRegDO from GitHub). Later, we’ll explain in detail what each of these packages provide. Again, if you are using RStudio Cloud, these packages will already be installed. You can skip to step 5 in this case.</p>
+<ol style="list-style-type: decimal">
+<li><p>At the top of the script you just created, type the following functions.</p>
+<pre class="r"><code># install packages
+install.packages(c(&quot;tidyverse&quot;, &quot;SWMPr&quot;, &quot;remotes&quot;))
+remotes::install_github(&quot;fawda123/WtRegDO&quot;)</code></pre></li>
+<li><p>Select all the lines by clicking and dragging the mouse pointer over the text.</p></li>
+<li><p>Send all the commands to the console using <code>ctrl+enter</code>. You should see some text output on the console about the installation process. The installation may take a few minutes so don’t be alarmed.</p></li>
+<li><p>After the packages are done installing, verify that there were no errors during the process (this should be pretty obvious, i.e., error text in big scary red letters).</p></li>
+<li><p>Load the packages after they’ve installed. Do not load <code>remotes</code>, it was only needed to install <code>WtRegDO</code> from GitHub.</p>
+<pre class="r"><code>library(&quot;tidyverse&quot;)
+library(&quot;SWMPr&quot;)
+library(&quot;WtRegDO&quot;)</code></pre></li>
+</ol>
+<p>An important aspect of packages is that you only need to download them once, but every time you start RStudio you need to load them with the <code>library()</code> function. Loading a package makes all of its functions available in your current R session.</p>
+<div id="getting-help" class="section level3">
+<h3>Getting Help</h3>
+<p>Being able to find help and interpret that help is probably one of the most important skills for learning a new language. R is no different. Help on functions and packages can be accessed directly from R, can be found on CRAN and other official R resources, searched on Google, found on StackOverflow, or from any number of fantastic online resources. I will cover a few of these here.</p>
+</div>
+<div id="help-from-the-console" class="section level3">
+<h3>Help from the console</h3>
+<p>Getting help from the console is straightforward and can be done numerous ways.</p>
+<pre class="r"><code># Using the help command/shortcut
+# When you know the name of a function
+help(&quot;print&quot;) # Help on the print command
+?print # Help on the print command using the `?` shortcut
+
+# When you know the name of the package
+help(package = &quot;sf&quot;) # Help on the package `dplyr`
+
+# Don&#39;t know the exact name or just part of it
+apropos(&quot;print&quot;) # Returns all available functions with &quot;print&quot; in the name
+??print # shortcut, but also searches demos and vignettes in a formatted page</code></pre>
+</div>
+<div id="official-r-resources" class="section level3">
+<h3>Official R Resources</h3>
+<p>In addition to help from within R itself, CRAN and the R-Project have many resources available for support. Two of the most notable are the mailing lists and the <a href="http://cran.r-project.org/web/views/" target="_blank">task views</a>.</p>
+<ul>
+<li><a href="https://stat.ethz.ch/mailman/listinfo/r-help" target="_blank">R Help Mailing List</a>: The main mailing list for R help. Can be a bit daunting and some (although not most) senior folks can be, um, curmudgeonly…</li>
+<li><a href="https://stat.ethz.ch/mailman/listinfo/r-sig-ecology" target="_blank">R-sig-ecology</a>: A special interest group for use of R in ecology. Less daunting than the main help with participation from some big names in ecological modelling and statistics (e.g., Ben Bolker, Gavin Simpson, and Phil Dixon).</li>
+<li><a href="http://cran.r-project.org/web/views/Environmetrics.html" target="_blank">Environmetrics Task View</a>: Task views are great in that they provide an annotated list of packages relevant to a particular field. This one is maintained by Gavin Simpson and has great info on packages relevant to the environmental sciences.</li>
+<li><a href="http://cran.r-project.org/web/views/Spatial.html" target="_blank">Spatial Analysis Task View</a>: One I use a lot that lists all the relevant packages for spatial analysis, GIS, and Remote Sensing in R.</li>
+</ul>
+</div>
+<div id="google-and-stackoverflow" class="section level3">
+<h3>Google and StackOverflow</h3>
+<p>While the resources already mentioned are useful, often the quickest way is to just turn to Google. However, a search for “R” is a bit challenging. A few ways around this. Google works great if you search for a given package or function name. You can also search for mailing lists directly (i.e. “R-sig-geo”), although Google often finds results from these sources.</p>
+<p>Blind googling can require a bit of strategy to get the info you want. Some pointers:</p>
+<ul>
+<li>Always preface the search with “r”</li>
+<li>Understand which sources are reliable</li>
+<li>Take note of the number of hits and date of a web page</li>
+<li>When in doubt, search with the exact error message (see here for <a href="https://cran.r-project.org/doc/manuals/R-lang.html#Exception-handling" target="_blank">details</a> about warnings vs errors)</li>
+</ul>
+<p>One specific resource that I use quite a bit is <a href="http://stackoverflow.com/questions/tagged/r" target="_blank">StackOverflow with the ‘r’ tag</a>. StackOverflow is a discussion forum for all things related to programming. You can then use this tag and the search functions in StackOverflow and find answers to almost anything you can think of. However, these forums are also very strict and I typically use them to find answers, not to ask questions.</p>
+</div>
+<div id="other-resources" class="section level3">
+<h3>Other Resources</h3>
+<p>As I mentioned earlier, there are TOO many resources to list here and everyone has their favorites. Below are just a few that I like.</p>
+<ul>
+<li><a href="http://rforcats.net/" target="_blank">R For Cats</a>: Basic introduction site, meant to be a gentle and light-hearted introduction</li>
+<li><a href="https://rstats.wtf/" target="_blank">WTF about R</a>: What they forgot to teach you about R, some basics of using R in the wild.</li>
+<li><a href="https://r4ds.had.co.nz/" target="_blank">R for Data Science</a>: My favorite resource for learning data science methods with R, focusing on the tidyverse.</li>
+<li><a href="http://adv-r.had.co.nz/" target="_blank">Advanced R</a>: Web home of Hadley Wickham’s book, the same author of R for Data Science. Gets into more advanced topics, but also covers the basics in a great way.</li>
+<li><a href="http://cran.r-project.org/doc/contrib/Short-refcard.pdf" target="_blank">CRAN Cheatsheets</a>: A good cheat sheet from the official source</li>
+<li><a href="http://www.rstudio.com/resources/cheatsheets/" target="_blank">RStudio Cheatsheets</a>: Additional cheat sheets from RStudio. I am especially fond of the data wrangling one.</li>
+</ul>
+</div>
+</div>
+<div id="data-structures-in-r" class="section level2">
+<h2>Data structures in R</h2>
+<p>Now that you know how to get started in R and where to find resources, we can begin talking about R data structures. Simply put, a data structure is a way for programming languages to handle information storage.</p>
+<p>There is a bewildering amount of formats for storing data and R is no exception. Understanding the basic building blocks that make up data types is essential. All functions in R require specific types of input data and the key to using functions is knowing how these types relate to each other.</p>
+<div id="vectors-one-dimensional-data" class="section level3">
+<h3>Vectors (one-dimensional data)</h3>
+<p>The basic data format in R is a vector - a one-dimensional grouping of elements that have the same type. These are all vectors and they are created with the <code>c</code> (concatenate) function:</p>
+<pre class="r"><code>dbl_var &lt;- c(1, 2.5, 4.5)
+int_var &lt;- c(1L, 6L, 10L)
+log_var &lt;- c(TRUE, FALSE, T, F)
+chr_var &lt;- c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</code></pre>
+<p>The four types of atomic vectors (think atoms that make up a molecule aka vector) are <code>double</code> (or numeric), <code>integer</code>, <code>logical</code>, and <code>character</code>. For most purposes you can ignore the <code>integer</code> class, so there are basically three types. Each type has some useful properties:</p>
+<pre class="r"><code>class(dbl_var)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>length(log_var)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>These properties are useful for not only describing an object, but they define limits on which functions or types of operations that can be used. That is, some functions require a character string input while others require a numeric input. Similarly, vectors of different types or properties may not play well together. Let’s look at some examples:</p>
+<pre class="r"><code># taking the mean of a character vector
+mean(chr_var)
+
+# adding two numeric vectors of different lengths
+vec1 &lt;- c(1, 2, 3, 4)
+vec2 &lt;- c(2, 3, 5)
+vec1 + vec2</code></pre>
+</div>
+<div id="dimensional-data" class="section level3">
+<h3>2-dimensional data</h3>
+<p>A collection of vectors represented as one data object are often described as two-dimensional data, or in R speak, a data frame (i.e., <code>data.frame()</code>). Think of them like your standard spreadsheet, where each column describes a variable (vector) and rows link observations between columns. Here’s a simple example:</p>
+<pre class="r"><code>ltrs &lt;- c(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)
+nums &lt;- c(1, 2, 3)
+logs &lt;- c(T, F, T)
+mydf &lt;- data.frame(ltrs, nums, logs)
+mydf</code></pre>
+<pre><code>##   ltrs nums  logs
+## 1    a    1  TRUE
+## 2    b    2 FALSE
+## 3    c    3  TRUE</code></pre>
+<p>The only constraints required to make a data frame are:</p>
+<ol style="list-style-type: decimal">
+<li><p>Each column (vector) contains the same type of data</p></li>
+<li><p>The number of observations in each column is equal.</p></li>
+</ol>
+</div>
+</div>
+<div id="getting-your-data-into-r" class="section level2">
+<h2>Getting your data into R</h2>
+<p>It is the rare case when you manually enter your data in R, not to mention impractical for most datasets. Most data analysis workflows typically begin with importing a dataset from an external source. Literally, this means committing a dataset to memory (i.e., storing it as a variable) as one of R’s data structure formats.</p>
+<p>Flat data files (text only, rectangular format) present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files. We’ll be using <code>read_excel()</code> function from the readxl package that comes with the tidyverse.</p>
+</div>
+<div id="the-working-directory" class="section level2">
+<h2>The working directory</h2>
+<p>Before we import data, we need to talk about the “working directory”. Whenever RStudio is opened, it uses a file location on your computer to access and save data. If you’re using an RStudio project, the working directory will be the folder where you created the project. If not, it is probably the the user’s home directory (e.g., <code>C:/Users/Marcus</code>), which you’ll want to change to where you have your data.</p>
+<p>You can see your working directory with the <code>getwd()</code> function or from the file path at the top of the console in RStudio. All files in the File pane window on the bottom right of RStudio are also those within the working directory. If you want to change your working directory, you can use the <code>setwd()</code> function and put the file path (as a character string) inside the function, e.g., <code>setwd('C:/Users/Marcus/Desktop/newdirectory')</code>.</p>
+<p>The working directory is important to know when you’re importing or exporting data. When you import data, a <em>relative</em> file path can be used that is an extension of the working directory. For example, if your working directory is <code>'C:/Users/Marcus/Desktop'</code> and you have a file called <code>mydata.csv</code> in that directory, you can use <code>read_csv('mydata.csv')</code> to import the file. Alternatively, if there’s a folder called “data” in your working directory with the file you want to import, you would use <code>read_csv('data/mydata.csv')</code>.</p>
+<p>If you want to import a file that is not in your working directory, you will have to use an <em>absolute</em> path that is the full file location. Otherwise, R will not know where to look outside of the working directory.</p>
+</div>
+<div id="exercise-3" class="section level2">
+<h2>Exercise 3</h2>
+<p>Now that we have the data downloaded and extracted to our data folder, we’ll use <code>read_csv</code> to import two files into our environment. The <code>read_csv</code> function comes with the tidyverse package, so make sure that package is loaded (i.e., <code>library(tidyverse)</code>) before you do this exercise. This should have been done in the second exercise.</p>
+<ol style="list-style-type: decimal">
+<li><p>Type the following in your script. Note the use of <em>relative</em> file paths within your project (see the explanation above).</p>
+<pre class="r"><code>apacpwq2019 &lt;- read_csv(&#39;data/apapcwq2019.csv&#39;)
+sapcawq2019 &lt;- read_csv(&#39;data/sapcawq2019.csv&#39;)</code></pre></li>
+<li><p>Send the commands to the console with <code>ctrl+enter</code>.</p></li>
+<li><p>Verify that the data imported correctly by viewing the first six rows of each dataset. Use the <code>head()</code> function directly in the console, e.g., <code>head(apacpwq2019)</code> or <code>head(sapcawq2019)</code></p></li>
+</ol>
+<p>Let’s explore the datasets a bit. There are many useful functions for exploring the characteristics of a dataset. This is always a good idea when you first import something.</p>
+<pre class="r"><code># get the dimensions
+dim(apacpwq2019)</code></pre>
+<pre><code>## [1] 33730    31</code></pre>
+<pre class="r"><code>dim(sapcawq2019)</code></pre>
+<pre><code>## [1] 35040    31</code></pre>
+<pre class="r"><code># get the column names
+names(apacpwq2019)</code></pre>
+<pre><code>##  [1] &quot;StationCode&quot;     &quot;isSWMP&quot;          &quot;DateTimeStamp&quot;   &quot;Historical&quot;     
+##  [5] &quot;ProvisionalPlus&quot; &quot;F_Record&quot;        &quot;Temp&quot;            &quot;F_Temp&quot;         
+##  [9] &quot;SpCond&quot;          &quot;F_SpCond&quot;        &quot;Sal&quot;             &quot;F_Sal&quot;          
+## [13] &quot;DO_Pct&quot;          &quot;F_DO_Pct&quot;        &quot;DO_mgl&quot;          &quot;F_DO_mgl&quot;       
+## [17] &quot;Depth&quot;           &quot;F_Depth&quot;         &quot;cDepth&quot;          &quot;F_cDepth&quot;       
+## [21] &quot;Level&quot;           &quot;F_Level&quot;         &quot;cLevel&quot;          &quot;F_cLevel&quot;       
+## [25] &quot;pH&quot;              &quot;F_pH&quot;            &quot;Turb&quot;            &quot;F_Turb&quot;         
+## [29] &quot;ChlFluor&quot;        &quot;F_ChlFluor&quot;      &quot;X31&quot;</code></pre>
+<pre class="r"><code>names(sapcawq2019)</code></pre>
+<pre><code>##  [1] &quot;StationCode&quot;     &quot;isSWMP&quot;          &quot;DateTimeStamp&quot;   &quot;Historical&quot;     
+##  [5] &quot;ProvisionalPlus&quot; &quot;F_Record&quot;        &quot;Temp&quot;            &quot;F_Temp&quot;         
+##  [9] &quot;SpCond&quot;          &quot;F_SpCond&quot;        &quot;Sal&quot;             &quot;F_Sal&quot;          
+## [13] &quot;DO_Pct&quot;          &quot;F_DO_Pct&quot;        &quot;DO_mgl&quot;          &quot;F_DO_mgl&quot;       
+## [17] &quot;Depth&quot;           &quot;F_Depth&quot;         &quot;cDepth&quot;          &quot;F_cDepth&quot;       
+## [21] &quot;Level&quot;           &quot;F_Level&quot;         &quot;cLevel&quot;          &quot;F_cLevel&quot;       
+## [25] &quot;pH&quot;              &quot;F_pH&quot;            &quot;Turb&quot;            &quot;F_Turb&quot;         
+## [29] &quot;ChlFluor&quot;        &quot;F_ChlFluor&quot;      &quot;X31&quot;</code></pre>
+<pre class="r"><code># see the first six rows
+head(apacpwq2019)</code></pre>
+<pre><code>## # A tibble: 6 x 31
+##   StationCode isSWMP DateTimeStamp   Historical ProvisionalPlus F_Record  Temp
+##   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;                &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;    &lt;dbl&gt;
+## 1 apapcwq     S      01/01/2019 0:00          0               1 NA        17.2
+## 2 apapcwq     S      01/01/2019 0:15          0               1 NA        17.1
+## 3 apapcwq     S      01/01/2019 0:30          0               1 NA        17  
+## 4 apapcwq     S      01/01/2019 0:45          0               1 NA        17  
+## 5 apapcwq     S      01/01/2019 1:00          0               1 NA        17  
+## 6 apapcwq     S      01/01/2019 1:15          0               1 NA        17  
+## # … with 24 more variables: F_Temp &lt;chr&gt;, SpCond &lt;dbl&gt;, F_SpCond &lt;chr&gt;,
+## #   Sal &lt;dbl&gt;, F_Sal &lt;chr&gt;, DO_Pct &lt;dbl&gt;, F_DO_Pct &lt;chr&gt;, DO_mgl &lt;dbl&gt;,
+## #   F_DO_mgl &lt;chr&gt;, Depth &lt;dbl&gt;, F_Depth &lt;chr&gt;, cDepth &lt;lgl&gt;, F_cDepth &lt;chr&gt;,
+## #   Level &lt;lgl&gt;, F_Level &lt;chr&gt;, cLevel &lt;lgl&gt;, F_cLevel &lt;lgl&gt;, pH &lt;dbl&gt;,
+## #   F_pH &lt;chr&gt;, Turb &lt;dbl&gt;, F_Turb &lt;chr&gt;, ChlFluor &lt;lgl&gt;, F_ChlFluor &lt;chr&gt;,
+## #   X31 &lt;lgl&gt;</code></pre>
+<pre class="r"><code>head(sapcawq2019)</code></pre>
+<pre><code>## # A tibble: 6 x 31
+##   StationCode isSWMP DateTimeStamp   Historical ProvisionalPlus F_Record  Temp
+##   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;                &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;    &lt;dbl&gt;
+## 1 sapcawq     P      01/01/2019 0:00          0               1 NA        16.6
+## 2 sapcawq     P      01/01/2019 0:15          0               1 NA        16.4
+## 3 sapcawq     P      01/01/2019 0:30          0               1 NA        16.4
+## 4 sapcawq     P      01/01/2019 0:45          0               1 NA        16.3
+## 5 sapcawq     P      01/01/2019 1:00          0               1 NA        16.3
+## 6 sapcawq     P      01/01/2019 1:15          0               1 NA        16.2
+## # … with 24 more variables: F_Temp &lt;chr&gt;, SpCond &lt;dbl&gt;, F_SpCond &lt;chr&gt;,
+## #   Sal &lt;dbl&gt;, F_Sal &lt;chr&gt;, DO_Pct &lt;dbl&gt;, F_DO_Pct &lt;chr&gt;, DO_mgl &lt;dbl&gt;,
+## #   F_DO_mgl &lt;chr&gt;, Depth &lt;dbl&gt;, F_Depth &lt;chr&gt;, cDepth &lt;dbl&gt;, F_cDepth &lt;chr&gt;,
+## #   Level &lt;lgl&gt;, F_Level &lt;chr&gt;, cLevel &lt;lgl&gt;, F_cLevel &lt;lgl&gt;, pH &lt;dbl&gt;,
+## #   F_pH &lt;chr&gt;, Turb &lt;dbl&gt;, F_Turb &lt;chr&gt;, ChlFluor &lt;lgl&gt;, F_ChlFluor &lt;chr&gt;,
+## #   X31 &lt;lgl&gt;</code></pre>
+<pre class="r"><code># get the overall structure
+str(apacpwq2019)</code></pre>
+<pre><code>## spec_tbl_df [33,730 × 31] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ StationCode    : chr [1:33730] &quot;apapcwq&quot; &quot;apapcwq&quot; &quot;apapcwq&quot; &quot;apapcwq&quot; ...
+##  $ isSWMP         : chr [1:33730] &quot;S&quot; &quot;S&quot; &quot;S&quot; &quot;S&quot; ...
+##  $ DateTimeStamp  : chr [1:33730] &quot;01/01/2019 0:00&quot; &quot;01/01/2019 0:15&quot; &quot;01/01/2019 0:30&quot; &quot;01/01/2019 0:45&quot; ...
+##  $ Historical     : num [1:33730] 0 0 0 0 0 0 0 0 0 0 ...
+##  $ ProvisionalPlus: num [1:33730] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ F_Record       : logi [1:33730] NA NA NA NA NA NA ...
+##  $ Temp           : num [1:33730] 17.2 17.1 17 17 17 17 17 17 17 17.1 ...
+##  $ F_Temp         : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ SpCond         : num [1:33730] 27.4 30.7 32.9 33.2 34.1 ...
+##  $ F_SpCond       : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ Sal            : num [1:33730] 16.9 19.2 20.6 20.8 21.4 21.3 21.4 21.6 21.1 20.8 ...
+##  $ F_Sal          : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ DO_Pct         : num [1:33730] 82 81.6 78.7 75.8 70.8 73.5 74.8 70.9 69.8 74.8 ...
+##  $ F_DO_Pct       : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ DO_mgl         : num [1:33730] 7.1 7 6.7 6.5 6 6.3 6.4 6 5.9 6.4 ...
+##  $ F_DO_mgl       : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ Depth          : num [1:33730] 2.41 2.4 2.39 2.38 2.37 2.36 2.34 2.33 2.31 2.29 ...
+##  $ F_Depth        : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ cDepth         : logi [1:33730] NA NA NA NA NA NA ...
+##  $ F_cDepth       : chr [1:33730] &quot;&lt;-2&gt; [GCM]&quot; &quot;&lt;-2&gt; [GCM]&quot; &quot;&lt;-2&gt; [GCM]&quot; &quot;&lt;-2&gt; [GCM]&quot; ...
+##  $ Level          : logi [1:33730] NA NA NA NA NA NA ...
+##  $ F_Level        : chr [1:33730] &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; ...
+##  $ cLevel         : logi [1:33730] NA NA NA NA NA NA ...
+##  $ F_cLevel       : logi [1:33730] NA NA NA NA NA NA ...
+##  $ pH             : num [1:33730] 7.8 7.8 7.8 7.8 7.8 7.8 7.8 7.8 7.8 7.8 ...
+##  $ F_pH           : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ Turb           : num [1:33730] 16 8 6 6 5 6 6 6 7 6 ...
+##  $ F_Turb         : chr [1:33730] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ ChlFluor       : logi [1:33730] NA NA NA NA NA NA ...
+##  $ F_ChlFluor     : chr [1:33730] &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; ...
+##  $ X31            : logi [1:33730] NA NA NA NA NA NA ...
+##  - attr(*, &quot;problems&quot;)= tibble [12,716 × 5] (S3: tbl_df/tbl/data.frame)
+##   ..$ row     : int [1:12716] 3508 10398 10399 10400 10401 10402 10403 10404 10405 10406 ...
+##   ..$ col     : chr [1:12716] &quot;F_Record&quot; &quot;F_Record&quot; &quot;F_Record&quot; &quot;F_Record&quot; ...
+##   ..$ expected: chr [1:12716] &quot;1/0/T/F/TRUE/FALSE&quot; &quot;1/0/T/F/TRUE/FALSE&quot; &quot;1/0/T/F/TRUE/FALSE&quot; &quot;1/0/T/F/TRUE/FALSE&quot; ...
+##   ..$ actual  : chr [1:12716] &quot;{CMC}&quot; &quot;{CWD}&quot; &quot;{CWD}&quot; &quot;{CWD}&quot; ...
+##   ..$ file    : chr [1:12716] &quot;&#39;data/apapcwq2019.csv&#39;&quot; &quot;&#39;data/apapcwq2019.csv&#39;&quot; &quot;&#39;data/apapcwq2019.csv&#39;&quot; &quot;&#39;data/apapcwq2019.csv&#39;&quot; ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   StationCode = col_character(),
+##   ..   isSWMP = col_character(),
+##   ..   DateTimeStamp = col_character(),
+##   ..   Historical = col_double(),
+##   ..   ProvisionalPlus = col_double(),
+##   ..   F_Record = col_logical(),
+##   ..   Temp = col_double(),
+##   ..   F_Temp = col_character(),
+##   ..   SpCond = col_double(),
+##   ..   F_SpCond = col_character(),
+##   ..   Sal = col_double(),
+##   ..   F_Sal = col_character(),
+##   ..   DO_Pct = col_double(),
+##   ..   F_DO_Pct = col_character(),
+##   ..   DO_mgl = col_double(),
+##   ..   F_DO_mgl = col_character(),
+##   ..   Depth = col_double(),
+##   ..   F_Depth = col_character(),
+##   ..   cDepth = col_logical(),
+##   ..   F_cDepth = col_character(),
+##   ..   Level = col_logical(),
+##   ..   F_Level = col_character(),
+##   ..   cLevel = col_logical(),
+##   ..   F_cLevel = col_logical(),
+##   ..   pH = col_double(),
+##   ..   F_pH = col_character(),
+##   ..   Turb = col_double(),
+##   ..   F_Turb = col_character(),
+##   ..   ChlFluor = col_logical(),
+##   ..   F_ChlFluor = col_character(),
+##   ..   X31 = col_logical()
+##   .. )</code></pre>
+<pre class="r"><code>str(sapcawq2019)</code></pre>
+<pre><code>## spec_tbl_df [35,040 × 31] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+##  $ StationCode    : chr [1:35040] &quot;sapcawq&quot; &quot;sapcawq&quot; &quot;sapcawq&quot; &quot;sapcawq&quot; ...
+##  $ isSWMP         : chr [1:35040] &quot;P&quot; &quot;P&quot; &quot;P&quot; &quot;P&quot; ...
+##  $ DateTimeStamp  : chr [1:35040] &quot;01/01/2019 0:00&quot; &quot;01/01/2019 0:15&quot; &quot;01/01/2019 0:30&quot; &quot;01/01/2019 0:45&quot; ...
+##  $ Historical     : num [1:35040] 0 0 0 0 0 0 0 0 0 0 ...
+##  $ ProvisionalPlus: num [1:35040] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ F_Record       : logi [1:35040] NA NA NA NA NA NA ...
+##  $ Temp           : num [1:35040] 16.6 16.4 16.4 16.3 16.3 16.2 16.1 15.9 15.7 15.6 ...
+##  $ F_Temp         : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ SpCond         : num [1:35040] 41.5 41.5 41.4 41 40.4 ...
+##  $ F_SpCond       : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ Sal            : num [1:35040] 26.6 26.6 26.6 26.3 25.8 25.5 25.7 25.6 25.6 25.1 ...
+##  $ F_Sal          : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ DO_Pct         : num [1:35040] 93.7 94.5 94.6 96.1 97.2 98.5 99.1 98.3 97.4 96.6 ...
+##  $ F_DO_Pct       : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ DO_mgl         : num [1:35040] 7.8 7.9 7.9 8 8.2 8.3 8.4 8.3 8.3 8.2 ...
+##  $ F_DO_mgl       : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ Depth          : num [1:35040] 1.98 2.09 2.2 2.36 2.49 2.63 2.76 2.9 3.04 3.15 ...
+##  $ F_Depth        : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ cDepth         : num [1:35040] 1.91 2.02 2.13 2.29 2.42 2.56 2.69 2.83 2.97 3.08 ...
+##  $ F_cDepth       : chr [1:35040] &quot;&lt;3&gt;&quot; &quot;&lt;3&gt;&quot; &quot;&lt;3&gt;&quot; &quot;&lt;3&gt;&quot; ...
+##  $ Level          : logi [1:35040] NA NA NA NA NA NA ...
+##  $ F_Level        : chr [1:35040] &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; ...
+##  $ cLevel         : logi [1:35040] NA NA NA NA NA NA ...
+##  $ F_cLevel       : logi [1:35040] NA NA NA NA NA NA ...
+##  $ pH             : num [1:35040] 7.7 7.7 7.7 7.7 7.7 7.8 7.8 7.8 7.8 7.8 ...
+##  $ F_pH           : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ Turb           : num [1:35040] 1 0 3 4 4 5 6 6 7 5 ...
+##  $ F_Turb         : chr [1:35040] &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; &quot;&lt;0&gt;&quot; ...
+##  $ ChlFluor       : logi [1:35040] NA NA NA NA NA NA ...
+##  $ F_ChlFluor     : chr [1:35040] &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; ...
+##  $ X31            : logi [1:35040] NA NA NA NA NA NA ...
+##  - attr(*, &quot;spec&quot;)=
+##   .. cols(
+##   ..   StationCode = col_character(),
+##   ..   isSWMP = col_character(),
+##   ..   DateTimeStamp = col_character(),
+##   ..   Historical = col_double(),
+##   ..   ProvisionalPlus = col_double(),
+##   ..   F_Record = col_logical(),
+##   ..   Temp = col_double(),
+##   ..   F_Temp = col_character(),
+##   ..   SpCond = col_double(),
+##   ..   F_SpCond = col_character(),
+##   ..   Sal = col_double(),
+##   ..   F_Sal = col_character(),
+##   ..   DO_Pct = col_double(),
+##   ..   F_DO_Pct = col_character(),
+##   ..   DO_mgl = col_double(),
+##   ..   F_DO_mgl = col_character(),
+##   ..   Depth = col_double(),
+##   ..   F_Depth = col_character(),
+##   ..   cDepth = col_double(),
+##   ..   F_cDepth = col_character(),
+##   ..   Level = col_logical(),
+##   ..   F_Level = col_character(),
+##   ..   cLevel = col_logical(),
+##   ..   F_cLevel = col_logical(),
+##   ..   pH = col_double(),
+##   ..   F_pH = col_character(),
+##   ..   Turb = col_double(),
+##   ..   F_Turb = col_character(),
+##   ..   ChlFluor = col_logical(),
+##   ..   F_ChlFluor = col_character(),
+##   ..   X31 = col_logical()
+##   .. )</code></pre>
+<p>You can also view each dataset in a spreadsheet style in the scripting window:</p>
+<pre class="r"><code>View(apacpwq2019)
+View(sapcawq2019)</code></pre>
+<div id="other-ways-to-import-data" class="section level3">
+<h3>Other ways to import data</h3>
+<p>You might want to import an Excel spreadsheet as well. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure used by Microsoft. The tools available in R have since matured and it’s now pretty painless to import a spreadsheet. The <code>readxl</code> package is the most recent and by far most flexible data import package for Excel files. It comes with the <code>tidyverse</code> family of packages.</p>
+<p>Once installed, we can load it to access the import functions.</p>
+<pre class="r"><code>library(readxl)
+dat &lt;- read_excel(&#39;location/of/excel/file.xlsx&#39;)</code></pre>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>In this lesson we learned about R and Rstudio, some of the basic syntax and data structures in R, and how to import files. We’ve just imported some water quality files from Apalachicola and Sapelo Island. Next we’ll learn how to import these data with SWMPr and prepare the data for further analysis.</p>
+</div>
 </div>
 
 
