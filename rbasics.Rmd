@@ -98,7 +98,15 @@ This exercise will make sure R and RStudio are working and that you can get arou
 
 R is built around functions.  These are commands that do specific things based on what you provide. The basic syntax of a function follows the form: `function_name(arg1, arg2, ...)`.  
 
-With the base install, you will gain access to many functions (`r pkgs <- search(); pkgs <- pkgs[grep("package:",pkgs)]; length(unlist(sapply(pkgs,lsf.str)))`, to be exact). 
+
+```{r, echo = F, include = F}
+pkgs <- search()
+pkgs <- pkgs[grep("package:",pkgs)]
+pkgs <- pkgs[grep("stats$|graphics$|grDevices$|utils$|datasets$|methods$|base$", pkgs)]
+nfuncs <- length(unlist(sapply(pkgs,lsf.str)))
+```
+
+With the base install, you will gain access to many functions (`r nfuncs`, to be exact). 
 Some examples:
 
 ```{r}
