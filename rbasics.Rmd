@@ -308,7 +308,7 @@ Now that we have the data downloaded and extracted to our data folder, we'll use
 1. Type the following in your script.  Note the use of *relative* file paths within your project (see the explanation above).
 
     ```{r}
-apacpwq2019 <- read_csv('data/apapcwq2019.csv')
+apacpwq2019 <- read_csv('data/apacpwq2019.csv')
 sapcawq2019 <- read_csv('data/sapcawq2019.csv')
     ```
 
