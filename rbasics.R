@@ -1,3 +1,8 @@
+pkgs <- search()
+pkgs <- pkgs[grep("package:",pkgs)]
+pkgs <- pkgs[grep("stats$|graphics$|grDevices$|utils$|datasets$|methods$|base$", pkgs)]
+nfuncs <- length(unlist(sapply(pkgs,lsf.str)))
+
 # print
 print('hello world!')
 
