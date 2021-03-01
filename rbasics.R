@@ -59,7 +59,7 @@ logs <- c(T, F, T)
 mydf <- data.frame(ltrs, nums, logs)
 mydf
 
-apacpwq2019 <- read_csv('data/apapcwq2019.csv')
+apacpwq2019 <- read_csv('data/apacpwq2019.csv')
 sapcawq2019 <- read_csv('data/sapcawq2019.csv')
 
 # get the dimensions
