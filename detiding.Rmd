@@ -8,7 +8,7 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 # Detiding
 
-Get the lesson R script: [rbasics.R](detiding.R)
+Get the lesson R script: [detiding.R](detiding.R)
 
 Get the lesson data: [download zip](data/779980.zip)
 
@@ -42,11 +42,11 @@ By the end of this lesson, you should know how or find the resources to be able 
 
 Last time we got comfortable with R basics by exploring how to get around the RStudio console, understanding the basics of the R language, and importing datasets for analysis.  Now that we have the basics out of the way, we can use some existing packages to work specifically with SWMP data. 
 
-The SWMPr package was developed a few years ago to provide a bridge between the raw data and the R analysis platform. It does this with some degree of success, but by far it's most useful feature is being able to import and combine time series from SWMP sites with relative ease.  In particular, the `import_local`, `qaqc`, and `comb` functions allow us to quickly import, clean up, and combine datasets for follow-up analysis.  This all we'll do with SWMPr in these lessons.
+The SWMPr package was developed a few years ago to provide a bridge between the raw data and the R analysis platform. It does this with some degree of success, but by far it's most useful feature is being able to import and combine time series from SWMP sites with relative ease.  In particular, the `import_local`, `qaqc`, and `comb` functions allow us to quickly import, clean up, and combine datasets for follow-up analysis.  This is all we'll do with SWMPr in these lessons.
 
-The `import_local` function is designed to work with data downloaded from the CDMO using the "Zip Downloads" feature from the Advanced Query System: <http://cdmo.baruch.sc.edu/aqs/zips.cfm>.  The data we have in our "data" folder was a requested from this feature for all datasets from Apalachicola and Sapelo Island from 2017 to 2019.
+The `import_local` function is designed to work with data downloaded from the CDMO using the "Zip Downloads" feature from the Advanced Query System: <http://cdmo.baruch.sc.edu/aqs/zips.cfm>.  The filfes we have in our "data" folder was requested from this feature for all datasets from Apalachicola and Sapelo Island from 2017 to 2019.
 
-The `import_local` function has two arguments: `path` to indicate where the data are located and `station_code` to indicate which station to import.  We first load SWMPr and then use the function to import data for Apallachicola Dry Bar station:
+The `import_local` function has two arguments: `path` to indicate where the data are located and `station_code` to indicate which station to import.  We first load SWMPr and then use the function to import data for Apalachicola Dry Bar station:
 
 ```{r}
 # load SWMPr
@@ -108,7 +108,7 @@ range(apa$datetimestamp)
 
 ## Exercise 1
 
-Repeat the above exercises but do this using data for Sapelo Island.  Import data for `sapdcwq` and `sapmlmet`, clean them up with `qaqc`, and combine them with `comb`. 
+Repeat the above examples but do this using data for Sapelo Island.  Import data for `sapdcwq` and `sapmlmet`, clean them up with `qaqc`, and combine them with `comb`. 
 
 1. Open a new script in your RStudio project, save it with an informative title (e.g, `import-detiding.R`), and add a section header with `Ctrl + Shift + R`. 1. Load the SWMPr package with the `library` function. 
 1. Import and clean up `sapdcwq` with `import_local` and `qaqc`. 
@@ -116,6 +116,88 @@ Repeat the above exercises but do this using data for Sapelo Island.  Import dat
 1. Combine the two with `comb`. Keep the time step at 15 minutes and use the `union` option. 
 
 ## Preparing SWMP data for detiding
+
+Now we want to setup our data for use with functions in the WtRegDO package.  As with most R functions, the input formats are very specific requiring us to make sure the column names, locations, and types of columns in our data are exactly as needed.  The two functions in WtRegDO that we'll use in this lesson are `evalcor` and `wtreg`.  You can look at the examples in the help file to see what format we need. 
+
+The WtRegDO package comes with an example dataset that has a format we can model for our SWMP data. First we load WtRegDO and then examine the `SAPDC` example dataset.  This is the same site we used for the previous exercise, just with older data. 
+
+```{r}
+# load WtRegDO
+library(WtRegDO)
+
+# view first six rows of SAPDC
+head(SAPDC)
+
+# View the structure of SAPDC
+str(SAPDC)
+```
+
+We can compare this to our Apalachicola dataset from before. 
+
+```{r}
+# view first six rows of apa
+head(apa)
+
+# view the structure of apa
+str(apa)
+```
+
+So, we need to do a few things to our Apalachicola dataset to make it look like SAPDC.  We can use functions from the dplyr package to "wrangle" the data into the correct format.  The dplyr package comes with the tidyverse. All we need to do is rename the columns and select only those that are relevant.  This can all be done with the `select` function in dplyr.
+
+```{r}
+# load dplyr
+library(dplyr)
+
+# select and rename columns
+apa <- select(apa,
+  DateTimeStamp = datetimestamp, 
+  Temp = temp, 
+  Sal = sal, 
+  DO_obs = do_mgl,
+  ATemp = atemp, 
+  BP = bp, 
+  WSpd = wspd, 
+  Tide = depth
+)
+
+# show first six rows
+head(apa)
+
+# view structure
+str(apa)
+```
+
+Finally, we need to deal with pesky missing data values.  Most functions in R deal with missing data by either not working at all or providing some work-around to accommodate the missing values. The functions in WtRegDO fall in the former category.  
+
+Missing data in SWMP are not uncommon and they often occur when sondes or other equipment are down for maintenance or are otherwise broken for a period of time.  So, missing observations usually come in blocks where all parameters are unavailable, as opposed to only one parameter.  We can quickly remove rows with missing data using the `na.omit` function. Note that this will remove an entire row where even one parameter is missing data.  Usually this is not ideal for most data, but this is okay for our examples because we require all parameters at a time step to estimate metabolism. 
+
+Here we see an example of a chunk of missing observations.
+
+```{r}
+apa[which(is.na(apa$Tide))[1:5], ]
+```
+
+Now we just remove the rows with missing data using `na.omit`. 
+
+```{r}
+# number of rows before
+nrow(apa)
+
+# omit missing rows
+apa <- na.omit(apa)
+
+# number of rows after
+nrow(apa)
+```
+
+## Exercise 2
+
+Repeat the above examples but use the combined dataset for Sapelo Island that you created in [Exercise 1].
+
+1. Create a new section in your script using `Ctrl + Shift + r`. 
+1. Load the dplyr package with the library function. 
+1. Simultaneously rename and select the water temperature (`Temp`), salinity (`Sal`), dissolved oxygen (`DO_obs`), air temperature (`Atemp`), air pressure (`BP`), wind speed (`WSpd`), and tidal height (`Tide`) columns in the Sapelo Island dataset with the `select` function from dplyr. 
+1. Remove missing rows with `na.omit`. 
 
 ## What is and why detiding
 
