@@ -19,14 +19,21 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -40,11 +47,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -57,32 +59,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -92,10 +69,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -112,40 +85,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 52px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h2 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h3 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h4 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h5 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h6 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -173,7 +119,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -185,7 +131,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -196,10 +142,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -211,7 +170,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -337,13 +295,13 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -379,14 +337,14 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="Data_and_Resources.html">
-    <span class="fa fa-list"></span>
+    <span class="fas fa-list"></span>
      
     Data and resources
   </a>
 </li>
 <li>
   <a href="https://github.com/tbep-tech/ecometab-r-training">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -395,7 +353,7 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -420,7 +378,7 @@ div.tocify {
 <div id="lesson-exercises" class="section level2">
 <h2>Lesson Exercises</h2>
 <ul>
-<li>[Exercise 1]</li>
+<li><a href="#exercise-1">Exercise 1</a></li>
 <li>[Exercise 2]</li>
 <li>[Exercise 3]</li>
 </ul>
@@ -439,9 +397,139 @@ div.tocify {
 </div>
 <div id="data-import-with-swmpr" class="section level2">
 <h2>Data import with SWMPr</h2>
+<p>Last time we got comfortable with R basics by exploring how to get around the RStudio console, understanding the basics of the R language, and importing datasets for analysis. Now that we have the basics out of the way, we can use some existing packages to work specifically with SWMP data.</p>
+<p>The SWMPr package was developed a few years ago to provide a bridge between the raw data and the R analysis platform. It does this with some degree of success, but by far it’s most useful feature is being able to import and combine time series from SWMP sites with relative ease. In particular, the <code>import_local</code>, <code>qaqc</code>, and <code>comb</code> functions allow us to quickly import, clean up, and combine datasets for follow-up analysis. This all we’ll do with SWMPr in these lessons.</p>
+<p>The <code>import_local</code> function is designed to work with data downloaded from the CDMO using the “Zip Downloads” feature from the Advanced Query System: <a href="http://cdmo.baruch.sc.edu/aqs/zips.cfm" class="uri">http://cdmo.baruch.sc.edu/aqs/zips.cfm</a>. The data we have in our “data” folder was a requested from this feature for all datasets from Apalachicola and Sapelo Island from 2017 to 2019.</p>
+<p>The <code>import_local</code> function has two arguments: <code>path</code> to indicate where the data are located and <code>station_code</code> to indicate which station to import. We first load SWMPr and then use the function to import data for Apallachicola Dry Bar station:</p>
+<pre class="r"><code># load SWMPr
+library(SWMPr)
+
+# import data
+apadbwq &lt;- import_local(path = &#39;data&#39;, station_code = &#39;apadbwq&#39;)
+
+# characteristics of the dataset
+head(apadbwq)</code></pre>
+<pre><code>##         datetimestamp temp f_temp spcond f_spcond  sal f_sal do_pct f_do_pct
+## 1 2017-01-01 00:00:00 15.9    &lt;0&gt;  34.99      &lt;0&gt; 22.1   &lt;0&gt;  104.1      &lt;0&gt;
+## 2 2017-01-01 00:15:00 15.9    &lt;0&gt;  34.94      &lt;0&gt; 22.0   &lt;0&gt;  104.0      &lt;0&gt;
+## 3 2017-01-01 00:30:00 15.9    &lt;0&gt;  34.90      &lt;0&gt; 22.0   &lt;0&gt;  103.5      &lt;0&gt;
+## 4 2017-01-01 00:45:00 15.9    &lt;0&gt;  34.94      &lt;0&gt; 22.0   &lt;0&gt;  103.3      &lt;0&gt;
+## 5 2017-01-01 01:00:00 15.9    &lt;0&gt;  34.99      &lt;0&gt; 22.1   &lt;0&gt;  104.1      &lt;0&gt;
+## 6 2017-01-01 01:15:00 15.9    &lt;0&gt;  35.08      &lt;0&gt; 22.1   &lt;0&gt;  103.9      &lt;0&gt;
+##   do_mgl f_do_mgl depth f_depth cdepth f_cdepth level f_level clevel f_clevel
+## 1    9.0      &lt;0&gt;  1.88     &lt;0&gt;   1.81      &lt;3&gt;    NA    &lt;-1&gt;     NA     &lt;NA&gt;
+## 2    9.0      &lt;0&gt;  1.88     &lt;0&gt;   1.81      &lt;3&gt;    NA    &lt;-1&gt;     NA     &lt;NA&gt;
+## 3    9.0      &lt;0&gt;  1.89     &lt;0&gt;   1.82      &lt;3&gt;    NA    &lt;-1&gt;     NA     &lt;NA&gt;
+## 4    8.9      &lt;0&gt;  1.89     &lt;0&gt;   1.83      &lt;3&gt;    NA    &lt;-1&gt;     NA     &lt;NA&gt;
+## 5    9.0      &lt;0&gt;  1.90     &lt;0&gt;   1.84      &lt;3&gt;    NA    &lt;-1&gt;     NA     &lt;NA&gt;
+## 6    9.0      &lt;0&gt;  1.90     &lt;0&gt;   1.84      &lt;3&gt;    NA    &lt;-1&gt;     NA     &lt;NA&gt;
+##    ph f_ph turb f_turb chlfluor f_chlfluor
+## 1 8.3  &lt;0&gt;   15    &lt;0&gt;       NA       &lt;-1&gt;
+## 2 8.2  &lt;0&gt;   15    &lt;0&gt;       NA       &lt;-1&gt;
+## 3 8.3  &lt;0&gt;   13    &lt;0&gt;       NA       &lt;-1&gt;
+## 4 8.3  &lt;0&gt;   16    &lt;0&gt;       NA       &lt;-1&gt;
+## 5 8.3  &lt;0&gt;   10    &lt;0&gt;       NA       &lt;-1&gt;
+## 6 8.3  &lt;0&gt;   14    &lt;0&gt;       NA       &lt;-1&gt;</code></pre>
+<pre class="r"><code>dim(apadbwq)</code></pre>
+<pre><code>## [1] 105120     25</code></pre>
+<pre class="r"><code>range(apadbwq$datetimestamp)</code></pre>
+<pre><code>## [1] &quot;2017-01-01 00:00:00 EST&quot; &quot;2019-12-31 23:45:00 EST&quot;</code></pre>
+<p>Note that this function was able to import and combine data from multiple csv files. We would have had to do this by hand if we were importing data with more general import functions available in R (e.g., <code>read_csv()</code> from last time).</p>
 </div>
 <div id="cleaning-and-combining-swmp-data" class="section level2">
 <h2>Cleaning and combining SWMP data</h2>
+<p>Each row has data for multiple parameters at 15 minute intervals. Each parameter also includes a column with QAQC flags, i.e., <code>f_</code> then the parameter name. We can then use the <code>qaqc</code> function to “screen” observations with specific QAQC flags. You can view what the flags mean at this website: <a href="http://cdmo.baruch.sc.edu/data/qaqc.cfm" class="uri">http://cdmo.baruch.sc.edu/data/qaqc.cfm</a>. We typically want to only use data that have the “0” flag, meaning it has passed initial QAQC checks. Other flags can be kept by adding them to the <code>qaqc_keep</code> argument. You can view a tabular summary of the flags in a dataset using the <code>qaqcchk</code> function.</p>
+<pre class="r"><code># keep only observations that passed qaqc chekcs
+apadbwq &lt;- qaqc(apadbwq, qaqc_keep = &#39;0&#39;)
+
+# check the results
+head(apadbwq)</code></pre>
+<pre><code>##         datetimestamp temp spcond  sal do_pct do_mgl depth cdepth level clevel
+## 1 2017-01-01 00:00:00 15.9  34.99 22.1  104.1    9.0  1.88     NA    NA     NA
+## 2 2017-01-01 00:15:00 15.9  34.94 22.0  104.0    9.0  1.88     NA    NA     NA
+## 3 2017-01-01 00:30:00 15.9  34.90 22.0  103.5    9.0  1.89     NA    NA     NA
+## 4 2017-01-01 00:45:00 15.9  34.94 22.0  103.3    8.9  1.89     NA    NA     NA
+## 5 2017-01-01 01:00:00 15.9  34.99 22.1  104.1    9.0  1.90     NA    NA     NA
+## 6 2017-01-01 01:15:00 15.9  35.08 22.1  103.9    9.0  1.90     NA    NA     NA
+##    ph turb chlfluor
+## 1 8.3   15       NA
+## 2 8.2   15       NA
+## 3 8.3   13       NA
+## 4 8.3   16       NA
+## 5 8.3   10       NA
+## 6 8.3   14       NA</code></pre>
+<pre class="r"><code>dim(apadbwq)</code></pre>
+<pre><code>## [1] 105120     13</code></pre>
+<pre class="r"><code>range(apadbwq$datetimestamp)</code></pre>
+<pre><code>## [1] &quot;2017-01-01 00:00:00 EST&quot; &quot;2019-12-31 23:45:00 EST&quot;</code></pre>
+<p>Notice that the number of rows are the same as before - no rows are removed by <code>qaqc</code> to retain the timesteps. Values that did not fit the screening criteria are given a <code>NA</code> value. Also notice the flag columns are removed.</p>
+<p>Now we can repeat the steps above to import and clean data from the weather station at Apalachicola.</p>
+<pre class="r"><code># import weather data, clean it up
+apaebmet &lt;- import_local(path = &#39;data&#39;, station_code = &#39;apaebmet&#39;)
+apaebmet &lt;- qaqc(apaebmet, qaqc_keep = &#39;0&#39;)
+
+# check the results
+head(apaebmet)</code></pre>
+<pre><code>##         datetimestamp atemp rh   bp wspd maxwspd wdir sdwdir totpar totprcp
+## 1 2017-01-01 00:00:00  15.7 89 1020  4.8     6.7   97     10      0       0
+## 2 2017-01-01 00:15:00  15.8 90 1020  4.9     6.5  103      9      0       0
+## 3 2017-01-01 00:30:00  16.1 91 1020  3.8     5.8  107     11      0       0
+## 4 2017-01-01 00:45:00  16.5 92 1019  3.3     6.4  119     15      0       0
+## 5 2017-01-01 01:00:00  16.9 93 1019  5.3     8.6  113      9      0       0
+## 6 2017-01-01 01:15:00  17.3 93 1019  3.9     5.6  118     10      0       0
+##   totsorad
+## 1       NA
+## 2       NA
+## 3       NA
+## 4       NA
+## 5       NA
+## 6       NA</code></pre>
+<pre class="r"><code>dim(apaebmet)</code></pre>
+<pre><code>## [1] 105120     11</code></pre>
+<pre class="r"><code>range(apaebmet$datetimestamp)</code></pre>
+<pre><code>## [1] &quot;2017-01-01 00:00:00 EST&quot; &quot;2019-12-31 23:45:00 EST&quot;</code></pre>
+<p>The <code>comb</code> function in SWMPr lets us combine data from two locations using the <code>datetimestamp</code> column. We’ll need to do this to use the functions in the WtRegDO package that require both water quality and weather data.</p>
+<p>There are a couple of arguments to consider when using the <code>comb</code> function. First, the <code>timestep</code> argument defines the time step for the resulting output. Keep this at 15 to retain all of the data. You could use a larger time step to subset the data if, for example, we data only every 60 minutes. Second, the <code>method</code> argument defines how two datasets with different date ranges are combined. Use <code>method = 'union'</code> to retain the entire date range across both datasets or use <code>method = 'intersect'</code> to retain only the dates that include data from both datasets. For our example, <code>union</code> and <code>intersect</code> produce the same results since the date ranges are the same.</p>
+<pre class="r"><code># combine water quality and weather data
+apa &lt;- comb(apadbwq, apaebmet, timestep = 15, method = &#39;union&#39;)
+
+# check the results
+head(apa)</code></pre>
+<pre><code>##         datetimestamp temp spcond  sal do_pct do_mgl depth cdepth level clevel
+## 1 2017-01-01 00:00:00 15.9  34.99 22.1  104.1    9.0  1.88     NA    NA     NA
+## 2 2017-01-01 00:15:00 15.9  34.94 22.0  104.0    9.0  1.88     NA    NA     NA
+## 3 2017-01-01 00:30:00 15.9  34.90 22.0  103.5    9.0  1.89     NA    NA     NA
+## 4 2017-01-01 00:45:00 15.9  34.94 22.0  103.3    8.9  1.89     NA    NA     NA
+## 5 2017-01-01 01:00:00 15.9  34.99 22.1  104.1    9.0  1.90     NA    NA     NA
+## 6 2017-01-01 01:15:00 15.9  35.08 22.1  103.9    9.0  1.90     NA    NA     NA
+##    ph turb chlfluor atemp rh   bp wspd maxwspd wdir sdwdir totpar totprcp
+## 1 8.3   15       NA  15.7 89 1020  4.8     6.7   97     10      0       0
+## 2 8.2   15       NA  15.8 90 1020  4.9     6.5  103      9      0       0
+## 3 8.3   13       NA  16.1 91 1020  3.8     5.8  107     11      0       0
+## 4 8.3   16       NA  16.5 92 1019  3.3     6.4  119     15      0       0
+## 5 8.3   10       NA  16.9 93 1019  5.3     8.6  113      9      0       0
+## 6 8.3   14       NA  17.3 93 1019  3.9     5.6  118     10      0       0
+##   totsorad
+## 1       NA
+## 2       NA
+## 3       NA
+## 4       NA
+## 5       NA
+## 6       NA</code></pre>
+<pre class="r"><code>dim(apa)</code></pre>
+<pre><code>## [1] 105120     23</code></pre>
+<pre class="r"><code>range(apa$datetimestamp)</code></pre>
+<pre><code>## [1] &quot;2017-01-01 00:00:00 EST&quot; &quot;2019-12-31 23:45:00 EST&quot;</code></pre>
+</div>
+<div id="exercise-1" class="section level2">
+<h2>Exercise 1</h2>
+<p>Repeat the above exercises but do this using data for Sapelo Island. Import data for <code>sapdcwq</code> and <code>sapmlmet</code>, clean them up with <code>qaqc</code>, and combine them with <code>comb</code>.</p>
+<ol style="list-style-type: decimal">
+<li>Open a new script in your RStudio project, save it with an informative title (e.g, <code>import-detiding.R</code>), and add a section header with <code>Ctrl + Shift + R</code>. 1. Load the SWMPr package with the <code>library</code> function.</li>
+<li>Import and clean up <code>sapdcwq</code> with <code>import_local</code> and <code>qaqc</code>.</li>
+<li>Import and clean up <code>sapmlmet</code> with <code>import_local</code> and <code>qaqc</code>.</li>
+<li>Combine the two with <code>comb</code>. Keep the time step at 15 minutes and use the <code>union</code> option.</li>
+</ol>
 </div>
 <div id="preparing-swmp-data-for-detiding" class="section level2">
 <h2>Preparing SWMP data for detiding</h2>
@@ -449,8 +537,8 @@ div.tocify {
 <div id="what-is-and-why-detiding" class="section level2">
 <h2>What is and why detiding</h2>
 </div>
-<div id="using-wtregdo-to-detie" class="section level2">
-<h2>Using WtRegDO to detie</h2>
+<div id="using-wtregdo-to-detide" class="section level2">
+<h2>Using WtRegDO to detide</h2>
 </div>
 <div id="how-well-did-it-work" class="section level2">
 <h2>How well did it work?</h2>
@@ -486,7 +574,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
