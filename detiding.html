@@ -363,7 +363,7 @@ div.tocify {
 
 <div id="detiding" class="section level1">
 <h1>Detiding</h1>
-<p>Get the lesson R script: <a href="detiding.R">rbasics.R</a></p>
+<p>Get the lesson R script: <a href="detiding.R">detiding.R</a></p>
 <p>Get the lesson data: <a href="data/779980.zip">download zip</a></p>
 <div id="lesson-outline" class="section level2">
 <h2>Lesson Outline</h2>
@@ -379,7 +379,7 @@ div.tocify {
 <h2>Lesson Exercises</h2>
 <ul>
 <li><a href="#exercise-1">Exercise 1</a></li>
-<li>[Exercise 2]</li>
+<li><a href="#exercise-2">Exercise 2</a></li>
 <li>[Exercise 3]</li>
 </ul>
 </div>
@@ -398,9 +398,9 @@ div.tocify {
 <div id="data-import-with-swmpr" class="section level2">
 <h2>Data import with SWMPr</h2>
 <p>Last time we got comfortable with R basics by exploring how to get around the RStudio console, understanding the basics of the R language, and importing datasets for analysis. Now that we have the basics out of the way, we can use some existing packages to work specifically with SWMP data.</p>
-<p>The SWMPr package was developed a few years ago to provide a bridge between the raw data and the R analysis platform. It does this with some degree of success, but by far it’s most useful feature is being able to import and combine time series from SWMP sites with relative ease. In particular, the <code>import_local</code>, <code>qaqc</code>, and <code>comb</code> functions allow us to quickly import, clean up, and combine datasets for follow-up analysis. This all we’ll do with SWMPr in these lessons.</p>
-<p>The <code>import_local</code> function is designed to work with data downloaded from the CDMO using the “Zip Downloads” feature from the Advanced Query System: <a href="http://cdmo.baruch.sc.edu/aqs/zips.cfm" class="uri">http://cdmo.baruch.sc.edu/aqs/zips.cfm</a>. The data we have in our “data” folder was a requested from this feature for all datasets from Apalachicola and Sapelo Island from 2017 to 2019.</p>
-<p>The <code>import_local</code> function has two arguments: <code>path</code> to indicate where the data are located and <code>station_code</code> to indicate which station to import. We first load SWMPr and then use the function to import data for Apallachicola Dry Bar station:</p>
+<p>The SWMPr package was developed a few years ago to provide a bridge between the raw data and the R analysis platform. It does this with some degree of success, but by far it’s most useful feature is being able to import and combine time series from SWMP sites with relative ease. In particular, the <code>import_local</code>, <code>qaqc</code>, and <code>comb</code> functions allow us to quickly import, clean up, and combine datasets for follow-up analysis. This is all we’ll do with SWMPr in these lessons.</p>
+<p>The <code>import_local</code> function is designed to work with data downloaded from the CDMO using the “Zip Downloads” feature from the Advanced Query System: <a href="http://cdmo.baruch.sc.edu/aqs/zips.cfm" class="uri">http://cdmo.baruch.sc.edu/aqs/zips.cfm</a>. The filfes we have in our “data” folder was requested from this feature for all datasets from Apalachicola and Sapelo Island from 2017 to 2019.</p>
+<p>The <code>import_local</code> function has two arguments: <code>path</code> to indicate where the data are located and <code>station_code</code> to indicate which station to import. We first load SWMPr and then use the function to import data for Apalachicola Dry Bar station:</p>
 <pre class="r"><code># load SWMPr
 library(SWMPr)
 
@@ -523,7 +523,7 @@ head(apa)</code></pre>
 </div>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>
-<p>Repeat the above exercises but do this using data for Sapelo Island. Import data for <code>sapdcwq</code> and <code>sapmlmet</code>, clean them up with <code>qaqc</code>, and combine them with <code>comb</code>.</p>
+<p>Repeat the above examples but do this using data for Sapelo Island. Import data for <code>sapdcwq</code> and <code>sapmlmet</code>, clean them up with <code>qaqc</code>, and combine them with <code>comb</code>.</p>
 <ol style="list-style-type: decimal">
 <li>Open a new script in your RStudio project, save it with an informative title (e.g, <code>import-detiding.R</code>), and add a section header with <code>Ctrl + Shift + R</code>. 1. Load the SWMPr package with the <code>library</code> function.</li>
 <li>Import and clean up <code>sapdcwq</code> with <code>import_local</code> and <code>qaqc</code>.</li>
@@ -533,6 +533,154 @@ head(apa)</code></pre>
 </div>
 <div id="preparing-swmp-data-for-detiding" class="section level2">
 <h2>Preparing SWMP data for detiding</h2>
+<p>Now we want to setup our data for use with functions in the WtRegDO package. As with most R functions, the input formats are very specific requiring us to make sure the column names, locations, and types of columns in our data are exactly as needed. The two functions in WtRegDO that we’ll use in this lesson are <code>evalcor</code> and <code>wtreg</code>. You can look at the examples in the help file to see what format we need.</p>
+<p>The WtRegDO package comes with an example dataset that has a format we can model for our SWMP data. First we load WtRegDO and then examine the <code>SAPDC</code> example dataset. This is the same site we used for the previous exercise, just with older data.</p>
+<pre class="r"><code># load WtRegDO
+library(WtRegDO)
+
+# view first six rows of SAPDC
+head(SAPDC)</code></pre>
+<pre><code>##         DateTimeStamp Temp  Sal DO_obs ATemp   BP WSpd      Tide
+## 1 2012-01-01 00:00:00 14.9 33.3    5.0  11.9 1022  0.5 0.8914295
+## 2 2012-01-01 00:30:00 14.9 33.4    5.5  11.3 1022  0.6 1.0011830
+## 3 2012-01-01 01:00:00 14.9 33.4    5.9   9.9 1021  0.6 1.0728098
+## 4 2012-01-01 01:30:00 14.8 33.3    6.4  10.0 1022  2.4 1.1110885
+## 5 2012-01-01 02:00:00 14.7 33.2    6.6  11.4 1022  1.3 1.1251628
+## 6 2012-01-01 02:30:00 14.7 33.3    6.1  10.7 1021  0.0 1.1223799</code></pre>
+<pre class="r"><code># View the structure of SAPDC
+str(SAPDC)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    17568 obs. of  8 variables:
+##  $ DateTimeStamp: POSIXct, format: &quot;2012-01-01 00:00:00&quot; &quot;2012-01-01 00:30:00&quot; ...
+##  $ Temp         : num  14.9 14.9 14.9 14.8 14.7 14.7 14.6 14.6 14.4 14.2 ...
+##  $ Sal          : num  33.3 33.4 33.4 33.3 33.2 33.3 33.4 33.4 33.3 33.3 ...
+##  $ DO_obs       : num  5 5.5 5.9 6.4 6.6 6.1 5.7 5.2 4.6 4 ...
+##  $ ATemp        : num  11.9 11.3 9.9 10 11.4 10.7 10.2 8.9 10.4 11 ...
+##  $ BP           : num  1022 1022 1021 1022 1022 ...
+##  $ WSpd         : num  0.5 0.6 0.6 2.4 1.3 0 0 0 0 0 ...
+##  $ Tide         : num  0.891 1.001 1.073 1.111 1.125 ...</code></pre>
+<p>We can compare this to our Apalachicola dataset from before.</p>
+<pre class="r"><code># view first six rows of apa
+head(apa)</code></pre>
+<pre><code>##         datetimestamp temp spcond  sal do_pct do_mgl depth cdepth level clevel
+## 1 2017-01-01 00:00:00 15.9  34.99 22.1  104.1    9.0  1.88     NA    NA     NA
+## 2 2017-01-01 00:15:00 15.9  34.94 22.0  104.0    9.0  1.88     NA    NA     NA
+## 3 2017-01-01 00:30:00 15.9  34.90 22.0  103.5    9.0  1.89     NA    NA     NA
+## 4 2017-01-01 00:45:00 15.9  34.94 22.0  103.3    8.9  1.89     NA    NA     NA
+## 5 2017-01-01 01:00:00 15.9  34.99 22.1  104.1    9.0  1.90     NA    NA     NA
+## 6 2017-01-01 01:15:00 15.9  35.08 22.1  103.9    9.0  1.90     NA    NA     NA
+##    ph turb chlfluor atemp rh   bp wspd maxwspd wdir sdwdir totpar totprcp
+## 1 8.3   15       NA  15.7 89 1020  4.8     6.7   97     10      0       0
+## 2 8.2   15       NA  15.8 90 1020  4.9     6.5  103      9      0       0
+## 3 8.3   13       NA  16.1 91 1020  3.8     5.8  107     11      0       0
+## 4 8.3   16       NA  16.5 92 1019  3.3     6.4  119     15      0       0
+## 5 8.3   10       NA  16.9 93 1019  5.3     8.6  113      9      0       0
+## 6 8.3   14       NA  17.3 93 1019  3.9     5.6  118     10      0       0
+##   totsorad
+## 1       NA
+## 2       NA
+## 3       NA
+## 4       NA
+## 5       NA
+## 6       NA</code></pre>
+<pre class="r"><code># view the structure of apa
+str(apa)</code></pre>
+<pre><code>## Classes &#39;swmpr&#39; and &#39;data.frame&#39;:    105120 obs. of  23 variables:
+##  $ datetimestamp: POSIXct, format: &quot;2017-01-01 00:00:00&quot; &quot;2017-01-01 00:15:00&quot; ...
+##  $ temp         : num  15.9 15.9 15.9 15.9 15.9 15.9 15.9 15.9 15.9 15.9 ...
+##  $ spcond       : num  35 34.9 34.9 34.9 35 ...
+##  $ sal          : num  22.1 22 22 22 22.1 22.1 22.1 22.2 22.2 22.2 ...
+##  $ do_pct       : num  104 104 104 103 104 ...
+##  $ do_mgl       : num  9 9 9 8.9 9 9 8.9 9 9 8.9 ...
+##  $ depth        : num  1.88 1.88 1.89 1.89 1.9 1.9 1.93 1.94 1.94 1.97 ...
+##  $ cdepth       : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ level        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ clevel       : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ ph           : num  8.3 8.2 8.3 8.3 8.3 8.3 8.2 8.3 8.3 8.2 ...
+##  $ turb         : num  15 15 13 16 10 14 21 13 13 15 ...
+##  $ chlfluor     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ atemp        : num  15.7 15.8 16.1 16.5 16.9 17.3 18 18.3 18.3 18.4 ...
+##  $ rh           : num  89 90 91 92 93 93 93 94 94 95 ...
+##  $ bp           : num  1020 1020 1020 1019 1019 ...
+##  $ wspd         : num  4.8 4.9 3.8 3.3 5.3 3.9 5.3 5.1 3.9 3.8 ...
+##  $ maxwspd      : num  6.7 6.5 5.8 6.4 8.6 5.6 6.8 7.4 5.2 5.5 ...
+##  $ wdir         : num  97 103 107 119 113 118 128 124 121 129 ...
+##  $ sdwdir       : num  10 9 11 15 9 10 8 7 7 8 ...
+##  $ totpar       : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ totprcp      : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ totsorad     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  - attr(*, &quot;station&quot;)= chr [1:2] &quot;apadbwq&quot; &quot;apaebmet&quot;
+##  - attr(*, &quot;parameters&quot;)= chr [1:22] &quot;temp&quot; &quot;spcond&quot; &quot;sal&quot; &quot;do_pct&quot; ...
+##  - attr(*, &quot;qaqc_cols&quot;)= logi FALSE
+##  - attr(*, &quot;cens_cols&quot;)= logi FALSE
+##  - attr(*, &quot;date_rng&quot;)= POSIXct[1:2], format: &quot;2017-01-01 00:00:00&quot; &quot;2019-12-31 23:45:00&quot;
+##  - attr(*, &quot;timezone&quot;)= chr &quot;America/Jamaica&quot;
+##  - attr(*, &quot;stamp_class&quot;)= chr [1:2] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre>
+<p>So, we need to do a few things to our Apalachicola dataset to make it look like SAPDC. We can use functions from the dplyr package to “wrangle” the data into the correct format. The dplyr package comes with the tidyverse. All we need to do is rename the columns and select only those that are relevant. This can all be done with the <code>select</code> function in dplyr.</p>
+<pre class="r"><code># load dplyr
+library(dplyr)
+
+# select and rename columns
+apa &lt;- select(apa,
+  DateTimeStamp = datetimestamp, 
+  Temp = temp, 
+  Sal = sal, 
+  DO_obs = do_mgl,
+  ATemp = atemp, 
+  BP = bp, 
+  WSpd = wspd, 
+  Tide = depth
+)
+
+# show first six rows
+head(apa)</code></pre>
+<pre><code>##         DateTimeStamp Temp  Sal DO_obs ATemp   BP WSpd Tide
+## 1 2017-01-01 00:00:00 15.9 22.1    9.0  15.7 1020  4.8 1.88
+## 2 2017-01-01 00:15:00 15.9 22.0    9.0  15.8 1020  4.9 1.88
+## 3 2017-01-01 00:30:00 15.9 22.0    9.0  16.1 1020  3.8 1.89
+## 4 2017-01-01 00:45:00 15.9 22.0    8.9  16.5 1019  3.3 1.89
+## 5 2017-01-01 01:00:00 15.9 22.1    9.0  16.9 1019  5.3 1.90
+## 6 2017-01-01 01:15:00 15.9 22.1    9.0  17.3 1019  3.9 1.90</code></pre>
+<pre class="r"><code># view structure
+str(apa)</code></pre>
+<pre><code>## Classes &#39;swmpr&#39; and &#39;data.frame&#39;:    105120 obs. of  8 variables:
+##  $ DateTimeStamp: POSIXct, format: &quot;2017-01-01 00:00:00&quot; &quot;2017-01-01 00:15:00&quot; ...
+##  $ Temp         : num  15.9 15.9 15.9 15.9 15.9 15.9 15.9 15.9 15.9 15.9 ...
+##  $ Sal          : num  22.1 22 22 22 22.1 22.1 22.1 22.2 22.2 22.2 ...
+##  $ DO_obs       : num  9 9 9 8.9 9 9 8.9 9 9 8.9 ...
+##  $ ATemp        : num  15.7 15.8 16.1 16.5 16.9 17.3 18 18.3 18.3 18.4 ...
+##  $ BP           : num  1020 1020 1020 1019 1019 ...
+##  $ WSpd         : num  4.8 4.9 3.8 3.3 5.3 3.9 5.3 5.1 3.9 3.8 ...
+##  $ Tide         : num  1.88 1.88 1.89 1.89 1.9 1.9 1.93 1.94 1.94 1.97 ...</code></pre>
+<p>Finally, we need to deal with pesky missing data values. Most functions in R deal with missing data by either not working at all or providing some work-around to accommodate the missing values. The functions in WtRegDO fall in the former category.</p>
+<p>Missing data in SWMP are not uncommon and they often occur when sondes or other equipment are down for maintenance or are otherwise broken for a period of time. So, missing observations usually come in blocks where all parameters are unavailable, as opposed to only one parameter. We can quickly remove rows with missing data using the <code>na.omit</code> function. Note that this will remove an entire row where even one parameter is missing data. Usually this is not ideal for most data, but this is okay for our examples because we require all parameters at a time step to estimate metabolism.</p>
+<p>Here we see an example of a chunk of missing observations.</p>
+<pre class="r"><code>apa[which(is.na(apa$Tide))[1:5], ]</code></pre>
+<pre><code>##            DateTimeStamp Temp Sal DO_obs ATemp   BP WSpd Tide
+## 2920 2017-01-31 09:45:00   NA  NA     NA  16.6 1025  1.9   NA
+## 4946 2017-02-21 12:15:00   NA  NA     NA  20.8 1017  6.5   NA
+## 4947 2017-02-21 12:30:00   NA  NA     NA  20.7 1017  6.7   NA
+## 4948 2017-02-21 12:45:00   NA  NA     NA  20.7 1016  5.6   NA
+## 4949 2017-02-21 13:00:00   NA  NA     NA  20.5 1016  4.3   NA</code></pre>
+<p>Now we just remove the rows with missing data using <code>na.omit</code>.</p>
+<pre class="r"><code># number of rows before
+nrow(apa)</code></pre>
+<pre><code>## [1] 105120</code></pre>
+<pre class="r"><code># omit missing rows
+apa &lt;- na.omit(apa)
+
+# number of rows after
+nrow(apa)</code></pre>
+<pre><code>## [1] 47587</code></pre>
+</div>
+<div id="exercise-2" class="section level2">
+<h2>Exercise 2</h2>
+<p>Repeat the above examples but use the combined dataset for Sapelo Island that you created in <a href="#exercise-1">Exercise 1</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Create a new section in your script using <code>Ctrl + Shift + r</code>.</li>
+<li>Load the dplyr package with the library function.</li>
+<li>Simultaneously rename and select the water temperature (<code>Temp</code>), salinity (<code>Sal</code>), dissolved oxygen (<code>DO_obs</code>), air temperature (<code>Atemp</code>), air pressure (<code>BP</code>), wind speed (<code>WSpd</code>), and tidal height (<code>Tide</code>) columns in the Sapelo Island dataset with the <code>select</code> function from dplyr.</li>
+<li>Remove missing rows with <code>na.omit</code>.</li>
+</ol>
 </div>
 <div id="what-is-and-why-detiding" class="section level2">
 <h2>What is and why detiding</h2>
