@@ -7,3 +7,119 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ```
 
 # Detiding
+
+Get the lesson R script: [rbasics.R](detiding.R)
+
+Get the lesson data: [download zip](data/779980.zip)
+
+## Lesson Outline
+
+- [Goals and Motivation]
+- [RStudio]
+- [R language fundamentals]
+- [Data structures in R]
+- [Getting your data into R]
+
+## Lesson Exercises
+
+- [Exercise 1]
+- [Exercise 2]
+- [Exercise 3]
+
+## Goals and Motivation
+
+This lesson will teach you how to use the [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) package to import SWMP data and how to use the [WtRegDO](https://github.com/fawda123/wtregdo) package to detide a dissolved oxygen time series.  We'll also be using packages in the tidyverse to wrangle the data for use with the WtRegDO functions. Background information on SWMPr is [here](https://journal.r-project.org/archive/2016/RJ-2016-015/index.html) and background information on detiding is [here](https://aslopubs.onlinelibrary.wiley.com/doi/full/10.1002/lom3.10062).  
+
+By the end of this lesson, you should know how or find the resources to be able to do the following:
+
+* Load SWMPr and import data from Apalachicola and Sapelo Island using the `import_local` function
+* Clean the SWMP data with `qaqc` and combine datasets with `comb`
+* Use the dplyr package to prepare the data for WtRegDO
+* Understand if dissolved oxygen is correlated with tide and how WtRegDO "removes" the tidal signal
+* Use WtRegDO to detide the DO time series
+
+## Data import with SWMPr
+
+Last time we got comfortable with R basics by exploring how to get around the RStudio console, understanding the basics of the R language, and importing datasets for analysis.  Now that we have the basics out of the way, we can use some existing packages to work specifically with SWMP data. 
+
+The SWMPr package was developed a few years ago to provide a bridge between the raw data and the R analysis platform. It does this with some degree of success, but by far it's most useful feature is being able to import and combine time series from SWMP sites with relative ease.  In particular, the `import_local`, `qaqc`, and `comb` functions allow us to quickly import, clean up, and combine datasets for follow-up analysis.  This all we'll do with SWMPr in these lessons.
+
+The `import_local` function is designed to work with data downloaded from the CDMO using the "Zip Downloads" feature from the Advanced Query System: <http://cdmo.baruch.sc.edu/aqs/zips.cfm>.  The data we have in our "data" folder was a requested from this feature for all datasets from Apalachicola and Sapelo Island from 2017 to 2019.
+
+The `import_local` function has two arguments: `path` to indicate where the data are located and `station_code` to indicate which station to import.  We first load SWMPr and then use the function to import data for Apallachicola Dry Bar station:
+
+```{r}
+# load SWMPr
+library(SWMPr)
+
+# import data
+apadbwq <- import_local(path = 'data', station_code = 'apadbwq')
+
+# characteristics of the dataset
+head(apadbwq)
+dim(apadbwq)
+range(apadbwq$datetimestamp)
+```
+
+Note that this function was able to import and combine data from multiple csv files.  We would have had to do this by hand if we were importing data with more general import functions available in R (e.g., `read_csv()` from last time).
+
+## Cleaning and combining SWMP data
+
+Each row has data for multiple parameters at 15 minute intervals.  Each parameter also includes a column with QAQC flags, i.e., `f_` then the parameter name.  We can then use the `qaqc` function to "screen" observations with specific QAQC flags.  You can view what the flags mean at this website: <http://cdmo.baruch.sc.edu/data/qaqc.cfm>.  We typically want to only use data that have the "0" flag, meaning it has passed initial QAQC checks.  Other flags can be kept by adding them to the `qaqc_keep` argument. You can view a tabular summary of the flags in a dataset using the `qaqcchk` function. 
+
+```{r}
+# keep only observations that passed qaqc chekcs
+apadbwq <- qaqc(apadbwq, qaqc_keep = '0')
+
+# check the results
+head(apadbwq)
+dim(apadbwq)
+range(apadbwq$datetimestamp)
+```
+
+Notice that the number of rows are the same as before - no rows are removed by `qaqc` to retain the timesteps.  Values that did not fit the screening criteria are given a `NA` value.  Also notice the flag columns are removed. 
+
+Now we can repeat the steps above to import and clean data from the weather station at Apalachicola. 
+
+```{r}
+# import weather data, clean it up
+apaebmet <- import_local(path = 'data', station_code = 'apaebmet')
+apaebmet <- qaqc(apaebmet, qaqc_keep = '0')
+
+# check the results
+head(apaebmet)
+dim(apaebmet)
+range(apaebmet$datetimestamp)
+```
+
+The `comb` function in SWMPr lets us combine data from two locations using the `datetimestamp` column.  We'll need to do this to use the functions in the WtRegDO package that require both water quality and weather data.  
+
+There are a couple of arguments to consider when using the `comb` function.  First, the `timestep` argument defines the time step for the resulting output.  Keep this at 15 to retain all of the data.  You could use a larger time step to subset the data if, for example, we data only every 60 minutes. Second, the `method` argument defines how two datasets with different date ranges are combined.  Use `method = 'union'` to retain the entire date range across both datasets or use `method = 'intersect'` to retain only the dates that include data from both datasets.  For our example, `union` and `intersect` produce the same results since the date ranges are the same. 
+
+```{r}
+# combine water quality and weather data
+apa <- comb(apadbwq, apaebmet, timestep = 15, method = 'union')
+
+# check the results
+head(apa)
+dim(apa)
+range(apa$datetimestamp)
+```
+
+## Exercise 1
+
+Repeat the above exercises but do this using data for Sapelo Island.  Import data for `sapdcwq` and `sapmlmet`, clean them up with `qaqc`, and combine them with `comb`. 
+
+1. Open a new script in your RStudio project, save it with an informative title (e.g, `import-detiding.R`), and add a section header with `Ctrl + Shift + R`. 1. Load the SWMPr package with the `library` function. 
+1. Import and clean up `sapdcwq` with `import_local` and `qaqc`. 
+1. Import and clean up `sapmlmet` with `import_local` and `qaqc`. 
+1. Combine the two with `comb`. Keep the time step at 15 minutes and use the `union` option. 
+
+## Preparing SWMP data for detiding
+
+## What is and why detiding
+
+## Using WtRegDO to detide
+
+## How well did it work?  
+
