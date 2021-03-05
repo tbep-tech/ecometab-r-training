@@ -12,6 +12,8 @@ Get the lesson R script: [rbasics.R](rbasics.R)
 
 Get the lesson data: [download zip](data/779980.zip)
 
+View the lesson recording:  [recording](https://www.youtube.com/watch?v=USrVG3IiW90&ab_channel=TheTBEP)
+
 ## Lesson Outline
 
 - [Goals and Motivation]
