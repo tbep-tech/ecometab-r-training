@@ -214,10 +214,64 @@ Here's an example from Sapelo Island demonstrating the problem.
 knitr::include_graphics('figure/tidecorex.png')
 ```
 
+Detiding works by using a regression approach to estimate a "signal" of the tide in the DO time series and then removing that signal to produce a "normalized" DO time series.  This normalized time series is thought to represent a biological signal as opposed to both a biological and tidal signal in the observed DO time series.  The method is based off of work in [Hirsch et al. 2010](https://onlinelibrary.wiley.com/doi/full/10.1111/j.1752-1688.2010.00482.x) using a __moving window, weighted regression__ approach that fits a unique model to each point in the time series.  Each unique model is fit using a set of weights that determine the influence of observations in the window to the model fit to the data. For detiding, these weights are determined by the time of day, number of days in the window, and a range of observations for the tidal height.  The "widths" of these windows have a direct effect on how well the model can detide the DO data.    
+
+An additional consideration for detiding is that it does not work well during all times of the year.  The model is likely to remove a portion of the biological signal at times of the year when the tidal height is correlated with the sun angle.  In other words, when periods of peak productivity are correlated with tidal height, it's impossible to isolate and remove only the tidal signal.  The end results is a normalized DO time series that is likely to underestimate metabolism because a portion of the biological signal was also removed.  
+
+Finally, detiding may not even be necessary for a DO time series.  If you have a suspicion that your DO data are tidally influences, it's best to verify this before blank application of the detiding functions.  It's better to estimate metabolism without detiding then to detide and estiamte metabolism if there is no or a minimal tidal influence.   
+
+For all of these reasons, detiding is an art that may require several iterations of model fitting to get the most desirable result.  Evaluating model fit is best achieved through evaluation of the metabolism estimates and we save that discussion for the next lesson. 
 
 ## Using WtRegDO to detide
 
+If you have strong reason to believe your data are tidally influenced, first use the `evalcor` function to "evaluate the correlation" between tidal change and the sun angle.  These correlations will help you identify periods of time when you might expect the detiding functions to not work well by removing both the tidal and biological signal. 
+
+The `evalcor` function requires an input dataset (as prepared from before), the time zone at the location, and the location lat/lon.  The time zone can be extracted from the `DateTimeStamp` column of the dataset.  The latitude and longitude can be found from the metadata in the zipped folder that was downloaded from CDMO or using the `site_codes()` function from SWMPr.  If using the latter approach, you'll need to [register](http://cdmo.baruch.sc.edu/webservices.cfm) your computer's IP address with CDMO. 
+
+Site location info is needed so that the `evalcor` function can identify the angle of the sun at the location and time for each observation. The function may take a few minutes to run. 
+
+```{r, fig.height = 4, fig.width = 8}
+# get time zone
+tz <- attr(apa$DateTimeStamp, which = 'tzone')
+lat <- 29.6747
+long <- 85.0583
+
+evalcor(apa, tz = tz, lat = lat, long = long)
+```
+
+What we get is a time series of the correlation of tidal height with the sun angle.  We can expect the detiding method to work best when this correlation is zero and it will not as effective as the correlation changes from zero.  So, in this case, detiding may not work as well in middle to late summer and early spring.  For periods of the year when detiding may not work, interpret the results with caution, or simply do not use detiding during those parts of the year. 
+
+Now that we have an expectation for when detiding would work well, we can use the `wtreg` function to detide the DO time series. The same inputs for `evalcor` are used for `wtreg`.  The rest of the arguments for `wtreg` are left at their default value, including the window widths for weighted regression.  Running the function may also take a minute or two. 
+
+```{r}
+dtd <- wtreg(apa, tz = tz, lat = lat, long = long)
+```
+
+The output from `wtreg` is similar to the input dataset, but with some additional columns added.  The two most important ones are `DO_prd` and `DO_nrm` for the predicted DO time series from your observed data and `DO_nrm` for the "normalized" or detided time series.  
+
+```{r}
+head(dtd)
+```
+
+In the next lesson, we'll cover some ways to evaluate effectiveness of the detiding.  For now, we can look at a simple plot to get a sense of how detiding altered the data. This example uses the plotly library, you'll have to install it to recreate the plot.
+
+```{r}
+library(plotly)
+
+plot_ly(dtd, x = ~DateTimeStamp, y = ~DO_obs, name = 'Observed DO', type = 'scatter', mode = 'lines') %>% 
+  add_trace(y = ~DO_nrm, name = 'Detided DO', mode = 'lines') %>% 
+  layout(xaxis = list(title = NULL), yaxis = list(title = "DO (mg/L)"))
+```
+
 ## Exercise 3
 
-### How well did it work?  
+Try running the `evalcor` and `wtreg` functions on the Sapelo Island data from [Exercise 2].  
+
+1. Run `evalcor` using `tz = 'America/Jamaica'`, `lat = ''`, and `long = ''`.
+1. From the plot, what times of year might you expect detiding to not work very well? 
+1. Run `wtreg` using the same arguments in step 1.  If you have plotly installed, try plotting the results to see how the "normalized" time series compares to the observed. 
+
+## Summary
+
+In this lesson we learned how to import data with SWMPr, prepare the data for analysis with WtRegDO, evaluate the DO time series with `evalcor`, and run weighted regression with `wtreg` to detide the data.  Next time we'll cover the basics of estimating ecosystem metabolism and how we can use those results to evaluate the detiding results. 
 
