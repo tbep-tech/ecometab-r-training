@@ -15,10 +15,11 @@ Get the lesson data: [download zip](data/779980.zip)
 ## Lesson Outline
 
 - [Goals and Motivation]
-- [RStudio]
-- [R language fundamentals]
-- [Data structures in R]
-- [Getting your data into R]
+- [Data import with SWMPr]
+- [Cleaning and combining SWMP data]
+- [Preparing SWMP data for detiding]
+- [What is and why detiding]
+- [Using WtRegDO to detide]
 
 ## Lesson Exercises
 
@@ -34,17 +35,17 @@ By the end of this lesson, you should know how or find the resources to be able 
 
 * Load SWMPr and import data from Apalachicola and Sapelo Island using the `import_local` function
 * Clean the SWMP data with `qaqc` and combine datasets with `comb`
-* Use the dplyr package to prepare the data for WtRegDO
+* Use the dplyr package from the tidyverse to prepare the data for WtRegDO
 * Understand if dissolved oxygen is correlated with tide and how WtRegDO "removes" the tidal signal
 * Use WtRegDO to detide the DO time series
 
 ## Data import with SWMPr
 
-Last time we got comfortable with R basics by exploring how to get around the RStudio console, understanding the basics of the R language, and importing datasets for analysis.  Now that we have the basics out of the way, we can use some existing packages to work specifically with SWMP data. 
+Last time we got comfortable with [R basics](rbasics.html) by exploring how to get around the RStudio console, understanding the basics of the R language, and importing datasets for analysis.  Now that we have the basics out of the way, we can use some existing packages to work specifically with SWMP data. 
 
 The SWMPr package was developed a few years ago to provide a bridge between the raw data and the R analysis platform. It does this with some degree of success, but by far it's most useful feature is being able to import and combine time series from SWMP sites with relative ease.  In particular, the `import_local`, `qaqc`, and `comb` functions allow us to quickly import, clean up, and combine datasets for follow-up analysis.  This is all we'll do with SWMPr in these lessons.
 
-The `import_local` function is designed to work with data downloaded from the CDMO using the "Zip Downloads" feature from the Advanced Query System: <http://cdmo.baruch.sc.edu/aqs/zips.cfm>.  The filfes we have in our "data" folder was requested from this feature for all datasets from Apalachicola and Sapelo Island from 2017 to 2019.
+The `import_local` function is designed to work with data downloaded from the CDMO using the [Zip Downloads](http://cdmo.baruch.sc.edu/aqs/zips.cfm) feature from the Advanced Query System.  The files we have in our "data" folder were requested from this feature for all Apalachicola and Sapelo Island data from 2017 to 2019.
 
 The `import_local` function has two arguments: `path` to indicate where the data are located and `station_code` to indicate which station to import.  We first load SWMPr and then use the function to import data for Apalachicola Dry Bar station:
 
@@ -65,11 +66,11 @@ Note that this function was able to import and combine data from multiple csv fi
 
 ## Cleaning and combining SWMP data
 
-Each row has data for multiple parameters at 15 minute intervals.  Each parameter also includes a column with QAQC flags, i.e., `f_` then the parameter name.  We can then use the `qaqc` function to "screen" observations with specific QAQC flags.  You can view what the flags mean at this website: <http://cdmo.baruch.sc.edu/data/qaqc.cfm>.  We typically want to only use data that have the "0" flag, meaning it has passed initial QAQC checks.  Other flags can be kept by adding them to the `qaqc_keep` argument. You can view a tabular summary of the flags in a dataset using the `qaqcchk` function. 
+Each row has data for multiple parameters at 15 minute intervals.  Each parameter also includes a column with QAQC flags, i.e., `f_` then the parameter name.  We can then use the `qaqc` function to "screen" observations with specific QAQC flags.  You can view what the flags mean at this website: <http://cdmo.baruch.sc.edu/data/qaqc.cfm>.  We'll keep all data that have the flags 0, 1, 2, 3, 4, and 5 by indicating this information in the `qaqc_keep` argument (in practice, you may only want to keep data with a "zero" flag). You can view a tabular summary of the flags in a dataset using the `qaqcchk` function. 
 
 ```{r}
 # keep only observations that passed qaqc chekcs
-apadbwq <- qaqc(apadbwq, qaqc_keep = '0')
+apadbwq <- qaqc(apadbwq, qaqc_keep = c('0', '1', '2', '3', '4', '5'))
 
 # check the results
 head(apadbwq)
@@ -77,14 +78,14 @@ dim(apadbwq)
 range(apadbwq$datetimestamp)
 ```
 
-Notice that the number of rows are the same as before - no rows are removed by `qaqc` to retain the timesteps.  Values that did not fit the screening criteria are given a `NA` value.  Also notice the flag columns are removed. 
+Notice that the number of rows are the same as before - no rows are removed by `qaqc`.  Values that did not fit the screening criteria are given a `NA` value.  Also notice the flag columns are removed. 
 
-Now we can repeat the steps above to import and clean data from the weather station at Apalachicola. 
+Our metabolism functions also require weather data.  We can repeat the steps above to import and clean data from the weather station at Apalachicola. 
 
 ```{r}
 # import weather data, clean it up
 apaebmet <- import_local(path = 'data', station_code = 'apaebmet')
-apaebmet <- qaqc(apaebmet, qaqc_keep = '0')
+apaebmet <- qaqc(apaebmet, qaqc_keep = c('0', '1', '2', '3', '4', '5'))
 
 # check the results
 head(apaebmet)
@@ -94,11 +95,13 @@ range(apaebmet$datetimestamp)
 
 The `comb` function in SWMPr lets us combine data from two locations using the `datetimestamp` column.  We'll need to do this to use the functions in the WtRegDO package that require both water quality and weather data.  
 
-There are a couple of arguments to consider when using the `comb` function.  First, the `timestep` argument defines the time step for the resulting output.  Keep this at 15 to retain all of the data.  You could use a larger time step to subset the data if, for example, we data only every 60 minutes. Second, the `method` argument defines how two datasets with different date ranges are combined.  Use `method = 'union'` to retain the entire date range across both datasets or use `method = 'intersect'` to retain only the dates that include data from both datasets.  For our example, `union` and `intersect` produce the same results since the date ranges are the same. 
+There are a couple of arguments to consider when using the `comb` function.  First, the `timestep` argument defines the time step for the resulting output.  Keep this at 15 to retain all of the data.  You could use a larger time step to subset the data if, for example, we wanted data every 60 minutes. Second, the `method` argument defines how two datasets with different date ranges are combined.  Use `method = 'union'` to retain the entire date range across both datasets or use `method = 'intersect'` to retain only the dates that include data from both datasets.  For our example, `union` and `intersect` produce the same results since the date ranges are the same. 
+
+To speed up the examples in our lesson, we'll use a 60 minute timestep.  In practice, it's better to retain all of the data (i.e., `timestep = 15`) 
 
 ```{r}
 # combine water quality and weather data
-apa <- comb(apadbwq, apaebmet, timestep = 15, method = 'union')
+apa <- comb(apadbwq, apaebmet, timestep = 60, method = 'union')
 
 # check the results
 head(apa)
@@ -113,13 +116,13 @@ Repeat the above examples but do this using data for Sapelo Island.  Import data
 1. Open a new script in your RStudio project, save it with an informative title (e.g, `import-detiding.R`), and add a section header with `Ctrl + Shift + R`. 1. Load the SWMPr package with the `library` function. 
 1. Import and clean up `sapdcwq` with `import_local` and `qaqc`. 
 1. Import and clean up `sapmlmet` with `import_local` and `qaqc`. 
-1. Combine the two with `comb`. Keep the time step at 15 minutes and use the `union` option. 
+1. Combine the two with `comb`. Use a 60 minute time step and use the `union` option. 
 
 ## Preparing SWMP data for detiding
 
-Now we want to setup our data for use with functions in the WtRegDO package.  As with most R functions, the input formats are very specific requiring us to make sure the column names, locations, and types of columns in our data are exactly as needed.  The two functions in WtRegDO that we'll use in this lesson are `evalcor` and `wtreg`.  You can look at the examples in the help file to see what format we need. 
+Now we want to setup our data for use with functions in the WtRegDO package.  As with most R functions, the input formats are very specific requiring us to make sure the column names, locations, and types of columns in our data are exactly as needed.  The two functions in WtRegDO that we'll use in this lesson are `evalcor` and `wtreg`.  You can look at the examples in the help file for these functions to see what format we need (`?evalcor`, `?wtreg`). 
 
-The WtRegDO package comes with an example dataset that has a format we can model for our SWMP data. First we load WtRegDO and then examine the `SAPDC` example dataset.  This is the same site we used for the previous exercise, just with older data. 
+The WtRegDO package comes with an example dataset that has a format we can follow for our SWMP data. First we load WtRegDO and then examine the `SAPDC` example dataset.  This is the same site we used for the previous exercise, just with older data. 
 
 ```{r}
 # load WtRegDO
@@ -142,7 +145,7 @@ head(apa)
 str(apa)
 ```
 
-So, we need to do a few things to our Apalachicola dataset to make it look like SAPDC.  We can use functions from the dplyr package to "wrangle" the data into the correct format.  The dplyr package comes with the tidyverse. All we need to do is rename the columns and select only those that are relevant.  This can all be done with the `select` function in dplyr.
+So, we need to do a few things to our Apalachicola dataset to make it look like SAPDC so it will work with the functions.  We can use the dplyr package to "wrangle" the data into the correct format.  The dplyr package comes with the tidyverse. All we need to do is rename the columns and select only those that are relevant.  This can all be done with the `select` function in dplyr.  Remember, we are trying to follow the exact format of the SAPDC dataset that comes with WtRegDO.
 
 ```{r}
 # load dplyr
@@ -167,7 +170,7 @@ head(apa)
 str(apa)
 ```
 
-Finally, we need to deal with pesky missing data values.  Most functions in R deal with missing data by either not working at all or providing some work-around to accommodate the missing values. The functions in WtRegDO fall in the former category.  
+Finally, we need to deal with pesky missing data values.  Most functions in R deal with missing data by either not working at all or providing some work-around to accommodate the missing values. The functions in WtRegDO are in the former category.  
 
 Missing data in SWMP are not uncommon and they often occur when sondes or other equipment are down for maintenance or are otherwise broken for a period of time.  So, missing observations usually come in blocks where all parameters are unavailable, as opposed to only one parameter.  We can quickly remove rows with missing data using the `na.omit` function. Note that this will remove an entire row where even one parameter is missing data.  Usually this is not ideal for most data, but this is okay for our examples because we require all parameters at a time step to estimate metabolism. 
 
@@ -196,12 +199,25 @@ Repeat the above examples but use the combined dataset for Sapelo Island that yo
 
 1. Create a new section in your script using `Ctrl + Shift + r`. 
 1. Load the dplyr package with the library function. 
-1. Simultaneously rename and select the water temperature (`Temp`), salinity (`Sal`), dissolved oxygen (`DO_obs`), air temperature (`Atemp`), air pressure (`BP`), wind speed (`WSpd`), and tidal height (`Tide`) columns in the Sapelo Island dataset with the `select` function from dplyr. 
+1. Simultaneously rename and select the date/time columns (`DateTimeStamp`), water temperature (`Temp`), salinity (`Sal`), dissolved oxygen (`DO_obs`), air temperature (`ATemp`), barometric pressure (`BP`), wind speed (`WSpd`), and tidal height (`Tide`) columns in the Sapelo Island dataset with the `select` function from dplyr. 
 1. Remove missing rows with `na.omit`. 
 
 ## What is and why detiding
 
+Now we can start using the detiding functions in WtRegDO.  The main reason to do this is that the dissolved oxygen time series is correlated with the tide and you want to remove that signal prior to estimating metabolism.  A fundamental assumption of the methods we use to estimate metabolism is that the data represents a sample from the same place over time.  If a sonde is measuring data moving past the sensor with changes in the tide, then you are potentially measuring parcels of water with different metabolic histories.  
+
+Quite literally, in order for the metabolism functions to work well, the DO time series should have a noticeable diel signal.  DO should start increasing with sunrise as production begins, it should peak around mid-day when temperature and solar radiation is highest, and it should decrease with sundown and into the night as respiration processes dominate. A DO time series influenced by the tide will typically not follow this pattern.  Metabolism estimates from DO data with significant tidal influence will often appear as "anomalous", having negative values for production and postiive values for respiration.  We'll discuss more on this next time. 
+
+Here's an example from Sapelo Island demonstrating the problem. 
+
+```{r, out.width = '100%'}
+knitr::include_graphics('figure/tidecorex.png')
+```
+
+
 ## Using WtRegDO to detide
 
-## How well did it work?  
+## Exercise 3
+
+### How well did it work?  
 
