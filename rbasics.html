@@ -19,14 +19,21 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -40,11 +47,6 @@
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -57,32 +59,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -92,10 +69,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -112,40 +85,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 52px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h2 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h3 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h4 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h5 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
-.section h6 {
-  padding-top: 57px;
-  margin-top: -57px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -173,7 +119,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -185,7 +131,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -196,10 +142,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -211,7 +170,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -337,13 +295,13 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -379,14 +337,14 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="Data_and_Resources.html">
-    <span class="fa fa-list"></span>
+    <span class="fas fa-list"></span>
      
     Data and resources
   </a>
 </li>
 <li>
   <a href="https://github.com/tbep-tech/ecometab-r-training">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -395,7 +353,7 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -444,7 +402,7 @@ div.tocify {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/" target="_blank">Stack Overflow blog</a>, <a href="http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html" target="_blank">IEEE rating</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2021-03-07, there are 17222 supplemental packages for R on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2021-03-08, there are 17247 supplemental packages for R on CRAN!</p>
 </div>
 </div>
 <div id="rstudio" class="section level2">
@@ -489,7 +447,7 @@ div.tocify {
 <div id="r-language-fundamentals" class="section level2">
 <h2>R language fundamentals</h2>
 <p>R is built around functions. These are commands that do specific things based on what you provide. The basic syntax of a function follows the form: <code>function_name(arg1, arg2, ...)</code>.</p>
-<p>With the base install, you will gain access to many functions (2325, to be exact). Some examples:</p>
+<p>With the base install, you will gain access to many functions (2292, to be exact). Some examples:</p>
 <pre class="r"><code># print
 print(&#39;hello world!&#39;)</code></pre>
 <pre><code>## [1] &quot;hello world!&quot;</code></pre>
@@ -498,24 +456,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1]  6.864018  9.153330 10.309563  8.448532 14.273495  9.909794 11.187801 12.277856 10.181349  7.404070 11.487241  5.895302  9.748905  8.853777 11.903370
-##  [16] 12.567142  9.543139  6.078471  9.915009  8.573457 10.480666  9.527605  8.797399 11.705868 10.108452 11.064598 11.400824 13.698783  8.337350 11.789346
-##  [31] 12.259789 10.919565 12.661795 12.633718  8.644759 11.765958 10.659577 10.755706 11.534641  9.113054  7.732519 12.449993 15.149125 14.479980 11.051332
-##  [46] 10.804441 11.649537 10.411433 12.345775  9.755804 12.670731 10.869233  7.641028 10.863072  7.307369 11.403145  6.642879  8.356749  9.690061 11.203253
-##  [61]  3.582756  8.805684 10.328746  9.275483  9.344990  8.767685  4.942754 10.376282  9.936210 10.459444  8.720776 12.372871  9.810888 10.158114 12.845135
-##  [76]  9.204794  7.582179 10.636344 10.526165  8.525194  9.832209 12.849648  8.531719 14.164809  5.623238 10.496447  8.757406  7.788832 10.873708  6.859168
-##  [91] 10.553410 13.313570  8.506115  8.633839  9.831609 10.604550  7.593333  8.396144 10.575354  9.323722</code></pre>
+<pre><code>##   [1]  9.776440  9.256148  9.993151  6.731263  7.706080  8.911614  5.680981
+##   [8] 14.240835 10.921332 10.497093  5.051496 11.579032 11.017692 13.406701
+##  [15]  9.926828  9.501155 11.740107 12.178295  8.575804  9.310005 12.159825
+##  [22]  9.184103  5.230795  7.038516 11.623678 13.120808  9.098322 12.455476
+##  [29] 12.542397  8.158422  8.220773  9.999702 10.165183  9.480945  8.814796
+##  [36] 12.584647 12.026261  8.797103 11.081000 13.221634  8.260942  4.593864
+##  [43]  9.853550  9.651040  9.041423  9.544956 11.796775  6.212956 12.916347
+##  [50] 10.560431  9.341863  7.316824 10.886209  5.560819  7.854844 12.059572
+##  [57] 10.845602  3.495635  7.845830 11.166118 13.105577  8.649761 10.027906
+##  [64]  9.736477  7.195870 11.651464  6.835530  9.475602  7.888095  9.859035
+##  [71] 10.146867 12.414332  8.361257 10.345353 11.002122  8.094209  7.260013
+##  [78]  8.893387 10.463638 11.693065 11.183656 13.423046  7.113036  6.663812
+##  [85] 12.859209  9.176044 13.148079 10.692295  9.664694 10.741470  9.702715
+##  [92] 13.616059 10.749229  8.486831 11.110986 10.873166 12.571912  9.030972
+##  [99]  7.220900 10.687296</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] -0.1190519</code></pre>
+<pre><code>## [1] -0.07361067</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 25.8992</code></pre>
+<pre><code>## [1] -4.05689</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it in an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] 16.80452</code></pre>
+<pre><code>## [1] 5.531463</code></pre>
 <div id="what-is-the-environment" class="section level3">
 <h3>What is the environment?</h3>
 <p>There are two outcomes when you run code. First, the code will simply print output directly in the console. Second, there is no output because you have stored it as a variable using <code>&lt;-</code>. Output that is stored is actually saved in the <code>environment</code>. The environment is the collection of named objects that are stored in memory for your current R session. Anything stored in memory will be accessible by it’s name without running the original script that was used to create it.</p>
@@ -527,7 +493,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/" target="_blank">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2021-03-07, there are 17222 packages on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/" target="_blank">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2021-03-08, there are 17247 packages on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>
@@ -679,43 +645,59 @@ dim(apacpwq2019)</code></pre>
 <pre><code>## [1] 35040    31</code></pre>
 <pre class="r"><code># get the column names
 names(apacpwq2019)</code></pre>
-<pre><code>##  [1] &quot;StationCode&quot;     &quot;isSWMP&quot;          &quot;DateTimeStamp&quot;   &quot;Historical&quot;      &quot;ProvisionalPlus&quot; &quot;F_Record&quot;        &quot;Temp&quot;            &quot;F_Temp&quot;         
-##  [9] &quot;SpCond&quot;          &quot;F_SpCond&quot;        &quot;Sal&quot;             &quot;F_Sal&quot;           &quot;DO_Pct&quot;          &quot;F_DO_Pct&quot;        &quot;DO_mgl&quot;          &quot;F_DO_mgl&quot;       
-## [17] &quot;Depth&quot;           &quot;F_Depth&quot;         &quot;cDepth&quot;          &quot;F_cDepth&quot;        &quot;Level&quot;           &quot;F_Level&quot;         &quot;cLevel&quot;          &quot;F_cLevel&quot;       
-## [25] &quot;pH&quot;              &quot;F_pH&quot;            &quot;Turb&quot;            &quot;F_Turb&quot;          &quot;ChlFluor&quot;        &quot;F_ChlFluor&quot;      &quot;X31&quot;</code></pre>
+<pre><code>##  [1] &quot;StationCode&quot;     &quot;isSWMP&quot;          &quot;DateTimeStamp&quot;   &quot;Historical&quot;     
+##  [5] &quot;ProvisionalPlus&quot; &quot;F_Record&quot;        &quot;Temp&quot;            &quot;F_Temp&quot;         
+##  [9] &quot;SpCond&quot;          &quot;F_SpCond&quot;        &quot;Sal&quot;             &quot;F_Sal&quot;          
+## [13] &quot;DO_Pct&quot;          &quot;F_DO_Pct&quot;        &quot;DO_mgl&quot;          &quot;F_DO_mgl&quot;       
+## [17] &quot;Depth&quot;           &quot;F_Depth&quot;         &quot;cDepth&quot;          &quot;F_cDepth&quot;       
+## [21] &quot;Level&quot;           &quot;F_Level&quot;         &quot;cLevel&quot;          &quot;F_cLevel&quot;       
+## [25] &quot;pH&quot;              &quot;F_pH&quot;            &quot;Turb&quot;            &quot;F_Turb&quot;         
+## [29] &quot;ChlFluor&quot;        &quot;F_ChlFluor&quot;      &quot;X31&quot;</code></pre>
 <pre class="r"><code>names(sapcawq2019)</code></pre>
-<pre><code>##  [1] &quot;StationCode&quot;     &quot;isSWMP&quot;          &quot;DateTimeStamp&quot;   &quot;Historical&quot;      &quot;ProvisionalPlus&quot; &quot;F_Record&quot;        &quot;Temp&quot;            &quot;F_Temp&quot;         
-##  [9] &quot;SpCond&quot;          &quot;F_SpCond&quot;        &quot;Sal&quot;             &quot;F_Sal&quot;           &quot;DO_Pct&quot;          &quot;F_DO_Pct&quot;        &quot;DO_mgl&quot;          &quot;F_DO_mgl&quot;       
-## [17] &quot;Depth&quot;           &quot;F_Depth&quot;         &quot;cDepth&quot;          &quot;F_cDepth&quot;        &quot;Level&quot;           &quot;F_Level&quot;         &quot;cLevel&quot;          &quot;F_cLevel&quot;       
-## [25] &quot;pH&quot;              &quot;F_pH&quot;            &quot;Turb&quot;            &quot;F_Turb&quot;          &quot;ChlFluor&quot;        &quot;F_ChlFluor&quot;      &quot;X31&quot;</code></pre>
+<pre><code>##  [1] &quot;StationCode&quot;     &quot;isSWMP&quot;          &quot;DateTimeStamp&quot;   &quot;Historical&quot;     
+##  [5] &quot;ProvisionalPlus&quot; &quot;F_Record&quot;        &quot;Temp&quot;            &quot;F_Temp&quot;         
+##  [9] &quot;SpCond&quot;          &quot;F_SpCond&quot;        &quot;Sal&quot;             &quot;F_Sal&quot;          
+## [13] &quot;DO_Pct&quot;          &quot;F_DO_Pct&quot;        &quot;DO_mgl&quot;          &quot;F_DO_mgl&quot;       
+## [17] &quot;Depth&quot;           &quot;F_Depth&quot;         &quot;cDepth&quot;          &quot;F_cDepth&quot;       
+## [21] &quot;Level&quot;           &quot;F_Level&quot;         &quot;cLevel&quot;          &quot;F_cLevel&quot;       
+## [25] &quot;pH&quot;              &quot;F_pH&quot;            &quot;Turb&quot;            &quot;F_Turb&quot;         
+## [29] &quot;ChlFluor&quot;        &quot;F_ChlFluor&quot;      &quot;X31&quot;</code></pre>
 <pre class="r"><code># see the first six rows
 head(apacpwq2019)</code></pre>
 <pre><code>## # A tibble: 6 x 31
-##   StationCode isSWMP DateTimeStamp Historical ProvisionalPlus F_Record  Temp F_Temp SpCond F_SpCond   Sal F_Sal DO_Pct F_DO_Pct DO_mgl F_DO_mgl Depth F_Depth
-##   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;              &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  
-## 1 apacpwq     P      01/01/2019 0~          1               1 {CWD}     18.1 &lt;0&gt; [~   26.8 &lt;0&gt; [GS~  16.5 &lt;0&gt; ~   97.4 &lt;0&gt; [GS~    8.3 &lt;0&gt; [GS~  1.06 &lt;1&gt; [G~
-## 2 apacpwq     P      01/01/2019 0~          1               1 {CWD}     18.1 &lt;0&gt; [~   27.6 &lt;0&gt; [GS~  17   &lt;0&gt; ~   96.4 &lt;0&gt; [GS~    8.2 &lt;0&gt; [GS~  1.05 &lt;1&gt; [G~
-## 3 apacpwq     P      01/01/2019 0~          1               1 {CWD}     18   &lt;0&gt; [~   27.8 &lt;0&gt; [GS~  17.1 &lt;0&gt; ~   95.8 &lt;0&gt; [GS~    8.2 &lt;0&gt; [GS~  1.04 &lt;1&gt; [G~
-## 4 apacpwq     P      01/01/2019 0~          1               1 {CWD}     18.1 &lt;0&gt; [~   28.0 &lt;0&gt; [GS~  17.3 &lt;0&gt; ~   96.8 &lt;0&gt; [GS~    8.3 &lt;0&gt; [GS~  1.02 &lt;1&gt; [G~
-## 5 apacpwq     P      01/01/2019 1~          1               1 {CWD}     18.2 &lt;0&gt; [~   27.7 &lt;0&gt; [GS~  17.1 &lt;0&gt; ~   97.2 &lt;0&gt; [GS~    8.3 &lt;0&gt; [GS~  1.01 &lt;1&gt; [G~
-## 6 apacpwq     P      01/01/2019 1~          1               1 {CWD}     18.2 &lt;0&gt; [~   27.4 &lt;0&gt; [GS~  16.9 &lt;0&gt; ~   96.8 &lt;0&gt; [GS~    8.3 &lt;0&gt; [GS~  0.99 &lt;1&gt; [G~
-## # ... with 13 more variables: cDepth &lt;lgl&gt;, F_cDepth &lt;chr&gt;, Level &lt;lgl&gt;, F_Level &lt;chr&gt;, cLevel &lt;lgl&gt;, F_cLevel &lt;lgl&gt;, pH &lt;dbl&gt;, F_pH &lt;chr&gt;, Turb &lt;dbl&gt;,
-## #   F_Turb &lt;chr&gt;, ChlFluor &lt;lgl&gt;, F_ChlFluor &lt;chr&gt;, X31 &lt;lgl&gt;</code></pre>
+##   StationCode isSWMP DateTimeStamp   Historical ProvisionalPlus F_Record  Temp
+##   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;                &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1 apacpwq     P      01/01/2019 0:00          1               1 {CWD}     18.1
+## 2 apacpwq     P      01/01/2019 0:15          1               1 {CWD}     18.1
+## 3 apacpwq     P      01/01/2019 0:30          1               1 {CWD}     18  
+## 4 apacpwq     P      01/01/2019 0:45          1               1 {CWD}     18.1
+## 5 apacpwq     P      01/01/2019 1:00          1               1 {CWD}     18.2
+## 6 apacpwq     P      01/01/2019 1:15          1               1 {CWD}     18.2
+## # … with 24 more variables: F_Temp &lt;chr&gt;, SpCond &lt;dbl&gt;, F_SpCond &lt;chr&gt;,
+## #   Sal &lt;dbl&gt;, F_Sal &lt;chr&gt;, DO_Pct &lt;dbl&gt;, F_DO_Pct &lt;chr&gt;, DO_mgl &lt;dbl&gt;,
+## #   F_DO_mgl &lt;chr&gt;, Depth &lt;dbl&gt;, F_Depth &lt;chr&gt;, cDepth &lt;lgl&gt;, F_cDepth &lt;chr&gt;,
+## #   Level &lt;lgl&gt;, F_Level &lt;chr&gt;, cLevel &lt;lgl&gt;, F_cLevel &lt;lgl&gt;, pH &lt;dbl&gt;,
+## #   F_pH &lt;chr&gt;, Turb &lt;dbl&gt;, F_Turb &lt;chr&gt;, ChlFluor &lt;lgl&gt;, F_ChlFluor &lt;chr&gt;,
+## #   X31 &lt;lgl&gt;</code></pre>
 <pre class="r"><code>head(sapcawq2019)</code></pre>
 <pre><code>## # A tibble: 6 x 31
-##   StationCode isSWMP DateTimeStamp Historical ProvisionalPlus F_Record  Temp F_Temp SpCond F_SpCond   Sal F_Sal DO_Pct F_DO_Pct DO_mgl F_DO_mgl Depth F_Depth
-##   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;              &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;  
-## 1 sapcawq     P      01/01/2019 0~          0               1 NA        16.6 &lt;0&gt;      41.5 &lt;0&gt;       26.6 &lt;0&gt;     93.7 &lt;0&gt;         7.8 &lt;0&gt;       1.98 &lt;0&gt;    
-## 2 sapcawq     P      01/01/2019 0~          0               1 NA        16.4 &lt;0&gt;      41.5 &lt;0&gt;       26.6 &lt;0&gt;     94.5 &lt;0&gt;         7.9 &lt;0&gt;       2.09 &lt;0&gt;    
-## 3 sapcawq     P      01/01/2019 0~          0               1 NA        16.4 &lt;0&gt;      41.4 &lt;0&gt;       26.6 &lt;0&gt;     94.6 &lt;0&gt;         7.9 &lt;0&gt;       2.2  &lt;0&gt;    
-## 4 sapcawq     P      01/01/2019 0~          0               1 NA        16.3 &lt;0&gt;      41.0 &lt;0&gt;       26.3 &lt;0&gt;     96.1 &lt;0&gt;         8   &lt;0&gt;       2.36 &lt;0&gt;    
-## 5 sapcawq     P      01/01/2019 1~          0               1 NA        16.3 &lt;0&gt;      40.4 &lt;0&gt;       25.8 &lt;0&gt;     97.2 &lt;0&gt;         8.2 &lt;0&gt;       2.49 &lt;0&gt;    
-## 6 sapcawq     P      01/01/2019 1~          0               1 NA        16.2 &lt;0&gt;      39.9 &lt;0&gt;       25.5 &lt;0&gt;     98.5 &lt;0&gt;         8.3 &lt;0&gt;       2.63 &lt;0&gt;    
-## # ... with 13 more variables: cDepth &lt;dbl&gt;, F_cDepth &lt;chr&gt;, Level &lt;lgl&gt;, F_Level &lt;chr&gt;, cLevel &lt;lgl&gt;, F_cLevel &lt;lgl&gt;, pH &lt;dbl&gt;, F_pH &lt;chr&gt;, Turb &lt;dbl&gt;,
-## #   F_Turb &lt;chr&gt;, ChlFluor &lt;lgl&gt;, F_ChlFluor &lt;chr&gt;, X31 &lt;lgl&gt;</code></pre>
+##   StationCode isSWMP DateTimeStamp   Historical ProvisionalPlus F_Record  Temp
+##   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;                &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;    &lt;dbl&gt;
+## 1 sapcawq     P      01/01/2019 0:00          0               1 NA        16.6
+## 2 sapcawq     P      01/01/2019 0:15          0               1 NA        16.4
+## 3 sapcawq     P      01/01/2019 0:30          0               1 NA        16.4
+## 4 sapcawq     P      01/01/2019 0:45          0               1 NA        16.3
+## 5 sapcawq     P      01/01/2019 1:00          0               1 NA        16.3
+## 6 sapcawq     P      01/01/2019 1:15          0               1 NA        16.2
+## # … with 24 more variables: F_Temp &lt;chr&gt;, SpCond &lt;dbl&gt;, F_SpCond &lt;chr&gt;,
+## #   Sal &lt;dbl&gt;, F_Sal &lt;chr&gt;, DO_Pct &lt;dbl&gt;, F_DO_Pct &lt;chr&gt;, DO_mgl &lt;dbl&gt;,
+## #   F_DO_mgl &lt;chr&gt;, Depth &lt;dbl&gt;, F_Depth &lt;chr&gt;, cDepth &lt;dbl&gt;, F_cDepth &lt;chr&gt;,
+## #   Level &lt;lgl&gt;, F_Level &lt;chr&gt;, cLevel &lt;lgl&gt;, F_cLevel &lt;lgl&gt;, pH &lt;dbl&gt;,
+## #   F_pH &lt;chr&gt;, Turb &lt;dbl&gt;, F_Turb &lt;chr&gt;, ChlFluor &lt;lgl&gt;, F_ChlFluor &lt;chr&gt;,
+## #   X31 &lt;lgl&gt;</code></pre>
 <pre class="r"><code># get the overall structure
 str(apacpwq2019)</code></pre>
-<pre><code>## spec_tbl_df [35,040 x 31] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+<pre><code>## spec_tbl_df [35,040 × 31] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 ##  $ StationCode    : chr [1:35040] &quot;apacpwq&quot; &quot;apacpwq&quot; &quot;apacpwq&quot; &quot;apacpwq&quot; ...
 ##  $ isSWMP         : chr [1:35040] &quot;P&quot; &quot;P&quot; &quot;P&quot; &quot;P&quot; ...
 ##  $ DateTimeStamp  : chr [1:35040] &quot;01/01/2019 0:00&quot; &quot;01/01/2019 0:15&quot; &quot;01/01/2019 0:30&quot; &quot;01/01/2019 0:45&quot; ...
@@ -747,7 +729,7 @@ str(apacpwq2019)</code></pre>
 ##  $ ChlFluor       : logi [1:35040] NA NA NA NA NA NA ...
 ##  $ F_ChlFluor     : chr [1:35040] &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; &quot;&lt;-1&gt;&quot; ...
 ##  $ X31            : logi [1:35040] NA NA NA NA NA NA ...
-##  - attr(*, &quot;problems&quot;)= tibble [11,504 x 5] (S3: tbl_df/tbl/data.frame)
+##  - attr(*, &quot;problems&quot;)= tibble [11,504 × 5] (S3: tbl_df/tbl/data.frame)
 ##   ..$ row     : int [1:11504] 21455 21456 21457 21458 21459 21460 21461 21462 21463 21464 ...
 ##   ..$ col     : chr [1:11504] &quot;cDepth&quot; &quot;cDepth&quot; &quot;cDepth&quot; &quot;cDepth&quot; ...
 ##   ..$ expected: chr [1:11504] &quot;1/0/T/F/TRUE/FALSE&quot; &quot;1/0/T/F/TRUE/FALSE&quot; &quot;1/0/T/F/TRUE/FALSE&quot; &quot;1/0/T/F/TRUE/FALSE&quot; ...
@@ -788,7 +770,7 @@ str(apacpwq2019)</code></pre>
 ##   ..   X31 = col_logical()
 ##   .. )</code></pre>
 <pre class="r"><code>str(sapcawq2019)</code></pre>
-<pre><code>## spec_tbl_df [35,040 x 31] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+<pre><code>## spec_tbl_df [35,040 × 31] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
 ##  $ StationCode    : chr [1:35040] &quot;sapcawq&quot; &quot;sapcawq&quot; &quot;sapcawq&quot; &quot;sapcawq&quot; ...
 ##  $ isSWMP         : chr [1:35040] &quot;P&quot; &quot;P&quot; &quot;P&quot; &quot;P&quot; ...
 ##  $ DateTimeStamp  : chr [1:35040] &quot;01/01/2019 0:00&quot; &quot;01/01/2019 0:15&quot; &quot;01/01/2019 0:30&quot; &quot;01/01/2019 0:45&quot; ...
@@ -900,7 +882,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
