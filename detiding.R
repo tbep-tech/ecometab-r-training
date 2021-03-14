@@ -70,6 +70,8 @@ head(apa)
 # view structure
 str(apa)
 
+names(apa) == names(SAPDC)
+
 apa[which(is.na(apa$Tide))[1:5], ]
 
 # number of rows before
