@@ -271,7 +271,7 @@ plot_ly(dtd, x = ~DateTimeStamp, y = ~DO_obs, name = 'Observed DO', type = 'scat
   layout(xaxis = list(title = NULL), yaxis = list(title = "DO (mg/L)"))
 ```
 
-There are a few things to note from the above graph.  First, the "normalized" detided DO time series has a much more noticeable diel signal.  This can often lead to less "anomalous" metabolism estimates.  Second,the detided time series has a diel amplitude that is much less than the observed time series.  This will usually be the case for detided data and the choice of window widths is important to provide a balance between removal of the tidal influence relative to the biological signal.  
+There are a few things to note from the above graph.  First, the "normalized" detided DO time series has a much more noticeable diel signal.  This can often lead to less "anomalous" metabolism estimates.  Second,the detided time series has a diel amplitude that is much less than the observed time series.  This will usually be the case for detided data and the choice of window widths is important to provide a balance between removal of the tidal influence relative to the biological signal. We'll discuss this balance next time.
 
 ## Exercise 3
 
