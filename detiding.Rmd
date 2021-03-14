@@ -62,11 +62,11 @@ dim(apadbwq)
 range(apadbwq$datetimestamp)
 ```
 
-Note that this function was able to import and combine data from multiple csv files.  We would have had to do this by hand if we were importing data with more general import functions available in R (e.g., `read_csv()` from last time).
+Note that this function was able to import and combine data from multiple csv files.  We would have had to do this by hand if we were importing data with more general import functions available in R (e.g., `read_csv` from last time).
 
 ## Cleaning and combining SWMP data
 
-Each row has data for multiple parameters at 15 minute intervals.  Each parameter also includes a column with QAQC flags, i.e., `f_` then the parameter name.  We can then use the `qaqc` function to "screen" observations with specific QAQC flags.  You can view what the flags mean at this website: <http://cdmo.baruch.sc.edu/data/qaqc.cfm>.  We'll keep all data that have the flags 0, 1, 2, 3, 4, and 5 by indicating this information in the `qaqc_keep` argument (in practice, you may only want to keep data with a "zero" flag). You can view a tabular summary of the flags in a dataset using the `qaqcchk` function. 
+Each row has data for multiple parameters at 15 minute intervals.  Each parameter also includes a column with QAQC flags, i.e., `f_` then the parameter name.  We can use the `qaqc` function to "screen" observations with specific QAQC flags.  You can view what the flags mean at this website: <http://cdmo.baruch.sc.edu/data/qaqc.cfm>.  We'll keep all data that have the flags 0, 1, 2, 3, 4, and 5 by indicating this information in the `qaqc_keep` argument (in practice, you may only want to keep data with a "zero" flag). You can view a tabular summary of the flags in a dataset using the `qaqcchk` function. 
 
 ```{r}
 # keep only observations that passed qaqc chekcs
@@ -97,7 +97,7 @@ The `comb` function in SWMPr lets us combine data from two locations using the `
 
 There are a couple of arguments to consider when using the `comb` function.  First, the `timestep` argument defines the time step for the resulting output.  Keep this at 15 to retain all of the data.  You could use a larger time step to subset the data if, for example, we wanted data every 60 minutes. Second, the `method` argument defines how two datasets with different date ranges are combined.  Use `method = 'union'` to retain the entire date range across both datasets or use `method = 'intersect'` to retain only the dates that include data from both datasets.  For our example, `union` and `intersect` produce the same results since the date ranges are the same. 
 
-To speed up the examples in our lesson, we'll use a 60 minute timestep.  In practice, it's better to retain all of the data (i.e., `timestep = 15`) 
+To speed up the examples in our lesson, we'll use a 60 minute timestep.  In practice, it's better to retain all of the data (i.e., `timestep = 15`). 
 
 ```{r}
 # combine water quality and weather data
@@ -145,7 +145,9 @@ head(apa)
 str(apa)
 ```
 
-So, we need to do a few things to our Apalachicola dataset to make it look like SAPDC so it will work with the functions.  We can use the dplyr package to "wrangle" the data into the correct format.  The dplyr package comes with the tidyverse. All we need to do is rename the columns and select only those that are relevant.  This can all be done with the `select` function in dplyr.  Remember, we are trying to follow the exact format of the SAPDC dataset that comes with WtRegDO.
+So, we need to do a few things to our Apalachicola dataset to make it look like SAPDC so it will work with the functions.  We can use the dplyr package to "wrangle" the data into the correct format (here's a useful [cheatsheet](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) for this package).  The dplyr package comes with the tidyverse. 
+
+All we need to do is rename the columns and select the ones we want in the correct order.  This can all be done with the `select` function in dplyr.  Remember, we are trying to follow the exact format of the SAPDC dataset that comes with WtRegDO.
 
 ```{r}
 # load dplyr
@@ -168,6 +170,12 @@ head(apa)
 
 # view structure
 str(apa)
+```
+
+We can also verify the column names are the same between the two datasets.  Note the use of two equal signs - this is how we tell R to test for equality.  
+
+```{r}
+names(apa) == names(SAPDC)
 ```
 
 Finally, we need to deal with pesky missing data values.  Most functions in R deal with missing data by either not working at all or providing some work-around to accommodate the missing values. The functions in WtRegDO are in the former category.  
@@ -197,16 +205,16 @@ nrow(apa)
 
 Repeat the above examples but use the combined dataset for Sapelo Island that you created in [Exercise 1].
 
-1. Create a new section in your script using `Ctrl + Shift + r`. 
+1. Create a new section in your script using `Ctrl + Shift + r` and give it an appropriate name. 
 1. Load the dplyr package with the library function. 
-1. Simultaneously rename and select the date/time columns (`DateTimeStamp`), water temperature (`Temp`), salinity (`Sal`), dissolved oxygen (`DO_obs`), air temperature (`ATemp`), barometric pressure (`BP`), wind speed (`WSpd`), and tidal height (`Tide`) columns in the Sapelo Island dataset with the `select` function from dplyr. 
-1. Remove missing rows with `na.omit`. 
+1. Simultaneously rename and select the date/time columns (`DateTimeStamp`), water temperature (`Temp`), salinity (`Sal`), dissolved oxygen (`DO_obs`), air temperature (`ATemp`), barometric pressure (`BP`), wind speed (`WSpd`), and tidal height (`Tide`) columns in the Sapelo Island dataset with the `select` function from dplyr.  Don't forget to assign the new dataset to an object in your workspace (with `<-`).
+1. Remove missing rows with `na.omit`.  How many rows were removed (e.g., `nrow` before and after)?  
 
 ## What is and why detiding
 
-Now we can start using the detiding functions in WtRegDO.  The motivation is that the dissolved oxygen time series is correlated with the tide and you want to remove that signal prior to estimating metabolism.  A fundamental assumption of the methods we use to estimate metabolism is that the data represents a sample from the same place over time.  If a monitoring sonde is measuring dissolved oxygen moving past the sensor with changes in the tide, then you are potentially measuring parcels of water with different metabolic histories.  
+Now we can start using the detiding functions in WtRegDO.  The motivation is that the dissolved oxygen time series is correlated with the tide and we want to remove that signal prior to estimating metabolism.  A fundamental assumption of the methods we use to estimate metabolism is that the data represents a sample from the same place over time.  If a monitoring sonde is measuring dissolved oxygen moving past the sensor with changes in the tide, then we are potentially evaluating parcels of water with different metabolic histories.  
 
-Quite literally, in order for the metabolism functions to work well, the DO time series should have a noticeable diel signal.  DO should start increasing with sunrise as production begins, it should peak around mid-day when temperature and solar radiation is highest, and it should decrease with sundown and into the night as respiration processes dominate. A DO time series influenced by the tide will typically not follow this pattern.  Metabolism estimates from DO data with significant tidal influence will often appear as "anomalous", having negative values for production and postiive values for respiration.  We'll discuss more on this next time. 
+Quite literally, in order for the metabolism functions to work well, the DO time series should have a noticeable diel signal.  DO should start increasing with sunrise as photosynthesis/production begins, it should peak around mid-day when temperature and solar radiation is highest, and it should decrease with sundown and into the night as respiration processes dominate. A DO time series influenced by the tide will typically not follow this pattern.  Metabolism estimates from DO data with significant tidal influence will often appear as "anomalous", having negative values for production and positive values for respiration.  We'll discuss more on this next time. 
 
 Here's an example from Sapelo Island demonstrating the problem. 
 
@@ -214,11 +222,11 @@ Here's an example from Sapelo Island demonstrating the problem.
 knitr::include_graphics('figure/tidecorex.png')
 ```
 
-Detiding works by using a regression approach to estimate a "signal" of the tide in the DO time series and then removing that signal to produce a "normalized" DO time series.  This normalized time series is thought to represent a biological signal as opposed to both a biological and tidal signal in the observed DO time series.  The method is based off of work in [Hirsch et al. 2010](https://onlinelibrary.wiley.com/doi/full/10.1111/j.1752-1688.2010.00482.x) using a __moving window, weighted regression__ approach that fits a unique model to each point in the time series.  Each unique model is fit using a set of weights that determine the influence of observations in the window to the model fit to the data. For detiding, these weights are determined by the time of day, number of days in the window, and a range of observations for the tidal height.  The "widths" of these windows have a direct effect on how well the model can detide the DO data.    
+Detiding works by using a regression approach to estimate a "signal" of the tide in the DO time series and then removing that signal to produce a "normalized" DO time series.  This normalized time series is thought to represent a biological signal as opposed to both a biological and tidal signal in the observed DO time series.  The method is based off of work in [Hirsch et al. 2010](https://onlinelibrary.wiley.com/doi/full/10.1111/j.1752-1688.2010.00482.x) using a __moving window, weighted regression__ approach that fits a unique model to each point in the time series.  Each unique model is fit using a set of weights that determine the influence of observations in the window to the model fit at the center of the window. For detiding, these weights are determined by the time of day, number of days in the window, and a range of observations for the tidal height.  The "widths" of these windows have a direct effect on how well the model can detide the DO data.    
 
-An additional consideration for detiding is that it does not work well during all times of the year.  The model is likely to remove a portion of the biological signal at times of the year when the tidal height is correlated with the sun angle.  In other words, when periods of peak productivity are correlated with tidal height, it's impossible to isolate and remove only the tidal signal.  The end result is a normalized DO time series that is likely to underestimate metabolism because a portion of the biological signal was also removed.  
+An additional consideration for detiding is that it does not work well during all times of the year.  The model is likely to remove a portion of the biological signal at times of the year when the tidal height is correlated with the sun angle.  In other words, when periods of peak productivity are correlated with tidal height, it's impossible to isolate and remove only the tidal signal.  The end result is a normalized DO time series that is likely to underestimate metabolism because a portion of the biological signal was also removed from the observed DO during detiding.  
 
-Finally, detiding may not even be necessary for a DO time series.  If you have a suspicion that your DO data are tidally influenced, it's best to verify this before blank application of the detiding functions.  A simple plot of dissolved oxygen with the tide over time can be used to evaluate a potential correlation.  It's often better to estimate metabolism without detiding then to detide and estimate metabolism if there is no or a minimal tidal influence.   
+Finally, detiding may not even be necessary for a DO time series.  If you have a suspicion that your DO data are tidally influenced, it's best to verify this before blank application of the detiding functions.  A simple plot of dissolved oxygen with the tide over time can be used to evaluate a potential correlation.  It can be better to estimate metabolism without detiding then to detide and estimate metabolism if there is no or a minimal tidal influence.   
 
 For all of these reasons, detiding is an art that may require several iterations of model fitting to get the most desirable result.  Evaluating model fit is best achieved through evaluation of the metabolism estimates and we save that discussion for the next lesson. 
 
@@ -239,9 +247,9 @@ long <- 85.0583
 evalcor(apa, tz = tz, lat = lat, long = long)
 ```
 
-What we get is a time series of the correlation of tidal height with the sun angle.  We can expect the detiding method to work best when this correlation is zero and it will not as effective as the correlation changes from zero.  So, in this case, detiding may not work as well in middle to late summer and early spring.  For periods of the year when detiding may not work, interpret the results with caution, or simply do not use detiding during those parts of the year. 
+What we get is a time series of the correlation of tidal height with the sun angle.  We can expect the detiding method to work best when this correlation is at or close to zero.  So, in this case, detiding may not work as well in middle to late summer and early spring.  For periods of the year when detiding may not work, interpret the results with caution, or simply do not use detiding during those parts of the year. There is no specific rule defining a maximum acceptable correlation for detiding, but Beck et al. 2015 suggest time periods when correlations exceed +/- 0.2 may be problematic.
 
-Now that we have an expectation for when detiding would work well, we can use the `wtreg` function to detide the DO time series. The same inputs for `evalcor` are used for `wtreg`.  The rest of the arguments for `wtreg` are left at their default value, including the window widths for weighted regression.  Running the function may also take a minute or two. 
+Now that we have an expectation for when detiding could work well, we can use the `wtreg` function to detide the DO time series. The same inputs for `evalcor` are used for `wtreg`.  The rest of the arguments for `wtreg` are left at their default value, including the window widths for weighted regression.  Running the function may also take a minute or two. 
 
 ```{r}
 dtd <- wtreg(apa, tz = tz, lat = lat, long = long)
@@ -263,12 +271,14 @@ plot_ly(dtd, x = ~DateTimeStamp, y = ~DO_obs, name = 'Observed DO', type = 'scat
   layout(xaxis = list(title = NULL), yaxis = list(title = "DO (mg/L)"))
 ```
 
+There are a few things to note from the above graph.  First, the "normalized" detided DO time series has a much more noticeable diel signal.  This can often lead to less "anomalous" metabolism estimates.  Second,the detided time series has a diel amplitude that is much less than the observed time series.  This will usually be the case for detided data and the choice of window widths is important to provide a balance between removal of the tidal influence relative to the biological signal.  
+
 ## Exercise 3
 
 Try running the `evalcor` and `wtreg` functions on the Sapelo Island data from [Exercise 2].  
 
-1. Run `evalcor` using `tz = 'America/Jamaica'`, `lat = ''`, and `long = ''`.
-1. From the plot, what times of year might you expect detiding to not work very well? 
+1. Run `evalcor` using `tz = 'America/Jamaica'`, `lat = 31.39`, and `long = -81.28`.
+1. From the plot, what times of the year might you expect detiding to not work very well? 
 1. Run `wtreg` using the same arguments in step 1.  If you have plotly installed, try plotting the results to see how the "normalized" time series compares to the observed. 
 
 ## Summary
