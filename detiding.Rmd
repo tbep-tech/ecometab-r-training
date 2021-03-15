@@ -114,7 +114,7 @@ range(apa$datetimestamp)
 Repeat the above examples but do this using data for Sapelo Island.  Import data for `sapdcwq` and `sapmlmet`, clean them up with `qaqc`, and combine them with `comb`. 
 
 1. Open a new script in your RStudio project, save it with an informative title (e.g, `import-detiding.R`), and add a section header with `Ctrl + Shift + R`.
-1. Load the SWMPr package with the `library` function.  This should already be installed from last time (i.e., `install.packages('SWMPR')`). 
+1. Load the SWMPr package with the `library` function.  This should already be installed from last time (i.e., `install.packages('SWMPr')`). 
 1. Import and clean up `sapdcwq` with `import_local` and `qaqc`. 
 1. Import and clean up `sapmlmet` with `import_local` and `qaqc`. 
 1. Combine the two with `comb`. Use a 60 minute time step and use the `union` option. 
