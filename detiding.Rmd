@@ -113,7 +113,8 @@ range(apa$datetimestamp)
 
 Repeat the above examples but do this using data for Sapelo Island.  Import data for `sapdcwq` and `sapmlmet`, clean them up with `qaqc`, and combine them with `comb`. 
 
-1. Open a new script in your RStudio project, save it with an informative title (e.g, `import-detiding.R`), and add a section header with `Ctrl + Shift + R`. 1. Load the SWMPr package with the `library` function. 
+1. Open a new script in your RStudio project, save it with an informative title (e.g, `import-detiding.R`), and add a section header with `Ctrl + Shift + R`.
+1. Load the SWMPr package with the `library` function.  This should already be installed from last time (i.e., `install.packages('SWMPR')`). 
 1. Import and clean up `sapdcwq` with `import_local` and `qaqc`. 
 1. Import and clean up `sapmlmet` with `import_local` and `qaqc`. 
 1. Combine the two with `comb`. Use a 60 minute time step and use the `union` option. 
@@ -207,14 +208,14 @@ Repeat the above examples but use the combined dataset for Sapelo Island that yo
 
 1. Create a new section in your script using `Ctrl + Shift + r` and give it an appropriate name. 
 1. Load the dplyr package with the library function. 
-1. Simultaneously rename and select the date/time columns (`DateTimeStamp`), water temperature (`Temp`), salinity (`Sal`), dissolved oxygen (`DO_obs`), air temperature (`ATemp`), barometric pressure (`BP`), wind speed (`WSpd`), and tidal height (`Tide`) columns in the Sapelo Island dataset with the `select` function from dplyr.  Don't forget to assign the new dataset to an object in your workspace (with `<-`).
+1. Simultaneously rename and select the date/time columns (`DateTimeStamp = datetimestamp`), water temperature (`Temp = temp`), salinity (`Sal = sal`), dissolved oxygen (`DO_obs = do_mgl`), air temperature (`ATemp = atemp`), barometric pressure (`BP = bp`), wind speed (`WSpd = wspd`), and tidal height (`Tide = depth`) columns in the Sapelo Island dataset with the `select` function from dplyr.  Don't forget to assign the new dataset to an object in your workspace (with `<-`).
 1. Remove missing rows with `na.omit`.  How many rows were removed (e.g., `nrow` before and after)?  
 
 ## What is and why detiding
 
 Now we can start using the detiding functions in WtRegDO.  The motivation is that the dissolved oxygen time series is correlated with the tide and we want to remove that signal prior to estimating metabolism.  A fundamental assumption of the methods we use to estimate metabolism is that the data represents a sample from the same place over time.  If a monitoring sonde is measuring dissolved oxygen moving past the sensor with changes in the tide, then we are potentially evaluating parcels of water with different metabolic histories.  
 
-Quite literally, in order for the metabolism functions to work well, the DO time series should have a noticeable diel signal.  DO should start increasing with sunrise as photosynthesis/production begins, it should peak around mid-day when temperature and solar radiation is highest, and it should decrease with sundown and into the night as respiration processes dominate. A DO time series influenced by the tide will typically not follow this pattern.  Metabolism estimates from DO data with significant tidal influence will often appear as "anomalous", having negative values for production and positive values for respiration.  We'll discuss more on this next time. 
+Quite literally, in order for the metabolism functions to work well, the DO time series should have a noticeable diel signal.  DO should start increasing with sunrise as photosynthesis/production begins, it should peak around mid-day when temperature and solar radiation is highest, and it should decrease with sundown and into the night as respiration processes dominate. A DO time series influenced by the tide will typically not follow this pattern.  Metabolism estimates from DO data with significant tidal influence will often appear as "anomalous", having negative values for production and positive values for respiration.  We'll discuss more about this next time. 
 
 Here's an example from Sapelo Island demonstrating the problem. 
 
