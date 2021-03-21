@@ -88,7 +88,7 @@ knitr::include_graphics('figure/tidecorex.png')
 # get time zone
 tz <- attr(apa$DateTimeStamp, which = 'tzone')
 lat <- 29.6747
-long <- 85.0583
+long <- -85.0583
 
 evalcor(apa, tz = tz, lat = lat, long = long)
 
