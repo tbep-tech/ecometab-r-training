@@ -43,3 +43,19 @@ head(apaeco)
 plot(apaeco)
 
 plot(apaeco, by = 'days')
+
+library(WtRegDO)
+dts <- as.Date(c('2012-02-01','2012-02-08')) 
+
+data(metab_obs)
+p <- plot(metab_obs, by = 'days') + facet_zoom(x = Date >= as.numeric(dts[1]) & Date <= as.numeric(dts[2]), zoom.size = 1)
+p
+
+meteval(apaeco)
+
+## apadtd <- wtreg(apa, tz = tz, lat = lat, long = long)
+
+apadtdeco <- WtRegDO::ecometab(apadtd, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
+
+plot(apadtdeco, by = 'days')
+meteval(apadtdeco)
