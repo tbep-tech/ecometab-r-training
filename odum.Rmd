@@ -140,7 +140,7 @@ The `ecometab` function in WtRegDO does all of this for you, excluding the detid
 ```{r}
 tz <- attr(apa$DateTimeStamp, which = 'tzone')
 lat <- 29.6747
-long <- 85.0583
+long <- -85.0583
 
 apaeco <- WtRegDO::ecometab(apa, DO_var = "DO_obs", tz = tz ,lat = lat, long = long)
 head(apaeco)
@@ -157,7 +157,7 @@ plot(apaeco)
 Or as the daily values:
 
 ```{r, out.width = '100%', fig.height = 3, fig.width = 7}
-WtRegDO::plot.metab(apaeco, by = 'days')
+plot(apaeco, by = 'days')
 ```
 
 Take special note of the times when production is negative and respiratoin is positive.  These are "anomalous" estimates that suggest a violation in the assumptions of the method, likely related to the tide. 
