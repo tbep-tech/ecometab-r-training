@@ -44,7 +44,7 @@ plot(apaeco)
 
 plot(apaeco, by = 'days')
 
-library(WtRegDO)
+library(ggforce)
 dts <- as.Date(c('2012-02-01','2012-02-08')) 
 
 data(metab_obs)
@@ -58,4 +58,19 @@ meteval(apaeco)
 apadtdeco <- WtRegDO::ecometab(apadtd, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
 
 plot(apadtdeco, by = 'days')
+meteval(apadtdeco)
+
+## # use different windows for detiding
+## apadtd2 <- wtreg(apa, tz = tz, lat = lat, long = long, wins = list(12, 12, 0.4))
+## 
+## # estimate metabolism
+## apadtdeco2 <- WtRegDO::ecometab(apadtd2, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
+## 
+## # plot
+## plot(apadtdeco2, by = 'days')
+## 
+## # evaluate
+## meteval(apadtdeco)
+apadtdeco2 <- WtRegDO::ecometab(apadtd2, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
+plot(apadtdeco2, by = 'days')
 meteval(apadtdeco)

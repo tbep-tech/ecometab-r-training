@@ -515,15 +515,16 @@ head(apaeco)</code></pre>
 </div>
 <div id="evaluating-metabolism" class="section level2">
 <h2>Evaluating metabolism</h2>
-<p>Your first clue as to whether your metabolism estimates are tidally influenced is to evaluate the “anomalous” estimates. These are times when production is negative and respiration is positive, likely related to when the diel DO curve did not follow the typical sunset, sunrise pattern. In many cases, this may be the result of the tide. This is an example from the <code>SAPDC</code> dataset.</p>
-<pre class="r"><code>library(WtRegDO)
+<p>Last time, we showed how you can plot the dissolved oxygen data to understand if the tide is influencing the observations. Now, we are using the metabolism estimates as our indicator of tidal influence since our end goal is to produce more precise and reliable measures of metabolism.</p>
+<p>Your first clue as to whether your metabolism estimates are tidally influenced is to evaluate the “anomalous” values. These are times when production is negative and respiration is positive, likely related to when the diel DO curve did not follow the typical sunset, sunrise pattern. In many cases, this may be the result of the tide. This is an example from the <code>SAPDC</code> dataset.</p>
+<pre class="r"><code>library(ggforce)
 dts &lt;- as.Date(c(&#39;2012-02-01&#39;,&#39;2012-02-08&#39;)) 
 
 data(metab_obs)
 p &lt;- plot(metab_obs, by = &#39;days&#39;) + facet_zoom(x = Date &gt;= as.numeric(dts[1]) &amp; Date &lt;= as.numeric(dts[2]), zoom.size = 1)
 p</code></pre>
 <p><img src="odum_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>We can quantify times when this occurs using the <code>meteval</code> function.</p>
+<p>We can quantify this using the <code>meteval</code> function.</p>
 <pre class="r"><code>meteval(apaeco)</code></pre>
 <pre><code>## $meanPg
 ## [1] 138.136
@@ -570,11 +571,11 @@ p</code></pre>
 <li><code>anomRt</code>: The percentage of days when respiration was negative (anomalous).</li>
 </ul>
 <p>Our percentage of anomalies should be as close to zero as possible.</p>
-<p>Now, we can use detiding to try to improve these estimates. The process for estimating metabolism is the same as above, except we use the detided results as input. First, we detide (see the <a href="detiding.html">last lesson</a>):</p>
+<p>Now, we can use detiding to try to hopfully improve these summaries and get more precise and accurate metabolsim estimates. The process for estimating metabolism is the same as above, except we use the detided results as input. First, we detide (see the <a href="detiding.html">last lesson</a>):</p>
 <pre class="r"><code>apadtd &lt;- wtreg(apa, tz = tz, lat = lat, long = long)</code></pre>
 <p>Then we use the detided results to estimate metabolism. Note how we are using the <code>'DO_nrm'</code> column as input.</p>
 <pre class="r"><code>apadtdeco &lt;- WtRegDO::ecometab(apadtd, DO_var = &quot;DO_nrm&quot;, tz = tz ,lat = lat, long = long)</code></pre>
-<p>We plot the data and use the <code>meteval</code> function to reassess how well we did.</p>
+<p>We plot the data and use the <code>meteval</code> function to assess how well we did.</p>
 <pre class="r"><code>plot(apadtdeco, by = &#39;days&#39;)</code></pre>
 <p><img src="odum_files/figure-html/unnamed-chunk-10-1.png" width="100%" /></p>
 <pre class="r"><code>meteval(apadtdeco)</code></pre>
@@ -614,21 +615,85 @@ p</code></pre>
 ## $Rtcor
 ##  [1] -0.38363023 -0.50577561 -0.40998238 -0.35009095 -0.29453600 -0.31592657
 ##  [7] -0.09992263  0.38564738  0.30133841  0.06983676  0.33413642  0.11815497</code></pre>
-<div id="step-1" class="section level3">
-<h3>Step 1</h3>
-</div>
-<div id="step-2" class="section level3">
-<h3>Step 2</h3>
-</div>
-<div id="step-3" class="section level3">
-<h3>Step 3</h3>
-</div>
+<p>From these results, we see that we’ve reduced the anomalous production and respiration estimates by about ten percent each. This is an improvement, although we have to be extra, extra careful that detiding didn’t smooth the dissolved oxygen time series more than it should, i.e., we don’t want detiding to remove both physical and biological components of the signal. A simple way to assess if you’ve removed too much of the signal is to evaluate the mean production and respiration estimates before and after detiding. In theory, they should be similar because tidal influences are observed at the daily scale and their effects should averaged out over time. In this case, we’ve reduced production and respiration by more than half that observed in the raw data.</p>
+<p>So, we have to detide our results again, but this time we use different window widths in the weighted regression. Unfortunately, choosing window widths is a bit of trial and error. The default values for the <code>wtreg</code> function are four days, 12 hours, and half the tidal height range. This means that each individual regression in the moving window for <code>wtreg</code> gives higher importance to observations that are within four days, 12 hours, and half the tidal height range of the value at the center of the window of each regression. This means that values that have characteristics similar to the value at the center of the window are given higher influence in how the regression is fit. We can tweak these values to determine the degree of “smoothness” or weighting used in the regression. For example, if we want to use 12 days, 12 hours, and 40% of the full tidal range for the window widths:</p>
+<pre class="r"><code># use different windows for detiding
+apadtd2 &lt;- wtreg(apa, tz = tz, lat = lat, long = long, wins = list(12, 12, 0.4))
+
+# estimate metabolism
+apadtdeco2 &lt;- WtRegDO::ecometab(apadtd2, DO_var = &quot;DO_nrm&quot;, tz = tz ,lat = lat, long = long)
+
+# plot
+plot(apadtdeco2, by = &#39;days&#39;)
+
+# evaluate
+meteval(apadtdeco)</code></pre>
+<pre class="r"><code>apadtdeco2 &lt;- WtRegDO::ecometab(apadtd2, DO_var = &quot;DO_nrm&quot;, tz = tz ,lat = lat, long = long)
+plot(apadtdeco2, by = &#39;days&#39;)</code></pre>
+<p><img src="odum_files/figure-html/unnamed-chunk-12-1.png" width="100%" /></p>
+<pre class="r"><code>meteval(apadtdeco)</code></pre>
+<pre><code>## $meanPg
+## [1] 58.60002
+## 
+## $sdPg
+## [1] 43.49517
+## 
+## $anomPg
+## [1] 5.96745
+## 
+## $meanRt
+## [1] -62.31011
+## 
+## $sdRt
+## [1] 41.80845
+## 
+## $anomRt
+## [1] 5.96745
+## 
+## $DOcor.month
+##  [1] &quot;01&quot; &quot;02&quot; &quot;03&quot; &quot;04&quot; &quot;05&quot; &quot;06&quot; &quot;07&quot; &quot;08&quot; &quot;09&quot; &quot;10&quot; &quot;11&quot; &quot;12&quot;
+## 
+## $DOcor.cor
+##  [1]  0.034750433  0.005221224 -0.236460860 -0.039854283 -0.140443711
+##  [6] -0.044812598 -0.050131136  0.040828270 -0.108051494 -0.536690351
+## [11] -0.088890072 -0.078972568
+## 
+## $month
+##  [1] &quot;01&quot; &quot;02&quot; &quot;03&quot; &quot;04&quot; &quot;05&quot; &quot;06&quot; &quot;07&quot; &quot;08&quot; &quot;09&quot; &quot;10&quot; &quot;11&quot; &quot;12&quot;
+## 
+## $Pgcor
+##  [1] -0.13341094 -0.20321977 -0.45556649 -0.22228797 -0.24034050 -0.09448502
+##  [7] -0.19577008  0.26713212  0.03163330 -0.06530112  0.06987799  0.32675551
+## 
+## $Rtcor
+##  [1] -0.38363023 -0.50577561 -0.40998238 -0.35009095 -0.29453600 -0.31592657
+##  [7] -0.09992263  0.38564738  0.30133841  0.06983676  0.33413642  0.11815497</code></pre>
+<p>In this case, choosing different window widths didn’t do much for affecting the results. Some sites are like that and it relates to problems seen with the <code>evalcor</code> function, i.e., there are substantial times when the tidal height is correlated with the sun angle meaning detiding will over-smooth the results by removing both the biological and physical components of the time series.</p>
+<p>Generally, you should test window widths in the range of 1 to 12 days, 1 to 12 hours, and 0.2 to 1 as the proportion of the tidal height range. Windows larger than these upper values reduce the effectiveness of the moving window approach by making it more similar to a global regression, whereas windows smaller than this will severely overfit the results. Finding an “optimal” combination can be time consuming and in many cases there may not be a combination that is ideal. If this is the case, consider whether detiding is appropriate at your site, and if so, when would detiding be appropriate. Even if detiding works, production may be very low and a diel oxygen may not be obvious at a site independent of the tide.</p>
+<p>Here are some rules to evaluate detiding:</p>
+<ol style="list-style-type: decimal">
+<li>Create a plot of the observed dissolved oxygen data relative to tidal height. How well do they track at the daily scale?</li>
+<li>Evaluate the <code>evalcor</code> function before you detide to see at which times of year detiding could work well and which times it might not.</li>
+<li>Estimate metabolism with <code>ecometab</code> using the obseved DO time series. Evaluate the results with <code>plot</code> and <code>meteval</code>. How many anomalous metabolism estimates do you see? What are the mean production and respiration estimates?</li>
+<li>Detide the results with the default settings and use those to estimate metabolism. Evaluate the results with <code>plot</code> and <code>meteval</code>. How many anomalous metabolism estimates do you see? What are the mean production and respiration estimates? Do these differ from the observed results?</li>
+<li>If you don’t see results that help, try a different window width combination for detiding. It may be useful to est out the extremes, e.g., <code>wins = list(1, 1, 0.1)</code> or <code>wins = list(12, 12, 1)</code>. Always plot the results. If nothing works, consider not using detiding at that site.</li>
+</ol>
 </div>
 <div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
+<p>Our Sapelo Island dataset works well with detiding. Use the <code>wtreg</code> function to detide the results with the default settings. Evaluate the results before and after detiding.</p>
+<ol style="list-style-type: decimal">
+<li>Create a new section in your script using <code>Ctrl + Shift + r</code> and give it an appropriate name.</li>
+<li>Using the <code>sap</code> dataset from <a href="#exercise-2">Exercise 2</a>, filter (from dplyr) the results to one year to speed up the process. Use the following. <code>r   sap &lt;- filter(sap, DateTimeStamp &gt;= as.Date('2019-01-01') &amp; DateTimeStamp &lt;= as.Date('2019-12-31'))</code></li>
+<li>Run <code>evalcor</code> using <code>tz = 'America/Jamaica'</code>, <code>lat = 31.39</code>, and <code>long = -81.28</code>. View the plot to verify the correlations are low.</li>
+<li>Run <code>wtreg</code> on <code>sap</code> using the same inputs as <code>evalcor</code>.</li>
+<li>Run <code>WtRegDO::ecometab</code> on the observed time series using the <code>DO_var = 'DO_mgl'</code> and <code>DO_var = 'DO_nrm'</code> options. Save them both to different objects.</li>
+<li>Plot the results before and after detiding and evaluate the differences in the metabolism results using <code>meteval</code>.</li>
+</ol>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
+<p>In this lesson, we learned how to estimate metabolism and how to use detiding results to evaluate if an improvement was observed to produce more precise and accurate metabolism results. Detiding is a bit of trial and error. If it works well at a site, it should be fairly obvious without having to iterate too much on selecting window widths. In other cases, a more systematic appoach to choosing the optimal window widths could be used. In the latter case, try to follow the guidelines <a href="https://github.com/fawda123/WtRegDO#optimization">here</a>.</p>
 </div>
 </div>
 
