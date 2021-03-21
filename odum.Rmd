@@ -7,3 +7,171 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ```
 
 # The Odum method
+
+Get the lesson R script: [odum.R](odum.R)
+
+Get the lesson data: [download zip](data/779980.zip)
+
+## Lesson Outline
+
+- [Goals and Motivation]
+- [Data prep for metabolism]
+- [Theory and calculations for metabolism]
+- [Evaluating effects of the tide]
+- [Using detiding with metabolsim]
+
+## Lesson Exercises
+
+- [Exercise 1]
+- [Exercise 2]
+- [Exercise 3]
+
+## Goals and Motivation
+
+This lesson will teach you how to use functions in the [WtRegDO](https://github.com/fawda123/wtregdo) package to estimate rates of ecosystem metabolism in our example datasets.  As in the [detiding](detiding.hmtl) lesson, we'll first use the SWMPr package to import and prepare our data for use with WtRegDO.  We'll also explore some ways we can evaluate how tidal advection may have influenced the estimates and how well detiding may have worked to remove this influence. Background information on SWMPr is [here](https://journal.r-project.org/archive/2016/RJ-2016-015/index.html) and background information on detiding is [here](https://aslopubs.onlinelibrary.wiley.com/doi/full/10.1002/lom3.10062).  
+
+By the end of this lesson, you should know how or find the resources to be able to do the following:
+
+* Import, clean, and combine data from our example datasets for use with the WtRegDO package
+* Understand the basics of how ecosystem metabolism is calculated
+* Use functions in WtRegDO to calculate metabolism
+* Evaluate potential influences of the tide on metabolism
+* Use tools in WtRegDO to evaluate effectiveness of detiding
+
+## Data import and wrangling
+
+We'll start with a bit of review from last time by using functions in the SWMPr and dplyr packages to prepare our data for estimating metabolism.  The format we used for the detiding functions last time is the same format we need for the metabolism functions. 
+
+Remember, the help files for each function are your friend.  In this session, we'll be using the `ecometab` function (from WtRegDO, not SWMPr). You can see input data that you need at the bottom of the help file (`?ecometab`) and use that as a model for how your data should be formatted.
+
+The `SAPDC` data that comes with WtRegDO is used in the help file: 
+
+```{r}
+library(WtRegDO)
+head(SAPDC)
+```
+
+We need to use the following steps with our SWMP data to make it look like `SAPDC`: 
+
+1. Load the libraries we need (SWMPr, dplyr)
+1. Import the water quality data. 
+1. Import the weather data.
+1. Clean the QAQC codes in both. 
+1. Combine the two datasets. 
+1. Select and rename the relevant columns. 
+1. Deal with missing observations. 
+
+Here's a simple workflow we can use. 
+
+```{r}
+library(SWMPr)
+library(dplyr)
+
+# step 1
+apadbwq <- import_local('data', 'apadbwq')
+
+# step 2
+apaebmet <- import_local(path = 'data', station_code = 'apaebmet')
+
+# step 3
+keeps <- c('0', '1', '2', '3', '4', '5')
+apadbwq <- qaqc(apadbwq, qaqc_keep = keeps)
+apaebmet <- qaqc(apaebmet, qaqc_keeep = keeps)
+
+# step 4
+apa <- comb(apadbwq, apaebmet, timestep = 60)
+
+# step 5
+apa <- select(apa,
+  DateTimeStamp = datetimestamp, 
+  Temp = temp, 
+  Sal = sal, 
+  DO_obs = do_mgl,
+  ATemp = atemp, 
+  BP = bp, 
+  WSpd = wspd, 
+  Tide = depth
+)
+
+# step 6
+apa <- na.omit(apa)
+```
+
+Now we should be ready to go with the functions in WtRegDO.  
+
+## Exercise 1
+
+Repeat the above workflow for the Sapelo Island data in our `data` folder.  
+
+1. Open a new script in your RStudio project, save it with an informative title (e.g, `odum.R`), and add a section header with `Ctrl + Shift + R`.
+1. Load the SWMPr and dplyr packages with the `library` function. 
+1. Import and clean up `sapdcwq` with `import_local` and `qaqc`. 
+1. Import and clean up `sapmlmet` with `import_local` and `qaqc`. 
+1. Combine the two with `comb`. Use a 60 minute time step and use the `union` option. 
+1. Simultaneously rename and select the date/time columns (`DateTimeStamp = datetimestamp`), water temperature (`Temp = temp`), salinity (`Sal = sal`), dissolved oxygen (`DO_obs = do_mgl`), air temperature (`ATemp = atemp`), barometric pressure (`BP = bp`), wind speed (`WSpd = wspd`), and tidal height (`Tide = depth`) columns in the Sapelo Island dataset with the `select` function from dplyr. 
+1. Remove missing rows with `na.omit`.
+
+## Estimating metabolism
+
+Simply put, ecosystem metabolism is a measure of the balance between production and respiration processes that create and consume organic matter. We can use these measures to characterize productivity in aquatic environments as a rate, as compared to "surrogate" snapshot measures like nutrient or chlorophyll concentrations.  These standardized rate estimates allow us to make inferences about system productivity (i.e., is a site/reserve a source or sink of organic matter) and allow us to more easily compare conditions across reserves. 
+
+The Odum "open-water" method is a commonly used approach to estimating metabolism ([Odum 1956](https://aslopubs.onlinelibrary.wiley.com/doi/10.4319/lo.1956.1.2.0102)).  It uses the dissolved oxygen time series in a simple mass-balance equation to infer rates of production and respiration: 
+
+$$
+\frac{\delta O_2}{\delta t} = GPP - ER + D
+$$
+
+where the change in dissolved oxygen over time is a balance between processes that create organic matter (production, $P$), consume organic matter (respiration, $R$), and gas exchange between the air-sea interface ($D$).  Production and respiration are biological processes (that can be influenced by physical proceses, i.e., the tide) and the air-sea gas exchange is a physical process influenced by local conditions (gradient differences, air temperature, wind, etc.).  Accurate quantification of each parameter is critical to accurately estimating metabolism.  
+
+A more detailed equation as an expansion of the above is: 
+
+$$
+H\frac{\delta O_2}{\delta t} = GPP - ER + k_{0_2}\left(O_2 - O_{2sat}\right) - uH\frac{\delta O_2}{\delta x} - vH\frac{\delta O_2}{\delta y}
+$$
+
+where metabolism is a depth-integrated measure, gas exchange is estimated as an assumed, known-constant $k_{0_2}$ multiplied by the difference between the air-sea oxygen gradient, and the effect of the tide on the dissolved oxygen gradient in two dimensions.  
+
+At the daily scale, metabolism is calculated as the integration of the dissolved oxygen time series, corrected for gas exchange.  Respiration is assumed constant and occur the 24 hour period, where it can be estimated during the portion of the time series occurring at night.  Production occurs during the day and is esimated as the integration of the DO curve during daylight hours corrected for respiration.    
+
+This may seem like a lot, but functions in WtRegDO can estimate these parameters for you.  The parameters $GPP$, $ER$, and $k_{0_2}\left(O_2 - O_{2sat}\right)$ are estimated from the time series, and the tidal influence, $uH\frac{\delta O_2}{\delta x}$ and  $vH\frac{\delta O_2}{\delta y}$, is approximated as the difference between the observed and detided dissolved oxygen from the `wtreg` function.  
+
+The `ecometab` function in WtRegDO does all of this for you, excluding the detiding process, which is done outside of `ecometab` with the `wtreg` function.  More on this later.  Here's how we use `ecometab` with our example dataset.  Note that we have to use `WtRegDO::ecometab` to specifically use the metabolims function from WtRegDO.  The SWMPr package also has an ecosystem metabolims function, but it is not under active development as part of this project (i.e., it doesn't include all of the features available in WtRegDO).  
+
+```{r}
+tz <- attr(apa$DateTimeStamp, which = 'tzone')
+lat <- 29.6747
+long <- 85.0583
+
+apaeco <- WtRegDO::ecometab(apa, DO_var = "DO_obs", tz = tz ,lat = lat, long = long)
+head(apaeco)
+```
+
+The output is returned at the daily scale because the estimates are based on integration of the dissolved oxygen time series each "metabolic" day (sunrise to sunrise each 24 hour period).  The values `Pg`, `Rt`, and `NEM` are production, respiration and net ecosystem metabolism (as the difference between production and respiration) as mmol of $O_2$ $m_{-2}$ $d_{-1$.   These are areal estimates corrected for the total depth at each site. 
+
+We can plot these results using the `plot` function from WtregDO:
+
+```{r, out.width = '100%', fig.height = 3, fig.width = 7}
+plot(apaeco)
+```
+
+Or as the daily values:
+
+```{r, out.width = '100%', fig.height = 3, fig.width = 7}
+WtRegDO::plot.metab(apaeco, by = 'days')
+```
+
+Take special note of the times when production is negative and respiratoin is positive.  These are "anomalous" estimates that suggest a violation in the assumptions of the method, likely related to the tide. 
+
+## Exercise 2
+
+Now we can estimate metabolism on the Sapelo Island dataset from [Exercise 1].
+
+1. Create a new section in your script using `Ctrl + Shift + r` and give it an appropriate name. 
+1. Use the `ecometab` function from WtRegDO on the `sap` dataset you created in Exercise 1. Use the following for the required arguments: `DO_var = 'DO_obs'`, `tz = 'America/Jamaica'`, `lat = 31.39`, and `long = -81.28`.  Don't forget to use `WtRegDO::ecometab` for the function.
+1. Plot the results with the `plot` function.  Evaluate the results at the daily scale using the `by = 'days'` argument.  When do you see anomalous values? 
+
+## Evaluating metabolism
+
+## Exercise 3
+
+## Summary
