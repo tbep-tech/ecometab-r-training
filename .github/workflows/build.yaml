@@ -27,7 +27,7 @@ jobs:
           brew install udunits
       - name: Install R package dependencies
         run: |
-          install.packages(c("rmarkdown", "tidyverse", "remotes", "SWMPr", "plotly", "pillar"))
+          install.packages(c("rmarkdown", "tidyverse", "remotes", "SWMPr", "plotly", "pillar", "ggforce"))
           remotes::install_github("fawda123/WtRegDO")
         shell: Rscript {0}
       - name: Render site

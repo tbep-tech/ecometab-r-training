@@ -4,6 +4,12 @@ options(repos = "http://cran.rstudio.com/")
 pkgs <- c("dplyr", "knitr")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy = FALSE, message = F, warning = F)
+
+library(tidyverse)
+library(WtRegDO)
+library(ggforce)
+
+data(apadtd)
 ```
 
 # The Odum method
@@ -16,9 +22,8 @@ Get the lesson data: [download zip](data/779980.zip)
 
 - [Goals and Motivation]
 - [Data prep for metabolism]
-- [Theory and calculations for metabolism]
-- [Evaluating effects of the tide]
-- [Using detiding with metabolsim]
+- [Estimating metabolism]
+- [Evaluating metabolism]
 
 ## Lesson Exercises
 
@@ -38,7 +43,7 @@ By the end of this lesson, you should know how or find the resources to be able 
 * Evaluate potential influences of the tide on metabolism
 * Use tools in WtRegDO to evaluate effectiveness of detiding
 
-## Data import and wrangling
+## Data prep for metabolism
 
 We'll start with a bit of review from last time by using functions in the SWMPr and dplyr packages to prepare our data for estimating metabolism.  The format we used for the detiding functions last time is the same format we need for the metabolism functions. 
 
@@ -150,17 +155,19 @@ The output is returned at the daily scale because the estimates are based on int
 
 We can plot these results using the `plot` function from WtregDO:
 
-```{r, out.width = '100%', fig.height = 3, fig.width = 7}
+```{r, out.width = '100%', fig.height = 5, fig.width = 9}
 plot(apaeco)
 ```
 
 Or as the daily values:
 
-```{r, out.width = '100%', fig.height = 3, fig.width = 7}
+```{r, out.width = '100%', fig.height = 5, fig.width = 9}
 plot(apaeco, by = 'days')
 ```
 
-Take special note of the times when production is negative and respiratoin is positive.  These are "anomalous" estimates that suggest a violation in the assumptions of the method, likely related to the tide. 
+There are a few patterns in the plots that we can use to make inferences about metabolism in this system.  First, production and respiration at this site increase in the summer and decrease in the winter.  This is a seasonal pattern observed at all locations.  Second, the NEM calculations hover around zero and are positive (net autotrophic, source) when production exceeds respiration and are negative (net heterotrophic, sink) when production is less than respiration.  Often times, NEM is used to make broad statements about ecosystem function.  
+
+Take special note of the times when production is negative and respiration is positive.  These are "anomalous" estimates that suggest a violation in the assumptions of the method, likely related to the tide. 
 
 ## Exercise 2
 
@@ -172,6 +179,58 @@ Now we can estimate metabolism on the Sapelo Island dataset from [Exercise 1].
 
 ## Evaluating metabolism
 
+Your first clue as to whether your metabolism estimates are tidally influenced is to evaluate the "anomalous" estimates.  These are times when production is negative and respiration is positive, likely related to when the diel DO curve did not follow the typical sunset, sunrise pattern. In many cases, this may be the result of the tide.  This is an example from the `SAPDC` dataset.
+
+```{r, fig.height = 5, fig.width = 9, fig.align = 'center'}
+library(WtRegDO)
+dts <- as.Date(c('2012-02-01','2012-02-08')) 
+
+data(metab_obs)
+p <- plot(metab_obs, by = 'days') + facet_zoom(x = Date >= as.numeric(dts[1]) & Date <= as.numeric(dts[2]), zoom.size = 1)
+p
+```
+
+We can quantify times when this occurs using the `meteval` function. 
+
+```{r}
+meteval(apaeco)
+```
+
+We get several measures from this function that provide clues about how well the assumptions for metabolism are met in the resulting estimates.  The first six are most important: 
+
+* `meanPg`: The mean production across the time series.
+* `sdPg`: The standard deviation of production.
+* `anomPg`: The percentage of days when production was negative (anomalous).
+* `meanRt`: The mean respiration across the time series.
+* `sdRt`: The standard deviation of respiration.
+* `anomRt`: The percentage of days when respiration was negative (anomalous).
+
+Our percentage of anomalies should be as close to zero as possible. 
+
+Now, we can use detiding to try to improve these estimates. The process for estimating metabolism is the same as above, except we use the detided results as input.  First, we detide (see the [last lesson](detiding.html)): 
+
+```{r, eval = F}
+apadtd <- wtreg(apa, tz = tz, lat = lat, long = long)
+```
+
+Then we use the detided results to estimate metabolism.  Note how we are using the `'DO_nrm'` column as input. 
+
+```{r}
+apadtdeco <- WtRegDO::ecometab(apadtd, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
+```
+
+We plot the data and use the `meteval` function to reassess how well we did. 
+
+```{r, out.width = '100%', fig.height = 5, fig.width = 9}
+plot(apadtdeco, by = 'days')
+meteval(apadtdeco)
+```
+
+### Step 1
+
+### Step 2
+
+### Step 3
 ## Exercise 3
 
 ## Summary
