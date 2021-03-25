@@ -368,7 +368,7 @@ div.tocify {
 <div id="lesson-outline" class="section level2">
 <h2>Lesson Outline</h2>
 <ul>
-<li><a href="#goals-and-motivation">Goals and Motivation</a></li>
+<li><a href="#goals-and-motivation">Goals and motivation</a></li>
 <li><a href="#data-prep-for-metabolism">Data prep for metabolism</a></li>
 <li><a href="#estimating-metabolism">Estimating metabolism</a></li>
 <li><a href="#evaluating-metabolism">Evaluating metabolism</a></li>
@@ -384,7 +384,7 @@ div.tocify {
 </div>
 <div id="goals-and-motivation" class="section level2">
 <h2>Goals and Motivation</h2>
-<p>This lesson will teach you how to use functions in the <a href="https://github.com/fawda123/wtregdo">WtRegDO</a> package to estimate rates of ecosystem metabolism in our example datasets. As in the <a href="detiding.hmtl">detiding</a> lesson, we’ll first use the SWMPr package to import and prepare our data for use with WtRegDO. We’ll also explore some ways we can evaluate how tidal advection may have influenced the estimates and how well detiding may have worked to remove this influence. Background information on SWMPr is <a href="https://journal.r-project.org/archive/2016/RJ-2016-015/index.html">here</a> and background information on detiding is <a href="https://aslopubs.onlinelibrary.wiley.com/doi/full/10.1002/lom3.10062">here</a>.</p>
+<p>This lesson will teach you how to use functions in the <a href="https://github.com/fawda123/wtregdo">WtRegDO</a> package to estimate rates of ecosystem metabolism in our example datasets. As in the <a href="detiding.hmtl">detiding</a> lesson, we’ll first use the SWMPr package to import and prepare our data for use with WtRegDO. We’ll also explore some ways we can evaluate how tidal advection may have influenced the metabolism estimates and how well detiding may have worked to remove this influence. Background information on SWMPr is <a href="https://journal.r-project.org/archive/2016/RJ-2016-015/index.html">here</a> and background information on detiding is <a href="https://aslopubs.onlinelibrary.wiley.com/doi/full/10.1002/lom3.10062">here</a>.</p>
 <p>By the end of this lesson, you should know how or find the resources to be able to do the following:</p>
 <ul>
 <li>Import, clean, and combine data from our example datasets for use with the WtRegDO package</li>
@@ -411,32 +411,33 @@ head(SAPDC)</code></pre>
 <p>We need to use the following steps with our SWMP data to make it look like <code>SAPDC</code>:</p>
 <ol style="list-style-type: decimal">
 <li>Load the libraries we need (SWMPr, dplyr)</li>
-<li>Import the water quality data.</li>
-<li>Import the weather data.</li>
-<li>Clean the QAQC codes in both.</li>
-<li>Combine the two datasets.</li>
-<li>Select and rename the relevant columns.</li>
-<li>Deal with missing observations.</li>
+<li>Import the water quality data</li>
+<li>Import the weather data</li>
+<li>Clean the QAQC codes in both</li>
+<li>Combine the two datasets</li>
+<li>Select and rename the relevant columns</li>
+<li>Deal with missing observations</li>
 </ol>
 <p>Here’s a simple workflow we can use.</p>
-<pre class="r"><code>library(SWMPr)
+<pre class="r"><code># step 1
+library(SWMPr)
 library(dplyr)
 
-# step 1
-apadbwq &lt;- import_local(&#39;data&#39;, &#39;apadbwq&#39;)
-
 # step 2
-apaebmet &lt;- import_local(path = &#39;data&#39;, station_code = &#39;apaebmet&#39;)
+apadbwq &lt;- import_local(path = &#39;data&#39;, station_code = &#39;apadbwq&#39;)
 
 # step 3
+apaebmet &lt;- import_local(path = &#39;data&#39;, station_code = &#39;apaebmet&#39;)
+
+# step 4
 keeps &lt;- c(&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;)
 apadbwq &lt;- qaqc(apadbwq, qaqc_keep = keeps)
 apaebmet &lt;- qaqc(apaebmet, qaqc_keeep = keeps)
 
-# step 4
-apa &lt;- comb(apadbwq, apaebmet, timestep = 60)
-
 # step 5
+apa &lt;- comb(apadbwq, apaebmet, timestep = 60, method = &#39;union&#39;)
+
+# step 6
 apa &lt;- select(apa,
   DateTimeStamp = datetimestamp, 
   Temp = temp, 
@@ -448,7 +449,7 @@ apa &lt;- select(apa,
   Tide = depth
 )
 
-# step 6
+# step 7
 apa &lt;- na.omit(apa)</code></pre>
 <p>Now we should be ready to go with the functions in WtRegDO.</p>
 </div>
@@ -458,10 +459,11 @@ apa &lt;- na.omit(apa)</code></pre>
 <ol style="list-style-type: decimal">
 <li>Open a new script in your RStudio project, save it with an informative title (e.g, <code>odum.R</code>), and add a section header with <code>Ctrl + Shift + R</code>.</li>
 <li>Load the SWMPr and dplyr packages with the <code>library</code> function.</li>
-<li>Import and clean up <code>sapdcwq</code> with <code>import_local</code> and <code>qaqc</code>.</li>
-<li>Import and clean up <code>sapmlmet</code> with <code>import_local</code> and <code>qaqc</code>.</li>
-<li>Combine the two with <code>comb</code>. Use a 60 minute time step and use the <code>union</code> option.</li>
-<li>Simultaneously rename and select the date/time columns (<code>DateTimeStamp = datetimestamp</code>), water temperature (<code>Temp = temp</code>), salinity (<code>Sal = sal</code>), dissolved oxygen (<code>DO_obs = do_mgl</code>), air temperature (<code>ATemp = atemp</code>), barometric pressure (<code>BP = bp</code>), wind speed (<code>WSpd = wspd</code>), and tidal height (<code>Tide = depth</code>) columns in the Sapelo Island dataset with the <code>select</code> function from dplyr.</li>
+<li>Import <code>sapdcwq</code> with <code>import_local</code>.</li>
+<li>Import <code>sapmlmet</code> with <code>import_local</code>.</li>
+<li>Clean both with <code>qaqc</code> keeping the flags <code>c('0', '1', '2', '3', '4', '5')</code>.</li>
+<li>Combine the two with <code>comb</code>. Use a 60 minute time step and use the union option.</li>
+<li>Simultaneously rename and select date/time (<code>DateTimeStamp = datetimestamp</code>), water temperature (<code>Temp = temp</code>), salinity (<code>Sal = sal</code>), dissolved oxygen (<code>DO_obs = do_mgl</code>), air temperature (<code>ATemp = atemp</code>), barometric pressure (<code>BP = bp</code>), wind speed (<code>WSpd = wspd</code>), and tidal height (<code>Tide = depth</code>) columns in the Sapelo Island dataset with the <code>select</code> function from dplyr.</li>
 <li>Remove missing rows with <code>na.omit</code>.</li>
 </ol>
 </div>
@@ -472,15 +474,18 @@ apa &lt;- na.omit(apa)</code></pre>
 <p><span class="math display">\[
 \frac{\delta O_2}{\delta t} = GPP - ER + D
 \]</span></p>
-<p>where the change in dissolved oxygen over time is a balance between processes that create organic matter (production, <span class="math inline">\(P\)</span>), consume organic matter (respiration, <span class="math inline">\(R\)</span>), and gas exchange between the air-sea interface (<span class="math inline">\(D\)</span>). Production and respiration are biological processes (that can be influenced by physical proceses, i.e., the tide) and the air-sea gas exchange is a physical process influenced by local conditions (gradient differences, air temperature, wind, etc.). Accurate quantification of each parameter is critical to accurately estimating metabolism.</p>
+<p>where the change in dissolved oxygen over time is a balance between processes that create organic matter (gross primary production, <span class="math inline">\(GPP\)</span>), consume organic matter (ecosystem respiration, <span class="math inline">\(ER\)</span>), and gas exchange between the air-sea interface (<span class="math inline">\(D\)</span>). Production and respiration are biological processes (that can be influenced by physical proceses, i.e., the tide) and the air-sea gas exchange is a physical process influenced by local conditions (gradient differences, air temperature, wind, etc.). Accurate quantification of each parameter is critical to estimating metabolism.</p>
 <p>A more detailed equation as an expansion of the above is:</p>
 <p><span class="math display">\[
 H\frac{\delta O_2}{\delta t} = GPP - ER + k_{0_2}\left(O_2 - O_{2sat}\right) - uH\frac{\delta O_2}{\delta x} - vH\frac{\delta O_2}{\delta y}
 \]</span></p>
-<p>where metabolism is a depth-integrated measure, gas exchange is estimated as an assumed, known-constant <span class="math inline">\(k_{0_2}\)</span> multiplied by the difference between the air-sea oxygen gradient, and the effect of the tide on the dissolved oxygen gradient in two dimensions.</p>
-<p>At the daily scale, metabolism is calculated as the integration of the dissolved oxygen time series, corrected for gas exchange. Respiration is assumed constant and occur the 24 hour period, where it can be estimated during the portion of the time series occurring at night. Production occurs during the day and is esimated as the integration of the DO curve during daylight hours corrected for respiration.</p>
-<p>This may seem like a lot, but functions in WtRegDO can estimate these parameters for you. The parameters <span class="math inline">\(GPP\)</span>, <span class="math inline">\(ER\)</span>, and <span class="math inline">\(k_{0_2}\left(O_2 - O_{2sat}\right)\)</span> are estimated from the time series, and the tidal influence, <span class="math inline">\(uH\frac{\delta O_2}{\delta x}\)</span> and <span class="math inline">\(vH\frac{\delta O_2}{\delta y}\)</span>, is approximated as the difference between the observed and detided dissolved oxygen from the <code>wtreg</code> function.</p>
-<p>The <code>ecometab</code> function in WtRegDO does all of this for you, excluding the detiding process, which is done outside of <code>ecometab</code> with the <code>wtreg</code> function. More on this later. Here’s how we use <code>ecometab</code> with our example dataset. Note that we have to use <code>WtRegDO::ecometab</code> to specifically use the metabolims function from WtRegDO. The SWMPr package also has an ecosystem metabolims function, but it is not under active development as part of this project (i.e., it doesn’t include all of the features available in WtRegDO).</p>
+<p>where metabolism is an areal rate, gas exchange is estimated as an assumed, known-constant <span class="math inline">\(k_{0_2}\)</span> multiplied by the difference between the air-sea oxygen gradient, and the effect of the tide on the dissolved oxygen gradient in two dimensions.</p>
+<p>At the daily scale, metabolism is calculated as the integration of the dissolved oxygen time series, corrected for gas exchange. Respiration is assumed constant and occurs over the 24 hour period, where it can be estimated during the portion of the time series occurring at night. Production occurs during the day and is estimated as the integration of the DO curve during daylight hours corrected for respiration. The parameters <span class="math inline">\(GPP\)</span>, <span class="math inline">\(ER\)</span>, and <span class="math inline">\(k_{0_2}\left(O_2 - O_{2sat}\right)\)</span> are estimated from the time series, and the tidal influence, <span class="math inline">\(uH\frac{\delta O_2}{\delta x}\)</span> and <span class="math inline">\(vH\frac{\delta O_2}{\delta y}\)</span>, is approximated as the difference between the observed and detided dissolved oxygen from the <code>wtreg</code> function.</p>
+<p>When all is said and done, you’ll end up with three measures describing metabolism:</p>
+<p><span class="math display">\[ 
+NEM = GPP - ER
+\]</span> Net ecosystem metabolism is the difference between production and respiration. Positive values imply autotrophic processes dominate and organic matter is being produced at a rate that exceeds respiration or decomposition. Negative values imply a heterotrophic system where organic matter is being consumed quicker than it is being produced. Strongly heterotrophic systems may have chronic water quality issues associated with eutrophication.</p>
+<p>The <code>ecometab</code> function in WtRegDO estimates all of the parameters for you, excluding the detiding process, which is done outside of <code>ecometab</code> with the <code>wtreg</code> function. More on this later. Here’s how we use <code>ecometab</code> with our example dataset on the observed dissolved oxygen time series. Note that we have to use <code>WtRegDO::ecometab</code> to use the metabolism function from WtRegDO. The SWMPr package also has an ecosystem metabolism function, but it is not under active development as part of this project and doesn’t include all of the features available in WtRegDO.</p>
 <pre class="r"><code>tz &lt;- attr(apa$DateTimeStamp, which = &#39;tzone&#39;)
 lat &lt;- 29.6747
 long &lt;- -85.0583
@@ -494,15 +499,15 @@ head(apaeco)</code></pre>
 ## 2017-01-03 2017-01-03  65.91970 -156.1426918 -90.222996
 ## 2017-01-04 2017-01-04 153.47355 -180.3388325 -26.865281
 ## 2017-01-05 2017-01-05 111.50119    0.7407608 112.241953</code></pre>
-<p>The output is returned at the daily scale because the estimates are based on integration of the dissolved oxygen time series each “metabolic” day (sunrise to sunrise each 24 hour period). The values <code>Pg</code>, <code>Rt</code>, and <code>NEM</code> are production, respiration and net ecosystem metabolism (as the difference between production and respiration) as mmol of <span class="math inline">\(O_2\)</span> <span class="math inline">\(m_{-2}\)</span> <span class="math inline">\(d_{-1\)</span>. These are areal estimates corrected for the total depth at each site.</p>
+<p>The output is returned at the daily scale because the estimates are based on integration of the dissolved oxygen time series each “metabolic” day (sunrise to sunrise each 24 hour period). The values <code>Pg</code>, <code>Rt</code>, and <code>NEM</code> are production, respiration and net ecosystem metabolism (as the difference between production and respiration) as mmol of O<span class="math inline">\(_2\)</span> m<span class="math inline">\(_{-2}\)</span> d<span class="math inline">\(_{-1}\)</span>. These are areal estimates (per square meter) corrected for the total depth at each site.</p>
 <p>We can plot these results using the <code>plot</code> function from WtregDO:</p>
 <pre class="r"><code>plot(apaeco)</code></pre>
 <p><img src="odum_files/figure-html/unnamed-chunk-4-1.png" width="100%" /></p>
 <p>Or as the daily values:</p>
 <pre class="r"><code>plot(apaeco, by = &#39;days&#39;)</code></pre>
 <p><img src="odum_files/figure-html/unnamed-chunk-5-1.png" width="100%" /></p>
-<p>There are a few patterns in the plots that we can use to make inferences about metabolism in this system. First, production and respiration at this site increase in the summer and decrease in the winter. This is a seasonal pattern observed at all locations. Second, the NEM calculations hover around zero and are positive (net autotrophic, source) when production exceeds respiration and are negative (net heterotrophic, sink) when production is less than respiration. Often times, NEM is used to make broad statements about ecosystem function.</p>
-<p>Take special note of the times when production is negative and respiration is positive. These are “anomalous” estimates that suggest a violation in the assumptions of the method, likely related to the tide.</p>
+<p>There are a few patterns in the plots that we can use to make inferences about metabolism in this system. First, production and respiration at this site increase in the summer and decrease in the winter. This is a seasonal pattern observed at most locations. Second, the NEM calculations hover around zero and are positive (net autotrophic, source) when production exceeds respiration and negative (net heterotrophic, sink) when production is less than respiration. Often times, NEM is used to make broad statements about ecosystem function.</p>
+<p>Take special note of the times when <em>production is negative</em> and <em>respiration is positive</em>. These are “anomalous” estimates that suggest a violation in the assumptions of the method, possibly related to the tide.</p>
 </div>
 <div id="exercise-2" class="section level2">
 <h2>Exercise 2</h2>
@@ -515,8 +520,8 @@ head(apaeco)</code></pre>
 </div>
 <div id="evaluating-metabolism" class="section level2">
 <h2>Evaluating metabolism</h2>
-<p>Last time, we showed how you can plot the dissolved oxygen data to understand if the tide is influencing the observations. Now, we are using the metabolism estimates as our indicator of tidal influence since our end goal is to produce more precise and reliable measures of metabolism.</p>
-<p>Your first clue as to whether your metabolism estimates are tidally influenced is to evaluate the “anomalous” values. These are times when production is negative and respiration is positive, likely related to when the diel DO curve did not follow the typical sunset, sunrise pattern. In many cases, this may be the result of the tide. This is an example from the <code>SAPDC</code> dataset.</p>
+<p>In the <a href="detiding.html">detiding</a> lesson, we showed how you can plot the dissolved oxygen data to understand if the tide is influencing the observations. Now, we are using the metabolism estimates as our indicator of tidal influence since our end goal is to produce more precise and reliable measures of metabolism.</p>
+<p>Your first clue as to whether your metabolism estimates are tidally influenced is to evaluate the “anomalous” values. These are times when production is negative and respiration is positive, likely because the diel DO curve did not follow the typical sunset, sunrise pattern. In many cases, this may be the result of the tide. This is an example from the <code>SAPDC</code> dataset.</p>
 <pre class="r"><code>library(ggforce)
 dts &lt;- as.Date(c(&#39;2012-02-01&#39;,&#39;2012-02-08&#39;)) 
 
@@ -568,10 +573,10 @@ p</code></pre>
 <li><code>anomPg</code>: The percentage of days when production was negative (anomalous).</li>
 <li><code>meanRt</code>: The mean respiration across the time series.</li>
 <li><code>sdRt</code>: The standard deviation of respiration.</li>
-<li><code>anomRt</code>: The percentage of days when respiration was negative (anomalous).</li>
+<li><code>anomRt</code>: The percentage of days when respiration was positive (anomalous).</li>
 </ul>
-<p>Our percentage of anomalies should be as close to zero as possible.</p>
-<p>Now, we can use detiding to try to hopfully improve these summaries and get more precise and accurate metabolsim estimates. The process for estimating metabolism is the same as above, except we use the detided results as input. First, we detide (see the <a href="detiding.html">last lesson</a>):</p>
+<p>Our percentage of anomalies should be as close to zero as possible. Detiding can help with this, but not always.</p>
+<p>Now, we can use detiding to try to improve these summaries and get more precise and accurate metabolism estimates. The process for estimating metabolism is the same as above, except we use the detided results as input. First, we detide (see the <a href="detiding.html">last lesson</a>):</p>
 <pre class="r"><code>apadtd &lt;- wtreg(apa, tz = tz, lat = lat, long = long)</code></pre>
 <p>Then we use the detided results to estimate metabolism. Note how we are using the <code>'DO_nrm'</code> column as input.</p>
 <pre class="r"><code>apadtdeco &lt;- WtRegDO::ecometab(apadtd, DO_var = &quot;DO_nrm&quot;, tz = tz ,lat = lat, long = long)</code></pre>
@@ -615,8 +620,8 @@ p</code></pre>
 ## $Rtcor
 ##  [1] -0.38363023 -0.50577561 -0.40998238 -0.35009095 -0.29453600 -0.31592657
 ##  [7] -0.09992263  0.38564738  0.30133841  0.06983676  0.33413642  0.11815497</code></pre>
-<p>From these results, we see that we’ve reduced the anomalous production and respiration estimates by about ten percent each. This is an improvement, although we have to be extra, extra careful that detiding didn’t smooth the dissolved oxygen time series more than it should, i.e., we don’t want detiding to remove both physical and biological components of the signal. A simple way to assess if you’ve removed too much of the signal is to evaluate the mean production and respiration estimates before and after detiding. In theory, they should be similar because tidal influences are observed at the daily scale and their effects should averaged out over time. In this case, we’ve reduced production and respiration by more than half that observed in the raw data.</p>
-<p>So, we have to detide our results again, but this time we use different window widths in the weighted regression. Unfortunately, choosing window widths is a bit of trial and error. The default values for the <code>wtreg</code> function are four days, 12 hours, and half the tidal height range. This means that each individual regression in the moving window for <code>wtreg</code> gives higher importance to observations that are within four days, 12 hours, and half the tidal height range of the value at the center of the window of each regression. This means that values that have characteristics similar to the value at the center of the window are given higher influence in how the regression is fit. We can tweak these values to determine the degree of “smoothness” or weighting used in the regression. For example, if we want to use 12 days, 12 hours, and 40% of the full tidal range for the window widths:</p>
+<p>From these results, we see that we’ve reduced the anomalous production and respiration estimates by about ten percent each. This is an improvement, although we have to be extra, extra careful that detiding didn’t smooth the dissolved oxygen time series more than it should, i.e., we don’t want detiding to remove both physical and biological components of the signal. A simple way to assess if you’ve removed too much of the signal is to evaluate the mean production and respiration estimates before and after detiding. In theory, they should be similar because tidal influences are observed at the daily scale and their effects should averaged out over time. In this case, we’ve reduced production and respiration by more than half that observed in the raw data. This suggests we’ve removed more from the dissolved oxygen time series than we should have.</p>
+<p>So, we have to detide our results again, but this time we use different window widths in the weighted regression. Unfortunately, choosing window widths is a bit of trial and error. The default values for the <code>wtreg</code> function are four days, 12 hours, and half the tidal height range. This means that each individual regression in the moving window for <code>wtreg</code> gives higher importance to observations that are within four days, 12 hours, and half the tidal height range of the value at the center of the window of each regression. In other words, obeservations that have characteristics similar to the value at the center of the window are given higher influence in how the regression is fit. We can tweak these values to determine the degree of “smoothness” or weighting used in the regression. For example, if we want to use 12 days, 12 hours, and 40% of the full tidal range for the window widths:</p>
 <pre class="r"><code># use different windows for detiding
 apadtd2 &lt;- wtreg(apa, tz = tz, lat = lat, long = long, wins = list(12, 12, 0.4))
 
@@ -668,27 +673,29 @@ plot(apadtdeco2, by = &#39;days&#39;)</code></pre>
 ## $Rtcor
 ##  [1] -0.38363023 -0.50577561 -0.40998238 -0.35009095 -0.29453600 -0.31592657
 ##  [7] -0.09992263  0.38564738  0.30133841  0.06983676  0.33413642  0.11815497</code></pre>
-<p>In this case, choosing different window widths didn’t do much for affecting the results. Some sites are like that and it relates to problems seen with the <code>evalcor</code> function, i.e., there are substantial times when the tidal height is correlated with the sun angle meaning detiding will over-smooth the results by removing both the biological and physical components of the time series.</p>
-<p>Generally, you should test window widths in the range of 1 to 12 days, 1 to 12 hours, and 0.2 to 1 as the proportion of the tidal height range. Windows larger than these upper values reduce the effectiveness of the moving window approach by making it more similar to a global regression, whereas windows smaller than this will severely overfit the results. Finding an “optimal” combination can be time consuming and in many cases there may not be a combination that is ideal. If this is the case, consider whether detiding is appropriate at your site, and if so, when would detiding be appropriate. Even if detiding works, production may be very low and a diel oxygen may not be obvious at a site independent of the tide.</p>
+<p>In this case, choosing different window widths didn’t do much for affecting the results. Some sites are like that and it relates to problems seen with the <code>evalcor</code> function, i.e., there are substantial times when the tidal height is correlated with the sun angle meaning detiding will over-smooth the results by removing both the biological and physical components of the time series. For other cases, sometimes there isn’t a strong diel signal to begin width, making it incredibly difficult to accurately estimate production and respiration.</p>
+<p>Generally, you should test window widths in the range of 1 to 12 days, 1 to 12 hours, and 0.2 to 1 as the proportion of the tidal height range. Windows larger than these upper values reduce the effectiveness of the moving window approach by making it more similar to a global regression, whereas very small windows will produce results that severely overfit the observations.</p>
+<p>You can try different combinations until you get a desirable results (low anomalous values, similar means). Finding an “optimal” combination can be time consuming and in many cases there may not be a combination that is ideal. If this is the case, consider whether detiding is appropriate at your site, and if so, when would detiding be appropriate. Even if detiding works, production may be very low and a diel oxygen may not be obvious at a site independent of the tide.</p>
 <p>Here are some rules to evaluate detiding:</p>
 <ol style="list-style-type: decimal">
 <li>Create a plot of the observed dissolved oxygen data relative to tidal height. How well do they track at the daily scale?</li>
 <li>Evaluate the <code>evalcor</code> function before you detide to see at which times of year detiding could work well and which times it might not.</li>
-<li>Estimate metabolism with <code>ecometab</code> using the obseved DO time series. Evaluate the results with <code>plot</code> and <code>meteval</code>. How many anomalous metabolism estimates do you see? What are the mean production and respiration estimates?</li>
+<li>Estimate metabolism with <code>ecometab</code> using the observed DO time series. Evaluate the results with <code>plot</code> and <code>meteval</code>. How many anomalous metabolism estimates do you see? What are the mean production and respiration estimates?</li>
 <li>Detide the results with the default settings and use those to estimate metabolism. Evaluate the results with <code>plot</code> and <code>meteval</code>. How many anomalous metabolism estimates do you see? What are the mean production and respiration estimates? Do these differ from the observed results?</li>
-<li>If you don’t see results that help, try a different window width combination for detiding. It may be useful to est out the extremes, e.g., <code>wins = list(1, 1, 0.1)</code> or <code>wins = list(12, 12, 1)</code>. Always plot the results. If nothing works, consider not using detiding at that site.</li>
+<li>If you don’t see results that help, try a different window width combination for detiding. It may be useful to test out the extremes, e.g., <code>wins = list(1, 1, 0.1)</code> or <code>wins = list(12, 12, 1)</code>. Always plot the results. If nothing works, consider not using detiding at that site.</li>
 </ol>
 </div>
 <div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
 <p>Our Sapelo Island dataset works well with detiding. Use the <code>wtreg</code> function to detide the results with the default settings. Evaluate the results before and after detiding.</p>
 <ol style="list-style-type: decimal">
-<li>Create a new section in your script using <code>Ctrl + Shift + r</code> and give it an appropriate name.</li>
-<li>Using the <code>sap</code> dataset from <a href="#exercise-2">Exercise 2</a>, filter (from dplyr) the results to one year to speed up the process. Use the following. <code>r   sap &lt;- filter(sap, DateTimeStamp &gt;= as.Date('2019-01-01') &amp; DateTimeStamp &lt;= as.Date('2019-12-31'))</code></li>
-<li>Run <code>evalcor</code> using <code>tz = 'America/Jamaica'</code>, <code>lat = 31.39</code>, and <code>long = -81.28</code>. View the plot to verify the correlations are low.</li>
-<li>Run <code>wtreg</code> on <code>sap</code> using the same inputs as <code>evalcor</code>.</li>
-<li>Run <code>WtRegDO::ecometab</code> on the observed time series using the <code>DO_var = 'DO_mgl'</code> and <code>DO_var = 'DO_nrm'</code> options. Save them both to different objects.</li>
-<li>Plot the results before and after detiding and evaluate the differences in the metabolism results using <code>meteval</code>.</li>
+<li><p>Create a new section in your script using <code>Ctrl + Shift + r</code> and give it an appropriate name.</p></li>
+<li><p>Using the <code>sap</code> dataset from <a href="#exercise-2">Exercise 2</a>, filter (from dplyr) the dataset to one year to speed up the process. Use the following.</p>
+<pre class="r"><code>sap &lt;- filter(sap, DateTimeStamp &gt;= as.Date(&#39;2019-01-01&#39;) &amp; DateTimeStamp &lt;= as.Date(&#39;2019-12-31&#39;))</code></pre></li>
+<li><p>Run <code>evalcor</code> using <code>tz = 'America/Jamaica'</code>, <code>lat = 31.39</code>, and <code>long = -81.28</code>. View the plot to verify the correlations are low.</p></li>
+<li><p>Run <code>wtreg</code> on <code>sap</code> using the same inputs as <code>evalcor</code>.</p></li>
+<li><p>Run <code>WtRegDO::ecometab</code> twice, first on the observed time series using <code>DO_var = 'DO_mgl'</code> and then on the detided time series using <code>DO_var = 'DO_nrm'</code> options. Save them both to different objects.</p></li>
+<li><p>Plot the results before and after detiding and evaluate the differences in the metabolism results using <code>meteval</code>.</p></li>
 </ol>
 </div>
 <div id="summary" class="section level2">
