@@ -279,7 +279,7 @@ Our Sapelo Island dataset works well with detiding.  Use the `wtreg` function to
 
 1. Create a new section in your script using `Ctrl + Shift + r` and give it an appropriate name. 
 1. Using the `sap` dataset from [Exercise 2], filter (from dplyr) the dataset to one year to speed up the process. Use the following.
-    ```{r }
+    ```{r, eval = F}
     sap <- filter(sap, DateTimeStamp >= as.Date('2019-01-01') & DateTimeStamp <= as.Date('2019-12-31'))
     ```
 1. Run `evalcor` using `tz = 'America/Jamaica'`, `lat = 31.39`, and `long = -81.28`. View the plot to verify the correlations are low. 
