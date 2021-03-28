@@ -1,24 +1,25 @@
 library(WtRegDO)
 head(SAPDC)
 
+# step 1
 library(SWMPr)
 library(dplyr)
 
-# step 1
-apadbwq <- import_local('data', 'apadbwq')
-
 # step 2
-apaebmet <- import_local(path = 'data', station_code = 'apaebmet')
+apadbwq <- import_local(path = 'data', station_code = 'apadbwq')
 
 # step 3
+apaebmet <- import_local(path = 'data', station_code = 'apaebmet')
+
+# step 4
 keeps <- c('0', '1', '2', '3', '4', '5')
 apadbwq <- qaqc(apadbwq, qaqc_keep = keeps)
 apaebmet <- qaqc(apaebmet, qaqc_keeep = keeps)
 
-# step 4
-apa <- comb(apadbwq, apaebmet, timestep = 60)
-
 # step 5
+apa <- comb(apadbwq, apaebmet, timestep = 60, method = 'union')
+
+# step 6
 apa <- select(apa,
   DateTimeStamp = datetimestamp, 
   Temp = temp, 
@@ -30,7 +31,7 @@ apa <- select(apa,
   Tide = depth
 )
 
-# step 6
+# step 7
 apa <- na.omit(apa)
 
 tz <- attr(apa$DateTimeStamp, which = 'tzone')
@@ -74,3 +75,5 @@ meteval(apadtdeco)
 apadtdeco2 <- WtRegDO::ecometab(apadtd2, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
 plot(apadtdeco2, by = 'days')
 meteval(apadtdeco)
+
+## sap <- filter(sap, DateTimeStamp >= as.Date('2019-01-01') & DateTimeStamp <= as.Date('2019-12-31'))
