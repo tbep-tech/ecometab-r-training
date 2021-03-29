@@ -137,7 +137,7 @@ $$
 H\frac{\delta O_2}{\delta t} = GPP - ER + k_{0_2}\left(O_2 - O_{2sat}\right) - uH\frac{\delta O_2}{\delta x} - vH\frac{\delta O_2}{\delta y}
 $$
 
-where metabolism is an areal rate, gas exchange is estimated as the gas transfer velocity $k_{0_2}$ multiplied by the difference between the air-sea oxygen gradient, and the effect of the tide on the dissolved oxygen gradient in two later dimensions.  
+where metabolism is an areal rate, gas exchange is estimated as the gas transfer velocity $k_{0_2}$ multiplied by the difference between the air-sea oxygen gradient, and the effect of the tide on the dissolved oxygen gradient in two lateral dimensions.  
 
 At the daily scale, metabolism is calculated as the integration of the dissolved oxygen time series, corrected for gas exchange.  Respiration is assumed constant over the 24 hour period and is estimated as the nighttime portion of the dissolved oxygen time series.  Production occurs during the day and is estimated as the integration of the DO curve during daylight hours corrected for respiration. The parameters $GPP$, $ER$, and $k_{0_2}\left(O_2 - O_{2sat}\right)$ are estimated from the time series, and the tidal influence, $uH\frac{\delta O_2}{\delta x}$ and  $vH\frac{\delta O_2}{\delta y}$, is approximated as the difference between the observed and detided dissolved oxygen from the `wtreg` function.  
 
@@ -155,11 +155,11 @@ tz <- attr(apa$DateTimeStamp, which = 'tzone')
 lat <- 29.6747
 long <- -85.0583
 
-apaeco <- WtRegDO::ecometab(apa, DO_var = "DO_obs", tz = tz ,lat = lat, long = long)
+apaeco <- WtRegDO::ecometab(apa, DO_var = "DO_obs", tz = tz, lat = lat, long = long)
 head(apaeco)
 ```
 
-The output is returned at the daily scale because the estimates are based on integration of the dissolved oxygen time series each "metabolic" day (sunrise to sunrise each 24 hour period).  The values `Pg`, `Rt`, and `NEM` are production, respiration and net ecosystem metabolism (as the difference between production and respiration) as mmol of O$_2$ m$_{-2}$ d$_{-1}$.   These are areal estimates (per square meter) corrected for the total depth at each site. 
+The output is returned at the daily scale because the estimates are based on integration of the dissolved oxygen time series each "metabolic" day (sunrise to sunrise each 24 hour period).  The values `Pg`, `Rt`, and `NEM` are production, respiration and net ecosystem metabolism (as the difference between production and respiration) as mmol of O$_2$ m$^{-2}$ d$^{-1}$.   These are areal estimates (per square meter) corrected for the total depth at each site. 
 
 We can plot these results using the `plot` function from WtregDO:
 
@@ -236,7 +236,7 @@ plot(apadtdeco, by = 'days')
 meteval(apadtdeco)
 ```
 
-From these results, we see that we've reduced the anomalous production and respiration estimates by about ten percent each.  This is an improvement, although we have to be extra, extra careful that detiding didn't smooth the dissolved oxygen time series more than it should, i.e., we don't want detiding to remove both physical and biological components of the signal. A simple way to assess if you've removed too much of the signal is to evaluate the mean production and respiration estimates before and after detiding.  In theory, they should be similar because tidal influences are observed at the daily scale and their effects should averaged out over time.  In this case, we've reduced production and respiration by more than half that observed in the raw data. This suggests we've removed more from the dissolved oxygen time series than we should have.
+From these results, we see that we've reduced the anomalous production and respiration estimates by about ten percent each.  This is an improvement, although we have to be extra, extra careful that detiding didn't smooth the dissolved oxygen time series more than it should, i.e., we don't want detiding to remove both physical and biological components of the signal. A simple way to assess if you've removed too much of the signal is to evaluate the mean production and respiration estimates before and after detiding.  In theory, they should be similar because tidal influences are observed at the daily scale and their effects should average out over time.  In this case, we've reduced production and respiration by more than half that observed in the raw data. This suggests we may have removed more from the dissolved oxygen time series than we should have.
 
 So, we have to detide our results again, but this time we use different window widths in the weighted regression. Unfortunately, choosing window widths is a bit of trial and error.  The default values for the `wtreg` function are four days, 12 hours, and half the tidal height range. This means that each individual regression in the moving window for `wtreg` gives higher importance to observations that are within four days, 12 hours, and half the tidal height range of the value at the center of the window of each regression. In other words, observations that have characteristics similar to the value at the center of the window are given higher influence in how the regression is fit. We can tweak these values to determine the degree of "smoothness" or weighting used in the regression.  For example, if we want to use 12 days, 12 hours, and 40% of the full tidal range for the window widths:
 
@@ -246,16 +246,18 @@ apadtd2 <- wtreg(apa, tz = tz, lat = lat, long = long, wins = list(12, 12, 0.4))
 
 # estimate metabolism
 apadtdeco2 <- WtRegDO::ecometab(apadtd2, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
-
-# plot
-plot(apadtdeco2, by = 'days')
-
-# evaluate
-meteval(apadtdeco)
 ```
-```{r, out.width = '100%', fig.height = 5, fig.width = 9}
+```{r, echo = F}
 apadtdeco2 <- WtRegDO::ecometab(apadtd2, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
+```
+
+Then plot:
+```{r, out.width = '100%', fig.height = 5, fig.width = 9}
 plot(apadtdeco2, by = 'days')
+```
+
+And run `meteval`:
+```{r}
 meteval(apadtdeco)
 ```
 
@@ -289,4 +291,4 @@ Our Sapelo Island dataset works well with detiding.  Use the `wtreg` function to
 
 ## Summary
 
-In this lesson, we learned how to estimate metabolism and how to use detiding results to evaluate if an improvement was observed to produce more precise and accurate metabolism results.  Detiding is a bit of trial and error.  If it works well at a site, it should be fairly obvious without having to iterate too much on selecting window widths.  In other cases, a more systematic appoach to choosing the optimal window widths could be used. In the latter case, try to follow the guidelines [here](https://github.com/fawda123/WtRegDO#optimization). 
+In this lesson, we learned how to estimate metabolism and how to use detiding results to evaluate if an improvement was observed to produce more precise and accurate metabolism results.  Detiding is a bit of trial and error.  If it works well at a site, it should be fairly obvious without having to iterate too much on selecting window widths.  In other cases, a more systematic approach to choosing the optimal window widths could be used. In the latter case, try to follow the guidelines [here](https://github.com/fawda123/WtRegDO#optimization). 
