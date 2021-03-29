@@ -38,7 +38,7 @@ tz <- attr(apa$DateTimeStamp, which = 'tzone')
 lat <- 29.6747
 long <- -85.0583
 
-apaeco <- WtRegDO::ecometab(apa, DO_var = "DO_obs", tz = tz ,lat = lat, long = long)
+apaeco <- WtRegDO::ecometab(apa, DO_var = "DO_obs", tz = tz, lat = lat, long = long)
 head(apaeco)
 
 plot(apaeco)
@@ -66,14 +66,10 @@ meteval(apadtdeco)
 ## 
 ## # estimate metabolism
 ## apadtdeco2 <- WtRegDO::ecometab(apadtd2, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
-## 
-## # plot
-## plot(apadtdeco2, by = 'days')
-## 
-## # evaluate
-## meteval(apadtdeco)
 apadtdeco2 <- WtRegDO::ecometab(apadtd2, DO_var = "DO_nrm", tz = tz ,lat = lat, long = long)
+
 plot(apadtdeco2, by = 'days')
+
 meteval(apadtdeco)
 
 ## sap <- filter(sap, DateTimeStamp >= as.Date('2019-01-01') & DateTimeStamp <= as.Date('2019-12-31'))
