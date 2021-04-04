@@ -7,3 +7,145 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ```
 
 # Understanding metabolism
+
+Get the lesson R script: [using.R](using.R)
+
+Get the lesson data: [download zip](data/779980.zip)
+
+## Lesson Outline
+
+- [Goals and motivation]
+- [Summarising and plotting metabolism data]
+- [Combining metabolism data with SWMP data]
+- [Compare metabolism with SWMP data]
+
+## Lesson Exercises
+
+- [Exercise 1]
+- [Exercise 2]
+- [Exercise 3]
+
+## Goals and Motivation
+
+This lesson will teach you how to begin evaluating estuary metabolism estimates using additional data available in SWMP. Our goals are to understand the tools that are available in R, and the tidyverse in particular, to combine and explore relationships among variables that could influence metabolism. These tools are the building blocks of more detailed analyses that will help you understand site-specific relationships or to develop more comprehensive comparisons between reserve.  
+
+By the end of this lesson, you should know how or find the resources to be able to do the following:
+
+* Summarise metabolism data using dplyr
+* Make some basic plots of metabolism using ggplot2
+* Combine metabolism estimates with additional SWMP data using dplyr
+* Compare metabolism estimates with additional SWMP data using ggplot2
+
+## Summarising and plotting metabolism data
+
+The [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/wtregdo) provide a set of easy to use functions for working with SWMP data to estimate metabolism.  Our goals so far have been to demonstrate how to use the pre-existing functions to evaluate metabolism in our example datasets.  
+
+What we have not covered is how to use the other tools available in R to create some more customized examples of data analyses.  This is obviously a huge topic that we cannot adequately cover in 90 minutes.  However, our goal today is to provide you with some general building blocks from which you can develop some more specific analyses. We'll be leveraging some of the other packages in the tidyverse to accomplish this goal.
+
+We start with our detided dissolved oxygen data from Apalachicola. Check out the [detiding](detiding.html) to review how we got these data. For sake of time, you can import this data file from the website: 
+
+```{r}
+load(url('https://tbep-tech.github.io/ecometab-r-training/data/apadtd.RData'))
+head(apadtd)
+```
+
+For this exercise, we'll assume the detided data is appropriate for estimating metabolism.  Remember, in practice you'll want to check out the data with `evalcor` and evaluate the metabolims results with `meteval`.
+
+We estimate metabolism as follows:
+
+```{r}
+tz <- attr(apadtd$DateTimeStamp, which = 'tzone')
+lat <- 29.6747
+long <- -85.0583
+
+apaeco <- WtRegDO::ecometab(apadtd, DO_var = "DO_nrm", tz = tz, lat = lat, long = long)
+head(apaeco)
+```
+
+The WtRegDO package has a plotting function that lets you view the metabolism results. This function lets you view the daily results or as aggregated summaries of the daily results.  For follow-up analysis, it will be useful to understand how to plot the data using more general plotting functions.  This will allow you to conduct your own analyses outside of the "pre-packaged" summaries in WtRegDO. 
+
+For plotting, we can use the ggplot2 library.  This comes with the tidyverse, so no need to install it separately, but you'll of course need to load the library. 
+
+```{r}
+library(ggplot2)
+```
+
+With ggplot2, you begin a plot with the function `ggplot()`. `ggplot()` creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = mpg)` creates an empty base graph.
+
+```{r, eval = F}
+ggplot(data = apaeco)
+```
+
+The next step is to "map" variables in your dataset to the plot visual properties or "aesthetics" (i.e., x variable, y variable, etc.).   The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the `data` argument, in this case, `apaeco`.  
+
+```{r, eval = F}
+ggplot(data = apaeco, aes(x = Date, y = Pg))
+```
+
+Now we need to add a "geometry" or `geom` to the plot to add components for viewing.  The next step is to add one or more layers (aka `geoms`) to `ggplot()`. The function `geom_point()` adds a layer of points to your plot based on the variable mappings in the `aes` function.
+
+```{r, fig.height = 3, fig.width = 7}
+ggplot(data = apaeco, aes(x = Date, y = Pg)) + 
+  geom_point()
+```
+
+we can also overlay a line using `geom_line()`. 
+
+```{r, fig.height = 3, fig.width = 7}
+ggplot(data = apaeco, aes(x = Date, y = Pg)) + 
+  geom_point() + 
+  geom_line()
+```
+
+Those are the basics of ggplot.  This structure may seem weird at first, but it's design is purposeful and easily extendable.  Just remember these requirements:
+
+* All ggplot plots start with the `ggplot` function
+* It will need three pieces of information: the **data**, how the data are **mapped** to the plot **aesthetics**, and a **geom** layer
+
+The daily data are a bit messy, so maybe we want to aggregate to averages before plotting to make the trends a little more apparent.  We need to use a few functions from the lubridate and dply packages to do this.  As before, these comes with the tidyverse package. 
+
+The lubridate package provides a set of functions to quickly modify date and time objects in R.  It provides many functions to convert R vectors to date objects (e.g., a character strings of dates imported from a csv) and many functions to extract components of date objects (e.g., month, day, etc.).  The latter is extremely useful for analysis.  
+
+First we load lubridate and dplyr.  Then we use both to create a month column from our existing date column in the apaeco data set. The `mutate` function from dplyr adds a column to our dataset and the `month` function extracts the month from the existing date column. 
+
+```{r}
+library(lubridate)
+library(dplyr)
+
+apasum <- mutate(apaeco, mo = month(Date))
+head(apasum)
+```
+
+We can plot the monthly values as boxplots with ggplot using the `geom_boxplot` geometry. 
+
+```{r, fig.height = 3, fig.width = 7}
+ggplot(apasum, aes(x = mo, y = Pg, group = mo)) + 
+  geom_boxplot()
+```
+
+Or, if we want to summarize the raw data, we can use the dplyr `group_by()` and `summarise()` functions.  Here we are grouping the data by month, then taking the average production values. Note the use of `na.rm = T` in the `mean` function. 
+
+```{r}
+apasum <- group_by(apasum, mo)
+apasum <- summarise(apasum, meanpg = mean(Pg, na.rm = T))
+```
+
+Then we plot as before using `geom_point()` and `geom_line()`.
+
+```{r, fig.height = 3, fig.width = 7}
+ggplot(apasum, aes(x = mo, y = meanpg)) + 
+  geom_point() +
+  geom_line()
+```
+
+## Exercise 1
+
+Now repeat some of the above analyses using the Sapelo Island metabolism data. 
+
+## Combining metabolism data with SWMP data
+
+## Exercise 2
+
+## Compare metabolism with SWMP data
+
+## Exercise 3
