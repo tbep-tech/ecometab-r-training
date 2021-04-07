@@ -27,7 +27,7 @@ Get the lesson data: [download zip](data/779980.zip)
 
 ## Goals and Motivation
 
-This lesson will teach you how to begin evaluating estuary metabolism estimates using additional data available in SWMP. Our goals are to understand the tools that are available in R, and the tidyverse in particular, to combine and explore relationships among variables that could influence metabolism. These tools are the building blocks of more detailed analyses that will help you understand site-specific relationships or to develop more comprehensive comparisons between reserve.  
+This lesson will teach you how to begin evaluating estuary metabolism estimates using additional data available in SWMP. Our goals are to understand the tools that are available in R, and the tidyverse in particular, to combine and explore relationships among variables that could influence metabolism. These tools are the building blocks of more detailed analyses that will help you understand site-specific relationships or to develop more comprehensive comparisons between reserves.  
 
 By the end of this lesson, you should know how or find the resources to be able to do the following:
 
@@ -38,20 +38,20 @@ By the end of this lesson, you should know how or find the resources to be able 
 
 ## Summarising and plotting metabolism data
 
-The [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/wtregdo) provide a set of easy to use functions for working with SWMP data to estimate metabolism.  Our goals so far have been to demonstrate how to use the pre-existing functions to evaluate metabolism in our example datasets.  
+The [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/wtregdo) packages provide a set of easy to use functions for working with SWMP data to estimate metabolism.  Our goals so far have been to demonstrate how to use the pre-existing functions to evaluate metabolism in our example datasets.  
 
-What we have not covered is how to use the other tools available in R to create some more customized examples of data analyses.  This is obviously a huge topic that we cannot adequately cover in 90 minutes.  However, our goal today is to provide you with some general building blocks from which you can develop some more specific analyses. We'll be leveraging some of the other packages in the tidyverse to accomplish this goal.
+What we have not covered is how to use the other tools available in R to create some more customized examples of data analyses.  This is obviously a huge topic that we cannot adequately cover in 90 minutes.  However, our goal today is to provide you with some general building blocks for developing some more specific analyses. We'll be leveraging some of the other packages in the tidyverse to accomplish this goal.
 
-We start with our detided dissolved oxygen data from Apalachicola. Check out the [detiding](detiding.html) to review how we got these data. For sake of time, you can import this data file from the website: 
+We start with our detided dissolved oxygen data from Apalachicola. Check out the [detiding](detiding.html) to review to see how we got these data. For sake of time, you can import this data file from the website: 
 
 ```{r}
 load(url('https://tbep-tech.github.io/ecometab-r-training/data/apadtd.RData'))
 head(apadtd)
 ```
 
-For this exercise, we'll assume the detided data is appropriate for estimating metabolism.  Remember, in practice you'll want to check out the data with `evalcor` and evaluate the metabolims results with `meteval`.
+For this exercise, we'll assume the detided data is appropriate for estimating metabolism.  Remember, in practice you'll want to check out the data with `evalcor` and evaluate the metabolism results with `meteval`.
 
-We estimate metabolism as follows:
+We estimate metabolism as follows, using the detided dissolved oxygen data:
 
 ```{r}
 tz <- attr(apadtd$DateTimeStamp, which = 'tzone')
@@ -62,7 +62,7 @@ apaeco <- WtRegDO::ecometab(apadtd, DO_var = "DO_nrm", tz = tz, lat = lat, long 
 head(apaeco)
 ```
 
-The WtRegDO package has a plotting function that lets you view the metabolism results. This function lets you view the daily results or as aggregated summaries of the daily results.  For follow-up analysis, it will be useful to understand how to plot the data using more general plotting functions.  This will allow you to conduct your own analyses outside of the "pre-packaged" summaries in WtRegDO. 
+The WtRegDO package has a plotting function that lets you view the metabolism results. This function lets you view the daily estimates or as aggregated summaries of the daily results.  For follow-up analysis, it will be useful to understand how to plot the data using more general plotting functions.  This will allow you to conduct your own analyses outside of the "pre-packaged" summaries in WtRegDO. 
 
 For plotting, we can use the ggplot2 library.  This comes with the tidyverse, so no need to install it separately, but you'll of course need to load the library. 
 
@@ -70,26 +70,26 @@ For plotting, we can use the ggplot2 library.  This comes with the tidyverse, so
 library(ggplot2)
 ```
 
-With ggplot2, you begin a plot with the function `ggplot()`. `ggplot()` creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = mpg)` creates an empty base graph.
+With ggplot2, you begin a plot with the function `ggplot()`. This creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = apaeco)` creates an empty base graph.
 
 ```{r, eval = F}
 ggplot(data = apaeco)
 ```
 
-The next step is to "map" variables in your dataset to the plot visual properties or "aesthetics" (i.e., x variable, y variable, etc.).   The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the `data` argument, in this case, `apaeco`.  
+The next step is to "map" variables in your dataset to the plot visual properties or "aesthetics" (i.e., x variable, y variable, etc.).   The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. The functoin looks for the mapped variable in the `data` argument, in this case, `apaeco`.  
 
 ```{r, eval = F}
 ggplot(data = apaeco, aes(x = Date, y = Pg))
 ```
 
-Now we need to add a "geometry" or `geom` to the plot to add components for viewing.  The next step is to add one or more layers (aka `geoms`) to `ggplot()`. The function `geom_point()` adds a layer of points to your plot based on the variable mappings in the `aes` function.
+Now we need to add a "geometry" or `geom` to the plot to add components for viewing.  We can add one or more layers (aka `geoms`) to `ggplot()`. The function `geom_point()` adds a layer of points to your plot based on the variable mappings in the `aes` function.
 
 ```{r, fig.height = 3, fig.width = 7}
 ggplot(data = apaeco, aes(x = Date, y = Pg)) + 
   geom_point()
 ```
 
-we can also overlay a line using `geom_line()`. 
+We can also overlay a line using `geom_line()`. 
 
 ```{r, fig.height = 3, fig.width = 7}
 ggplot(data = apaeco, aes(x = Date, y = Pg)) + 
@@ -102,11 +102,11 @@ Those are the basics of ggplot.  This structure may seem weird at first, but it'
 * All ggplot plots start with the `ggplot` function
 * It will need three pieces of information: the **data**, how the data are **mapped** to the plot **aesthetics**, and a **geom** layer
 
-The daily data are a bit messy, so maybe we want to aggregate to averages before plotting to make the trends a little more apparent.  We need to use a few functions from the lubridate and dply packages to do this.  As before, these comes with the tidyverse package. 
+The daily data are a bit messy, so maybe we want to aggregate to averages before plotting to make the trends a little more apparent.  We need to use a few functions from the lubridate and dplyr packages to do this.  As before, these come with the tidyverse package. 
 
 The lubridate package provides a set of functions to quickly modify date and time objects in R.  It provides many functions to convert R vectors to date objects (e.g., a character strings of dates imported from a csv) and many functions to extract components of date objects (e.g., month, day, etc.).  The latter is extremely useful for analysis.  
 
-First we load lubridate and dplyr.  Then we use both to create a month column from our existing date column in the apaeco data set. The `mutate` function from dplyr adds a column to our dataset and the `month` function extracts the month from the existing date column. 
+First we load the lubridate and dplyr packages.  Then we use both to create a month column from our existing date column in the apaeco data set. The `mutate` function from dplyr adds a column to our dataset and the `month` function extracts the month from the existing date column. 
 
 ```{r}
 library(lubridate)
