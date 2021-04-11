@@ -5,14 +5,16 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "R Basics"
-      href: rbasics.html
-    - text: "Detiding"
-      href: detiding.html
-    - text: "The Odum method"
-      href: odum.html
-    - text: "Understanding metabolism"
-      href: understanding.html
+    - text: "Lessons"
+      menu:
+        - text: "R Basics"
+          href: rbasics.html
+        - text: "Detiding"
+          href: detiding.html
+        - text: "The Odum method"
+          href: odum.html
+        - text: "Understanding metabolism"
+          href: understanding.html
   right:
     - text: "Data and resources"
       icon: fa-list

@@ -8,14 +8,14 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 # Understanding metabolism
 
-Get the lesson R script: [using.R](using.R)
+Get the lesson R script: [understanding.R](understanding.R)
 
 Get the lesson data: [download zip](data/779980.zip)
 
 ## Lesson Outline
 
 - [Goals and motivation]
-- [Summarising and plotting metabolism data]
+- [Summarizing and plotting metabolism data]
 - [Comparing metabolism with water quality data]
 - [Comparing metabolism with nutrient data]
 
@@ -31,12 +31,12 @@ This lesson will teach you how to begin evaluating estuary metabolism estimates 
 
 By the end of this lesson, you should know how or find the resources to be able to do the following:
 
-* Summarise metabolism data using dplyr
+* Summarize metabolism data using dplyr
 * Make some basic plots of metabolism using ggplot2
 * Combine metabolism estimates with additional SWMP data using dplyr
 * Compare metabolism estimates with additional SWMP data using ggplot2
 
-## Summarising and plotting metabolism data
+## Summarizing and plotting metabolism data
 
 The [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/wtregdo) packages provide a set of easy to use functions for working with SWMP data to estimate metabolism.  Our goals so far have been to demonstrate how to use the pre-existing functions to evaluate metabolism in our example datasets.  
 
@@ -172,7 +172,7 @@ apasum <- group_by(apasum, Date)
 apasum <- summarise(apasum, meantemp = mean(Temp, na.rm = T))
 ```
 
-The last thing to do is to join these summarized data with the metabolism results. For this, we can use a "join" function from dplyr.  We tell the `inner_join` function to combine the datasets using the `Date` column that is included in both the summarised water quality data and metabolism results. 
+The last thing to do is to join these summarized data with the metabolism results. For this, we can use a "join" function from dplyr.  We tell the `inner_join` function to combine the datasets using the `Date` column that is included in both the summarized water quality data and metabolism results. 
 
 ```{r}
 # join water quality with metabolism
@@ -259,17 +259,17 @@ apaeco <- mutate(apaeco,
   )
 ```
 
-Then group by the floored dates, summarise to averages, and join the data.
+Then group by the floored dates, summarize to averages, and join the data.
 
 ```{r}
-# group by and summarise apadbnut
+# group by and summarize apadbnut
 apadbnut <- group_by(apadbnut, dateflr)
 apadbnut <- summarise(apadbnut, 
   chla_n = mean(chla_n, na.rm = T), 
   nh4f = mean(nh4f, na.rm = T)
   )
 
-# group by and summarise metabolism
+# group by and summarize metabolism
 apaeco <- group_by(apaeco, dateflr)
 apaeco <- summarise(apaeco, 
   Pg = mean(Pg, na.rm = T), 
