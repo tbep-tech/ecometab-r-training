@@ -11,8 +11,8 @@ navbar:
       href: detiding.html
     - text: "The Odum method"
       href: odum.html
-    - text: "Using metabolism"
-      href: using.html
+    - text: "Understanding metabolism"
+      href: understanding.html
   right:
     - text: "Data and resources"
       icon: fa-list
