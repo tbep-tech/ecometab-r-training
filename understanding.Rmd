@@ -27,9 +27,9 @@ Get the lesson data: [download zip](data/779980.zip)
 
 ## Goals and Motivation
 
-This lesson will teach you how to begin evaluating estuary metabolism estimates using additional data available in SWMP. Our goals are to understand the tools that are available in R, and the tidyverse in particular, to combine and explore relationships among variables that could influence metabolism. These tools are the building blocks of more detailed analyses that will help you understand site-specific relationships or to develop more comprehensive comparisons between reserves.  
+This lesson will teach you how to begin evaluating estuary metabolism estimates using data available in SWMP. Our goals are to understand the tools that are available in R, and the tidyverse in particular, to combine and explore relationships among variables that could influence metabolism. These tools are the building blocks of more detailed analyses that will help you understand site-specific relationships or to develop more comprehensive comparisons between reserves.  
 
-By the end of this lesson, you should know how or find the resources to be able to do the following:
+By the end of this lesson, you should know how or be able to find resources to do the following:
 
 * Summarize metabolism data using dplyr
 * Make some basic plots of metabolism using ggplot2
@@ -40,16 +40,16 @@ By the end of this lesson, you should know how or find the resources to be able 
 
 The [SWMPr](https://cran.r-project.org/web/packages/SWMPr/index.html) and [WtRegDO](https://github.com/fawda123/wtregdo) packages provide a set of easy to use functions for working with SWMP data to estimate metabolism.  Our goals so far have been to demonstrate how to use the pre-existing functions to evaluate metabolism in our example datasets.  
 
-What we have not covered is how to use the other tools available in R to create some more customized examples of data analyses.  This is obviously a huge topic that we cannot adequately cover in 90 minutes.  However, our goal today is to provide you with some general building blocks for developing some more specific analyses. We'll be leveraging some of the other packages in the tidyverse to accomplish this goal.
+What we have not covered is how to use other tools available in R for more generic data analyses.  This is obviously a huge topic that we cannot adequately cover in 90 minutes.  However, our goal today is to provide you with some general building blocks for developing your own analyses. We'll be leveraging some of the other packages in the tidyverse to accomplish this goal.
 
-We start with our detided dissolved oxygen data from Apalachicola. Check out the [detiding](detiding.html) to review to see how we got these data. For sake of time, you can import this data file from the website: 
+We start with our detided dissolved oxygen data from Apalachicola. Check out the [detiding](detiding.html) lesson to review how we got these data. For sake of time, you can import this detided dataset for the dry bar station: 
 
 ```{r}
 load(url('https://tbep-tech.github.io/ecometab-r-training/data/apadtd.RData'))
 head(apadtd)
 ```
 
-For this exercise, we'll assume the detided data is appropriate for estimating metabolism.  Remember, in practice you'll want to check out the data with `evalcor` and evaluate the metabolism results with `meteval`.
+For this exercise, we'll assume the detided data is appropriate for estimating metabolism.  Remember, in practice you'll want to check out the data with `evalcor` and evaluate the metabolism results with `meteval`.  The rules at the end of the [Odum](odum.html) lesson describe a workflow for evaluating detiding.
 
 We estimate metabolism as follows, using the detided dissolved oxygen data:
 
@@ -62,7 +62,7 @@ apaeco <- WtRegDO::ecometab(apadtd, DO_var = "DO_nrm", tz = tz, lat = lat, long 
 head(apaeco)
 ```
 
-The WtRegDO package has a plotting function that lets you view the metabolism results. This function lets you view the daily estimates or as aggregated summaries of the daily results.  For follow-up analysis, it will be useful to understand how to plot the data using more general plotting functions.  This will allow you to conduct your own analyses outside of the "pre-packaged" summaries in WtRegDO. 
+The WtRegDO package has a plotting function that lets you view the metabolism results. This function lets you view the daily estimates of metabolism or as aggregated summaries of the daily results.  For follow-up analysis, it will be useful to understand how to plot the data using more general plotting functions.  This will allow you to conduct your own analyses outside of the "pre-packaged" summaries in WtRegDO. 
 
 For plotting, we can use the ggplot2 library.  This comes with the tidyverse, so no need to install it separately, but you'll of course need to load the library. 
 
@@ -70,13 +70,13 @@ For plotting, we can use the ggplot2 library.  This comes with the tidyverse, so
 library(ggplot2)
 ```
 
-With ggplot2, you begin a plot with the function `ggplot()`. This creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = apaeco)` creates an empty base graph.
+With ggplot2, you begin a plot with the function `ggplot()`. This creates a plotting coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So, `ggplot(data = apaeco)` creates an empty base graph.
 
 ```{r, eval = F}
 ggplot(data = apaeco)
 ```
 
-The next step is to "map" variables in your dataset to the plot visual properties or "aesthetics" (i.e., x variable, y variable, etc.).   The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. The functoin looks for the mapped variable in the `data` argument, in this case, `apaeco`.  
+The next step is to "map" variables in your dataset to the visual properties or "aesthetics" in the plot (i.e., x variable, y variable, etc.).   The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. The function looks for the mapped variable in the `data` argument, in this case, `apaeco`.  
 
 ```{r, eval = F}
 ggplot(data = apaeco, aes(x = Date, y = Pg))
@@ -89,7 +89,7 @@ ggplot(data = apaeco, aes(x = Date, y = Pg)) +
   geom_point()
 ```
 
-We can also overlay a line using `geom_line()`. 
+We can also overlay a line using `geom_line()`. Note that for `geom_point()` and `geom_line()`, we do not need to supply any arguments directly in these functions because of how we've setup the mapping for the initial `ggplot` function.
 
 ```{r, fig.height = 3, fig.width = 7}
 ggplot(data = apaeco, aes(x = Date, y = Pg)) + 
@@ -99,14 +99,19 @@ ggplot(data = apaeco, aes(x = Date, y = Pg)) +
 
 Those are the basics of ggplot.  This structure may seem weird at first, but it's design is purposeful and easily extendable.  Just remember these requirements:
 
-* All ggplot plots start with the `ggplot` function
-* It will need three pieces of information: the **data**, how the data are **mapped** to the plot **aesthetics**, and a **geom** layer
+* All ggplot plots start with the `ggplot` function.
+* The `ggplot` function will need two pieces of information: the **data** and how the data are **mapped** to the plot **aesthetics**.  
+* Create a visual component on the plot using a **geom** layer after the mapping is setup.
 
-The daily data are a bit messy, so maybe we want to aggregate to averages before plotting to make the trends a little more apparent.  We need to use a few functions from the lubridate and dplyr packages to do this.  As before, these come with the tidyverse package. 
+You can find more information about ggplot2 [here](https://ggplot2.tidyverse.org/). 
 
-The lubridate package provides a set of functions to quickly modify date and time objects in R.  It provides many functions to convert R vectors to date objects (e.g., a character strings of dates imported from a csv) and many functions to extract components of date objects (e.g., month, day, etc.).  The latter is extremely useful for analysis.  
+Now that we know how to create a basic plot, maybe we want to summarize the data to more easily visualize trends. The daily data are a bit messy, so maybe we want to aggregate to averages before plotting to make the trends a little more apparent.  We need to use a few functions from the [lubridate](https://lubridate.tidyverse.org/) and [dplyr](https://dplyr.tidyverse.org/) packages to do this.  As before, these come with the tidyverse package. 
 
-First we load the lubridate and dplyr packages.  Then we use both to create a month column from our existing date column in the apaeco data set. The `mutate` function from dplyr adds a column to our dataset and the `month` function extracts the month from the existing date column. 
+The lubridate package provides a set of functions to quickly modify date and time objects in R.  It provides many functions to convert R vectors to date objects (e.g., a character string of dates imported from a csv) and many functions to extract components of date objects (e.g., month, day, etc.).  The latter is extremely useful for analysis if, for example, we want to summarize or group data by specific components of time.  
+
+The dplyr package includes many functions for "wrangling" data as a common component of the workflow for working with data.  It includes functions for selecting, modifying, grouping, summarizing, and joining datasets.  All of the functions in dplyr are named as "verbs" that describe what they do.  We can use lubridate in combination with dplyr to summarize the metabolism results by different time periods. 
+
+First we load the lubridate and dplyr packages.  Then we use both to create a month column from our existing date column in the apaeco data set. The `mutate` function from dplyr adds a column to our dataset and the `month` function extracts the month from the existing date column. Note that the existing date column must be formatted as a date object in R for lubridate to work (check `class(apaeco$Date)`).  The functions in SWMPr and WtRegDO should output the date column in the appropriate format.   
 
 ```{r}
 library(lubridate)
@@ -116,7 +121,7 @@ apasum <- mutate(apaeco, mo = month(Date))
 head(apasum)
 ```
 
-We can plot the monthly values as boxplots with ggplot using the `geom_boxplot` geometry. 
+We can plot the monthly values as boxplots with ggplot using the `geom_boxplot` geometry. The `ggplot` setup is the same as before, except we add a `group` aesthetic so it knows to group by the month values and we use a different `geom`.  We need to use the `group` argument here so `ggplot` knows that the months are categories and not continuous values. 
 
 ```{r, fig.height = 3, fig.width = 7}
 ggplot(apasum, aes(x = mo, y = Pg, group = mo)) + 
@@ -153,13 +158,13 @@ Now repeat some of the above analyses using the Sapelo Island metabolism data.
 
 ## Comparing metabolism with water quality data
 
-One of the values of SWMP data is that we get a lot of supporting information that we can use to describe water quality changes.  For metabolism, we might expect that it tracks physical drivers like temperature or light energy, or perhaps nutrient inputs.  We can combine the metabolism estimates with other sWMP parameters to evaluate these hypotheses. 
+One of the values of SWMP data is that we get a lot of supporting information that we can use to describe water quality changes.  For metabolism, we might expect that it tracks physical drivers like temperature or light energy, or perhaps nutrient inputs.  We can combine the metabolism estimates with other SWMP parameters to evaluate these hypotheses. 
 
-We can load SWMP data as before using tools from SWMPr, in particular using the `import_local`, `qaqc`, and `comb` functions.  We've already done this a few times for the dry bar station at Apalachicola (see the "data prep" section in the [metabolism](odum.html) lesson). Our detided dataset from above includes some relevant water quality and weather data that we can evaluate.  
+We can load SWMP data as before using tools from SWMPr, in particular using the `import_local`, `qaqc`, and `comb` functions.  We've already done this a few times for the dry bar station at Apalachicola (see the "data prep" section in the [metabolism](odum.html) lesson). Our detided dataset from above includes some relevant water quality and weather data that we can evaluate, but we need to wrangle the data a bit and combine it with the metabolism  estimates before we can do any comparisons.  
 
-For example, perhaps we want to compare water temperature to metabolism. Since our metabolism estimates are on the daily scale, we'll also want to summarize our water quality data at this scale. We can use tools in the lubridate and dplyr packages to do this, just as above. 
+For example, perhaps we want to compare water temperature to metabolism. Since our metabolism estimates are on the daily scale, we need to summarize our water quality data at this scale to combine the two. We can use tools in the lubridate and dplyr packages to do this, just as we did above. 
 
-We can add a date column, group by day, then take average water temperature. 
+We can add a date column using the `date` function in lubridate, group by day using the `group_by` function from dplyr, then take average water temperature using the `summarise` function in dplyr. 
 
 ```{r}
 # add a date column
@@ -187,31 +192,33 @@ p <- ggplot(data = apasum, aes(x = meantemp, y = Pg)) +
 p
 ```
 
-Not much there, so maybe we can want to try exploring some other relationships. 
+Not much there, so maybe we can want to try exploring some other relationships. We'll do that after Exercise 2.
 
 ## Exercise 2
 
 Repeat the above examples using the Sapelo Island dataset.
 
-1. First, estimate metabolism for the Sapelo Isalnd data.  You should have this already from the first exercise. Here it is again:
+1. First, estimate metabolism for the Sapelo Island data.  You should have this already from the first exercise. Here it is again:
     ```{r, eval = F}
     load(url('https://tbep-tech.github.io/ecometab-r-training/data/sapdtd.RData'))
     sapeco <- WtRegDO::ecometab(sapdtd, DO_var = 'DO_nrm', lat = 31.39, long = -81.28, tz = 'America/Jamaica')
     ```
-1. From the detided Sapelo Island dataset, create a date column with the `mutate` and `date` functions.  
+1. From the detided Sapelo Island dataset (`sapdtd`), create a date column with the `mutate` and `date` functions.  
 1. Summarize mean daily water temperature using `group_by` and `summarise`. 
 1. Join the summarized data with the metabolism data using `inner_join` and `by = 'Date'`. 
 1. Make a scatterplot in ggplot by mapping the mean temperature and production summaries to the x, y aesthetics. 
 
 ## Comparing metabolism with nutrient data
 
-Our last example showed that we couldn't find a very strong relationship of water temperature with production.  That's okay.  We had a hypothesis, checked hte data, and then made a general conclusion that temperature isn't a strong driver of production at the Apalachicola dry bar site.  This doesn't mean temperature isn't always important - the limited data we have and our analysis at the daily scale provides us with some clues, but there's much more we can evaluate. 
+Our last example showed that we couldn't find a very strong relationship of water temperature with production.  That's okay.  We had a hypothesis, checked the data, and then made a general conclusion that temperature isn't a strong driver of production at the Apalachicola dry bar site.  This doesn't mean temperature isn't always important - the limited data we evaluated and our coarse analysis at the daily scale provides us with some clues, but there's much more we can evaluate. 
 
 Now we have the tools to start looking at some additional datasets.  Another reasonable expectation is that metabolism may be driven by nutrients.  We can us the same tools above to import, combine, and evaluate relationships of metabolism with nutrients. 
 
-Let's import nutrient data from the dry bar station using `import_local` from SWMPr. 
+Let's import nutrient data from the dry bar station using `import_local` from SWMPr. The `apadbnut` station data are in the data folder that you downloaded for these lessons.
 
 ```{r}
+library(SWMPr)
+
 apadbnut <- import_local(path = 'data', station_code = 'apadbnut')
 ```
 
@@ -222,18 +229,19 @@ apadbnut <- qaqc(apadbnut, qaqc_keep = c('0', '1', '2', '3', '4', '5'))
 head(apadbnut)
 ```
 
-If we want to compare any of the nutrient data to metabolism, we need to aggregate the information at a time scale that allows comparison.  The metabolism results are daily, but the nutrient data are collected monthly.  
+If we want to compare any of the nutrient data to metabolism, we need to aggregate or combine the information at a time scale that allows comparison.  The metabolism results are daily, but the nutrient data are collected once a month.  
 
-We can first try joining the nutrient data to metabolism by day.  First we need to create a date column for the nutrients.
+We can first try joining the nutrient data to metabolism by day. We have metabolism estimates for every day in our dataset, so we're essentially taking a slice of the metabolism data that corresponds to the days when we have nutrient data.  First we need to create a date column for the nutrients since the `datetimestamp` column shows date and time.
 
 ```{r}
 apadbnut <- mutate(apadbnut, Date = date(datetimestamp))
 ```
 
-Now we can join by date.  We use `inner_join` to combine by dates that are shared between the two datasets. 
+Now we can join by date.  We use `inner_join` from dplyr to combine by dates that are shared between the two datasets. 
 
 ```{r, fig.height = 5, fig.width = 5}
 apajoin <- inner_join(apaeco, apadbnut, by = 'Date')
+head(apajoin)
 ```
 
 We can now plot the metabolism estimates against the various nutrient observations. Here's an example looking at chlorophyll.
@@ -259,26 +267,21 @@ apaeco <- mutate(apaeco,
   )
 ```
 
-Then group by the floored dates, summarize to averages, and join the data.
+Then we can join by the floored dates, group by the floored dates, and summarize to averages.
 
 ```{r}
-# group by and summarize apadbnut
-apadbnut <- group_by(apadbnut, dateflr)
-apadbnut <- summarise(apadbnut, 
-  chla_n = mean(chla_n, na.rm = T), 
-  nh4f = mean(nh4f, na.rm = T)
-  )
+# join by the floored dates
+apajoin <- inner_join(apaeco, apadbnut, by = 'dateflr')
 
-# group by and summarize metabolism
-apaeco <- group_by(apaeco, dateflr)
-apaeco <- summarise(apaeco, 
+# group by and summarize
+apajoin <- group_by(apajoin, dateflr)
+apajoin <- summarise(apajoin, 
+  chla_n = mean(chla_n, na.rm = T), 
+  nh4f = mean(nh4f, na.rm = T),
   Pg = mean(Pg, na.rm = T), 
   Rt = mean(Rt, na.rm = T), 
   NEM = mean(NEM, na.rm = T)
   )
-
-# join
-apajoin <- inner_join(apaeco, apadbnut, by = 'dateflr')
 ```
 
 Now plot as before.  Here we're looking at average Production vs chlorophyll using the monthly summaries.
@@ -294,7 +297,11 @@ Repeat the above examples using the Sapelo Island dataset.
 
 1. Import the nutrient data for the `sapdcnut` station using `import_local` and `qaqc`. 
 1. Add a date column to the nutrients data using `mutate` from dplyr and `date` from lubridate. 
-1. Floor the date columns in the nutrients data and metabolism data (`sapeco` from exercise 2) using`unit = 'month'` with  `floor_date` from lubridate.
-1. Group and summarize the nutrients and metabolism data by the floor dates using `group_by` and `summarise`.  For the summaries, take the average of the metabolism estimates and any of the nutrient parameters of your choosing. 
-1. Combine the summarized datasets Use `inner_join()` to combine the datasets by the floored date column.
+1. Floor the date columns in the nutrients data and metabolism data (`sapeco` from exercise 2) using `unit = 'month'` with  `floor_date` from lubridate.
+1. Combine the nutrients and metabolism data by the floored dates using `inner_join` and `by = 'dateflr'`. 
+1. Group and summarize the joined data by the floored dates using `group_by` and `summarise`.  For the summaries, take the average of the metabolism estimates and any of the nutrient parameters of your choosing. 
 1. Make a scatterplot in ggplot by mapping the mean nutrients and mean metabolism summaries to the x, y aesthetics. 
+
+## Summary
+
+In this lesson, we explored some of the tools in the tidyverse that can be used for more generic evaluations of metabolism data.  Using these tools to explore differences in metabolism between reserves and how these differences are governed by other water quality or nutrient parameters will be valuable to understanding drivers of change at each site. The tools provided in SWMPr and WtRegDO are just a starting point  and we encourage continued learning to make full use of the tools available in R.  Checkout our [Data and resources](Data_and_Resources.html) tab for additional information.

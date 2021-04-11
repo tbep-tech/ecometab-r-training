@@ -21,7 +21,7 @@ This is a list of the data sources used in this workshop. For live-coding, pleas
     - [rbasics.R](rbasics.R)
     - [detiding.R](detiding.R)
     - [odum.R](odum.R)
-    - [using.R](using.R)
+    - [understanding.R](understanding.R)
 
 ### Resources
 
