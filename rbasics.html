@@ -321,17 +321,26 @@ div.tocify {
         <li>
   <a href="index.html">Home</a>
 </li>
-<li>
-  <a href="rbasics.html">R Basics</a>
-</li>
-<li>
-  <a href="detiding.html">Detiding</a>
-</li>
-<li>
-  <a href="odum.html">The Odum method</a>
-</li>
-<li>
-  <a href="understanding.html">Understanding metabolism</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="rbasics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="detiding.html">Detiding</a>
+    </li>
+    <li>
+      <a href="odum.html">The Odum method</a>
+    </li>
+    <li>
+      <a href="understanding.html">Understanding metabolism</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -456,32 +465,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1] 11.285049  8.693291 12.098074 10.676420 12.125614 12.733885  7.070313
-##   [8]  8.105683 12.013714  8.132417  9.391764 13.990099 12.089488 12.026536
-##  [15] 10.584704  9.544993  9.878073 15.752172 11.140279 12.475291  7.604964
-##  [22] 11.114474 13.517356  8.424899 11.268835 11.620802  8.657611 11.907473
-##  [29] 10.750646  9.176463  8.602187  9.638467  9.486732 10.928120  7.470242
-##  [36]  7.965326  9.717817  8.571136 11.300761 10.152450  9.613640 12.704754
-##  [43]  8.387931  9.782322  8.066453  9.151732 12.154044  7.525433  9.290115
-##  [50]  8.077583 11.214827 10.448024  9.530587  7.189373  7.932137  9.572023
-##  [57]  8.586748  7.393414  8.111482  8.434170 10.091731  8.914798 12.780895
-##  [64] 13.420473  8.851572  5.837103  9.236063  7.285115  8.881305 11.009097
-##  [71] 12.613288  9.208609  6.834443  8.386551  9.899242 10.212414  6.838990
-##  [78] 11.198952 10.531920  8.390517 12.834678 13.080549 10.125924 11.181935
-##  [85]  9.727119  9.756667  6.312294 11.096078  8.655321  8.652031  8.681316
-##  [92] 14.663763 10.817153  9.331843 11.288193  9.723935 10.492196 10.671420
-##  [99] 12.541181  9.425856</code></pre>
+<pre><code>##   [1] 10.972489  8.660698 11.868087  5.506062 11.640007  7.666677 11.416221
+##   [8]  7.684873  9.880437 14.424998 11.343718 12.690770 11.710336  7.254340
+##  [15] 10.211568 12.138958  9.726707 11.478007 10.812754  9.689474 10.847751
+##  [22] 10.217784 11.062011 12.144335  6.943462  9.892668 12.121018 11.039724
+##  [29] 11.201069 12.423424  6.994416  9.055176 12.154543 11.349522  9.059512
+##  [36]  6.399141  6.935137  5.464937  9.430725 11.754174  6.703337 13.707723
+##  [43]  9.590943 11.293655 12.560179  8.947697  9.810145  9.417609 12.935448
+##  [50]  9.206850  8.212738 12.414656 10.160685 13.079881 10.483103 11.634706
+##  [57] 14.877513  7.541574 10.744616 13.318229 10.957309 11.154484  5.545341
+##  [64] 11.899552  9.459711  9.713323  6.896231  8.977466 12.369637 10.938152
+##  [71]  7.384423 10.595854 12.817588 10.713580 10.122648 11.171790 11.015593
+##  [78]  8.035384  7.539086  8.719809 13.877716 12.399544 10.454573  9.991269
+##  [85] 10.875098 13.240409 11.666837 13.875181  5.211197  8.676572 11.582277
+##  [92] 10.163193  7.028462  9.916573  7.736360  9.490549 12.291344 10.062107
+##  [99]  7.511626  9.363717</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] 0.02197418</code></pre>
+<pre><code>## [1] -0.1171522</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 7.804439</code></pre>
+<pre><code>## [1] -11.62401</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it in an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] 5.844632</code></pre>
+<pre><code>## [1] 0.08289941</code></pre>
 <div id="what-is-the-environment" class="section level3">
 <h3>What is the environment?</h3>
 <p>There are two outcomes when you run code. First, the code will simply print output directly in the console. Second, there is no output because you have stored it as a variable using <code>&lt;-</code>. Output that is stored is actually saved in the <code>environment</code>. The environment is the collection of named objects that are stored in memory for your current R session. Anything stored in memory will be accessible by it’s name without running the original script that was used to create it.</p>

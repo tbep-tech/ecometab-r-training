@@ -321,17 +321,26 @@ div.tocify {
         <li>
   <a href="index.html">Home</a>
 </li>
-<li>
-  <a href="rbasics.html">R Basics</a>
-</li>
-<li>
-  <a href="detiding.html">Detiding</a>
-</li>
-<li>
-  <a href="odum.html">The Odum method</a>
-</li>
-<li>
-  <a href="understanding.html">Understanding metabolism</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="rbasics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="detiding.html">Detiding</a>
+    </li>
+    <li>
+      <a href="odum.html">The Odum method</a>
+    </li>
+    <li>
+      <a href="understanding.html">Understanding metabolism</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -363,13 +372,13 @@ div.tocify {
 
 <div id="understanding-metabolism" class="section level1">
 <h1>Understanding metabolism</h1>
-<p>Get the lesson R script: <a href="using.R">using.R</a></p>
+<p>Get the lesson R script: <a href="understanding.R">understanding.R</a></p>
 <p>Get the lesson data: <a href="data/779980.zip">download zip</a></p>
 <div id="lesson-outline" class="section level2">
 <h2>Lesson Outline</h2>
 <ul>
 <li><a href="#goals-and-motivation">Goals and motivation</a></li>
-<li><a href="#summarising-and-plotting-metabolism-data">Summarising and plotting metabolism data</a></li>
+<li><a href="#summarizing-and-plotting-metabolism-data">Summarizing and plotting metabolism data</a></li>
 <li><a href="#comparing-metabolism-with-water-quality-data">Comparing metabolism with water quality data</a></li>
 <li><a href="#comparing-metabolism-with-nutrient-data">Comparing metabolism with nutrient data</a></li>
 </ul>
@@ -387,14 +396,14 @@ div.tocify {
 <p>This lesson will teach you how to begin evaluating estuary metabolism estimates using additional data available in SWMP. Our goals are to understand the tools that are available in R, and the tidyverse in particular, to combine and explore relationships among variables that could influence metabolism. These tools are the building blocks of more detailed analyses that will help you understand site-specific relationships or to develop more comprehensive comparisons between reserves.</p>
 <p>By the end of this lesson, you should know how or find the resources to be able to do the following:</p>
 <ul>
-<li>Summarise metabolism data using dplyr</li>
+<li>Summarize metabolism data using dplyr</li>
 <li>Make some basic plots of metabolism using ggplot2</li>
 <li>Combine metabolism estimates with additional SWMP data using dplyr</li>
 <li>Compare metabolism estimates with additional SWMP data using ggplot2</li>
 </ul>
 </div>
-<div id="summarising-and-plotting-metabolism-data" class="section level2">
-<h2>Summarising and plotting metabolism data</h2>
+<div id="summarizing-and-plotting-metabolism-data" class="section level2">
+<h2>Summarizing and plotting metabolism data</h2>
 <p>The <a href="https://cran.r-project.org/web/packages/SWMPr/index.html">SWMPr</a> and <a href="https://github.com/fawda123/wtregdo">WtRegDO</a> packages provide a set of easy to use functions for working with SWMP data to estimate metabolism. Our goals so far have been to demonstrate how to use the pre-existing functions to evaluate metabolism in our example datasets.</p>
 <p>What we have not covered is how to use the other tools available in R to create some more customized examples of data analyses. This is obviously a huge topic that we cannot adequately cover in 90 minutes. However, our goal today is to provide you with some general building blocks for developing some more specific analyses. We’ll be leveraging some of the other packages in the tidyverse to accomplish this goal.</p>
 <p>We start with our detided dissolved oxygen data from Apalachicola. Check out the <a href="detiding.html">detiding</a> to review to see how we got these data. For sake of time, you can import this data file from the website:</p>
@@ -511,7 +520,7 @@ apasum &lt;- group_by(apasum, Date)
 
 # summmarise average water temperature
 apasum &lt;- summarise(apasum, meantemp = mean(Temp, na.rm = T))</code></pre>
-<p>The last thing to do is to join these summarized data with the metabolism results. For this, we can use a “join” function from dplyr. We tell the <code>inner_join</code> function to combine the datasets using the <code>Date</code> column that is included in both the summarised water quality data and metabolism results.</p>
+<p>The last thing to do is to join these summarized data with the metabolism results. For this, we can use a “join” function from dplyr. We tell the <code>inner_join</code> function to combine the datasets using the <code>Date</code> column that is included in both the summarized water quality data and metabolism results.</p>
 <pre class="r"><code># join water quality with metabolism
 apasum &lt;- inner_join(apasum, apaeco, by = &#39;Date&#39;)</code></pre>
 <p>Now we’re ready to plot. We can make a quick scatterplot with ggplot by mapping the appropriate variables in our dataset to the x, y aesthetics. Temperature is our independent variable in this case, so we put it on the x-axis.</p>
@@ -571,15 +580,15 @@ apadbnut &lt;- mutate(apadbnut,
 apaeco &lt;- mutate(apaeco, 
     dateflr = floor_date(Date, unit = &#39;month&#39;)
   )</code></pre>
-<p>Then group by the floored dates, summarise to averages, and join the data.</p>
-<pre class="r"><code># group by and summarise apadbnut
+<p>Then group by the floored dates, summarize to averages, and join the data.</p>
+<pre class="r"><code># group by and summarize apadbnut
 apadbnut &lt;- group_by(apadbnut, dateflr)
 apadbnut &lt;- summarise(apadbnut, 
   chla_n = mean(chla_n, na.rm = T), 
   nh4f = mean(nh4f, na.rm = T)
   )
 
-# group by and summarise metabolism
+# group by and summarize metabolism
 apaeco &lt;- group_by(apaeco, dateflr)
 apaeco &lt;- summarise(apaeco, 
   Pg = mean(Pg, na.rm = T), 

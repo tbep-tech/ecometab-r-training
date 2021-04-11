@@ -80,14 +80,14 @@ apaeco <- mutate(apaeco,
     dateflr = floor_date(Date, unit = 'month')
   )
 
-# group by and summarise apadbnut
+# group by and summarize apadbnut
 apadbnut <- group_by(apadbnut, dateflr)
 apadbnut <- summarise(apadbnut, 
   chla_n = mean(chla_n, na.rm = T), 
   nh4f = mean(nh4f, na.rm = T)
   )
 
-# group by and summarise metabolism
+# group by and summarize metabolism
 apaeco <- group_by(apaeco, dateflr)
 apaeco <- summarise(apaeco, 
   Pg = mean(Pg, na.rm = T), 
