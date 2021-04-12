@@ -25,10 +25,9 @@ jobs:
       - name: Install macOS dependencies
         run: |
           brew install udunits
-          brew install pkg-config
       - name: Install R package dependencies
         run: |
-          install.packages(c("rmarkdown", "tidyverse", "remotes", "SWMPr", "plotly", "pillar", "ggforce", "qpdf"))
+          install.packages(c("rmarkdown", "tidyverse", "remotes", "SWMPr", "plotly", "pillar", "ggforce"))
           remotes::install_github("fawda123/WtRegDO")
         shell: Rscript {0}
       - name: Render site
