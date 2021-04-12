@@ -76,7 +76,7 @@ With ggplot2, you begin a plot with the function `ggplot()`. This creates a plot
 ggplot(data = apaeco)
 ```
 
-The next step is to "map" variables in your dataset to the visual properties or "aesthetics" in the plot (i.e., x variable, y variable, etc.).   The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. The function looks for the mapped variable in the `data` argument, in this case, `apaeco`.  
+The next step is to "map" variables in your dataset to the visual properties or "aesthetics" in the plot (i.e., x variable, y variable, etc.).   The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. The function looks for the mapped variables in the `data` argument, in this case, `apaeco`.  
 
 ```{r, eval = F}
 ggplot(data = apaeco, aes(x = Date, y = Pg))
@@ -97,7 +97,7 @@ ggplot(data = apaeco, aes(x = Date, y = Pg)) +
   geom_line()
 ```
 
-Those are the basics of ggplot.  This structure may seem weird at first, but it's design is purposeful and easily extendable.  Just remember these requirements:
+Those are the basics of ggplot.  This structure may seem weird at first, but it's design is purposeful and easily extendable by following a "grammar of graphics".  Just remember these requirements:
 
 * All ggplot plots start with the `ggplot` function.
 * The `ggplot` function will need two pieces of information: the **data** and how the data are **mapped** to the plot **aesthetics**.  
@@ -109,7 +109,7 @@ Now that we know how to create a basic plot, maybe we want to summarize the data
 
 The lubridate package provides a set of functions to quickly modify date and time objects in R.  It provides many functions to convert R vectors to date objects (e.g., a character string of dates imported from a csv) and many functions to extract components of date objects (e.g., month, day, etc.).  The latter is extremely useful for analysis if, for example, we want to summarize or group data by specific components of time.  
 
-The dplyr package includes many functions for "wrangling" data as a common component of the workflow for working with data.  It includes functions for selecting, modifying, grouping, summarizing, and joining datasets.  All of the functions in dplyr are named as "verbs" that describe what they do.  We can use lubridate in combination with dplyr to summarize the metabolism results by different time periods. 
+The dplyr package includes many functions for "wrangling" data as a common component of the workflow for evaluating data.  It includes functions for selecting, modifying, grouping, summarizing, and joining datasets.  All of the functions in dplyr are named as "verbs" that describe what they do.  We can use lubridate in combination with dplyr to summarize the metabolism results by different time periods. 
 
 First we load the lubridate and dplyr packages.  Then we use both to create a month column from our existing date column in the apaeco data set. The `mutate` function from dplyr adds a column to our dataset and the `month` function extracts the month from the existing date column. Note that the existing date column must be formatted as a date object in R for lubridate to work (check `class(apaeco$Date)`).  The functions in SWMPr and WtRegDO should output the date column in the appropriate format.   
 
@@ -164,12 +164,17 @@ We can load SWMP data as before using tools from SWMPr, in particular using the 
 
 For example, perhaps we want to compare water temperature to metabolism. Since our metabolism estimates are on the daily scale, we need to summarize our water quality data at this scale to combine the two. We can use tools in the lubridate and dplyr packages to do this, just as we did above. 
 
-We can add a date column using the `date` function in lubridate, group by day using the `group_by` function from dplyr, then take average water temperature using the `summarise` function in dplyr. 
+We can add a date column using the `date` function in lubridate.
 
 ```{r}
 # add a date column
 apasum <- mutate(apadtd, Date = date(DateTimeStamp))
+head(apasum)
+```
 
+Then we group by day using the `group_by` function from dplyr and take average water temperature using the `summarise` function in dplyr. 
+
+```{r}
 # group by date
 apasum <- group_by(apasum, Date)
 
@@ -182,6 +187,7 @@ The last thing to do is to join these summarized data with the metabolism result
 ```{r}
 # join water quality with metabolism
 apasum <- inner_join(apasum, apaeco, by = 'Date')
+head(apasum)
 ```
 
 Now we're ready to plot.  We can make a quick scatterplot with ggplot by mapping the appropriate variables in our dataset to the x, y aesthetics. Temperature is our independent variable in this case, so we put it on the x-axis.  
