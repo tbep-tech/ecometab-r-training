@@ -450,7 +450,7 @@ head(apaeco)</code></pre>
 <pre class="r"><code>library(ggplot2)</code></pre>
 <p>With ggplot2, you begin a plot with the function <code>ggplot()</code>. This creates a plotting coordinate system that you can add layers to. The first argument of <code>ggplot()</code> is the dataset to use in the graph. So, <code>ggplot(data = apaeco)</code> creates an empty base graph.</p>
 <pre class="r"><code>ggplot(data = apaeco)</code></pre>
-<p>The next step is to “map” variables in your dataset to the visual properties or “aesthetics” in the plot (i.e., x variable, y variable, etc.). The <code>mapping</code> argument is defined with <code>aes()</code>, and the <code>x</code> and <code>y</code> arguments of <code>aes()</code> specify which variables to map to the x and y axes. The function looks for the mapped variable in the <code>data</code> argument, in this case, <code>apaeco</code>.</p>
+<p>The next step is to “map” variables in your dataset to the visual properties or “aesthetics” in the plot (i.e., x variable, y variable, etc.). The <code>mapping</code> argument is defined with <code>aes()</code>, and the <code>x</code> and <code>y</code> arguments of <code>aes()</code> specify which variables to map to the x and y axes. The function looks for the mapped variables in the <code>data</code> argument, in this case, <code>apaeco</code>.</p>
 <pre class="r"><code>ggplot(data = apaeco, aes(x = Date, y = Pg))</code></pre>
 <p>Now we need to add a “geometry” or <code>geom</code> to the plot to add components for viewing. We can add one or more layers (aka <code>geoms</code>) to <code>ggplot()</code>. The function <code>geom_point()</code> adds a layer of points to your plot based on the variable mappings in the <code>aes</code> function.</p>
 <pre class="r"><code>ggplot(data = apaeco, aes(x = Date, y = Pg)) + 
@@ -461,7 +461,7 @@ head(apaeco)</code></pre>
   geom_point() + 
   geom_line()</code></pre>
 <p><img src="understanding_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>Those are the basics of ggplot. This structure may seem weird at first, but it’s design is purposeful and easily extendable. Just remember these requirements:</p>
+<p>Those are the basics of ggplot. This structure may seem weird at first, but it’s design is purposeful and easily extendable by following a “grammar of graphics”. Just remember these requirements:</p>
 <ul>
 <li>All ggplot plots start with the <code>ggplot</code> function.</li>
 <li>The <code>ggplot</code> function will need two pieces of information: the <strong>data</strong> and how the data are <strong>mapped</strong> to the plot <strong>aesthetics</strong>.<br />
@@ -471,7 +471,7 @@ head(apaeco)</code></pre>
 <p>You can find more information about ggplot2 <a href="https://ggplot2.tidyverse.org/">here</a>.</p>
 <p>Now that we know how to create a basic plot, maybe we want to summarize the data to more easily visualize trends. The daily data are a bit messy, so maybe we want to aggregate to averages before plotting to make the trends a little more apparent. We need to use a few functions from the <a href="https://lubridate.tidyverse.org/">lubridate</a> and <a href="https://dplyr.tidyverse.org/">dplyr</a> packages to do this. As before, these come with the tidyverse package.</p>
 <p>The lubridate package provides a set of functions to quickly modify date and time objects in R. It provides many functions to convert R vectors to date objects (e.g., a character string of dates imported from a csv) and many functions to extract components of date objects (e.g., month, day, etc.). The latter is extremely useful for analysis if, for example, we want to summarize or group data by specific components of time.</p>
-<p>The dplyr package includes many functions for “wrangling” data as a common component of the workflow for working with data. It includes functions for selecting, modifying, grouping, summarizing, and joining datasets. All of the functions in dplyr are named as “verbs” that describe what they do. We can use lubridate in combination with dplyr to summarize the metabolism results by different time periods.</p>
+<p>The dplyr package includes many functions for “wrangling” data as a common component of the workflow for evaluating data. It includes functions for selecting, modifying, grouping, summarizing, and joining datasets. All of the functions in dplyr are named as “verbs” that describe what they do. We can use lubridate in combination with dplyr to summarize the metabolism results by different time periods.</p>
 <p>First we load the lubridate and dplyr packages. Then we use both to create a month column from our existing date column in the apaeco data set. The <code>mutate</code> function from dplyr adds a column to our dataset and the <code>month</code> function extracts the month from the existing date column. Note that the existing date column must be formatted as a date object in R for lubridate to work (check <code>class(apaeco$Date)</code>). The functions in SWMPr and WtRegDO should output the date column in the appropriate format.</p>
 <pre class="r"><code>library(lubridate)
 library(dplyr)
@@ -515,23 +515,55 @@ apasum &lt;- summarise(apasum, meanpg = mean(Pg, na.rm = T))</code></pre>
 <p>One of the values of SWMP data is that we get a lot of supporting information that we can use to describe water quality changes. For metabolism, we might expect that it tracks physical drivers like temperature or light energy, or perhaps nutrient inputs. We can combine the metabolism estimates with other SWMP parameters to evaluate these hypotheses.</p>
 <p>We can load SWMP data as before using tools from SWMPr, in particular using the <code>import_local</code>, <code>qaqc</code>, and <code>comb</code> functions. We’ve already done this a few times for the dry bar station at Apalachicola (see the “data prep” section in the <a href="odum.html">metabolism</a> lesson). Our detided dataset from above includes some relevant water quality and weather data that we can evaluate, but we need to wrangle the data a bit and combine it with the metabolism estimates before we can do any comparisons.</p>
 <p>For example, perhaps we want to compare water temperature to metabolism. Since our metabolism estimates are on the daily scale, we need to summarize our water quality data at this scale to combine the two. We can use tools in the lubridate and dplyr packages to do this, just as we did above.</p>
-<p>We can add a date column using the <code>date</code> function in lubridate, group by day using the <code>group_by</code> function from dplyr, then take average water temperature using the <code>summarise</code> function in dplyr.</p>
+<p>We can add a date column using the <code>date</code> function in lubridate.</p>
 <pre class="r"><code># add a date column
 apasum &lt;- mutate(apadtd, Date = date(DateTimeStamp))
-
-# group by date
+head(apasum)</code></pre>
+<pre><code>##         DateTimeStamp Temp  Sal DO_obs ATemp   BP WSpd Tide metab_date
+## 1 2017-01-01 00:00:00 15.9 22.1    9.0  15.7 1020  4.8 1.88 2016-12-31
+## 2 2017-01-01 01:00:00 15.9 22.1    9.0  16.9 1019  5.3 1.90 2016-12-31
+## 3 2017-01-01 02:00:00 15.9 22.2    9.0  18.3 1018  3.9 1.94 2016-12-31
+## 4 2017-01-01 03:00:00 16.0 23.4    8.6  19.0 1018  4.6 2.00 2016-12-31
+## 5 2017-01-01 04:00:00 16.0 23.5    8.5  19.5 1018  5.0 2.01 2016-12-31
+## 6 2017-01-01 05:00:00 16.1 23.6    8.4  19.4 1018  4.2 2.01 2016-12-31
+##   solar_period          solar_time  day_hrs  dec_time hour        Beta2
+## 1       sunset 2016-12-31 22:51:56 10.27807 -365.0000    0 -0.661774387
+## 2       sunset 2016-12-31 22:51:56 10.27807 -364.9583    1 -0.197013200
+## 3       sunset 2016-12-31 22:51:56 10.27807 -364.9167    2  0.035692964
+## 4       sunset 2016-12-31 22:51:56 10.27807 -364.8750    3 -0.002937492
+## 5       sunset 2016-12-31 22:51:56 10.27807 -364.8333    4 -0.187566704
+## 6       sunset 2016-12-31 22:51:56 10.27807 -364.7917    5 -0.406850558
+##     DO_prd   DO_nrm       Date
+## 1 8.821057 8.953471 2017-01-01
+## 2 8.714655 8.760363 2017-01-01
+## 3 8.657867 8.653582 2017-01-01
+## 4 8.625646 8.635960 2017-01-01
+## 5 8.583420 8.655840 2017-01-01
+## 6 8.534384 8.677753 2017-01-01</code></pre>
+<p>Then we group by day using the <code>group_by</code> function from dplyr and take average water temperature using the <code>summarise</code> function in dplyr.</p>
+<pre class="r"><code># group by date
 apasum &lt;- group_by(apasum, Date)
 
 # summmarise average water temperature
 apasum &lt;- summarise(apasum, meantemp = mean(Temp, na.rm = T))</code></pre>
 <p>The last thing to do is to join these summarized data with the metabolism results. For this, we can use a “join” function from dplyr. We tell the <code>inner_join</code> function to combine the datasets using the <code>Date</code> column that is included in both the summarized water quality data and metabolism results.</p>
 <pre class="r"><code># join water quality with metabolism
-apasum &lt;- inner_join(apasum, apaeco, by = &#39;Date&#39;)</code></pre>
+apasum &lt;- inner_join(apasum, apaeco, by = &#39;Date&#39;)
+head(apasum)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   Date       meantemp    Pg      Rt    NEM
+##   &lt;date&gt;        &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 2017-01-01     16.6  37.2 -61.0   -23.8 
+## 2 2017-01-02     17.8  25.1 -55.0   -29.9 
+## 3 2017-01-03     18.9  27.5 -32.5    -4.97
+## 4 2017-01-04     19    33.9 -28.5     5.40
+## 5 2017-01-05     18.3  27.9 -15.8    12.1 
+## 6 2017-01-06     18.1  26.4   0.492  26.9</code></pre>
 <p>Now we’re ready to plot. We can make a quick scatterplot with ggplot by mapping the appropriate variables in our dataset to the x, y aesthetics. Temperature is our independent variable in this case, so we put it on the x-axis.</p>
 <pre class="r"><code>p &lt;- ggplot(data = apasum, aes(x = meantemp, y = Pg)) + 
   geom_point()
 p</code></pre>
-<p><img src="understanding_files/figure-html/unnamed-chunk-15-1.png" width="480" /></p>
+<p><img src="understanding_files/figure-html/unnamed-chunk-16-1.png" width="480" /></p>
 <p>Not much there, so maybe we can want to try exploring some other relationships. We’ll do that after Exercise 2.</p>
 </div>
 <div id="exercise-2" class="section level2">
@@ -551,7 +583,7 @@ sapeco &lt;- WtRegDO::ecometab(sapdtd, DO_var = &#39;DO_nrm&#39;, lat = 31.39, l
 <div id="comparing-metabolism-with-nutrient-data" class="section level2">
 <h2>Comparing metabolism with nutrient data</h2>
 <p>Our last example showed that we couldn’t find a very strong relationship of water temperature with production. That’s okay. We had a hypothesis, checked the data, and then made a general conclusion that temperature isn’t a strong driver of production at the Apalachicola dry bar site. This doesn’t mean temperature isn’t always important - the limited data we evaluated and our coarse analysis at the daily scale provides us with some clues, but there’s much more we can evaluate.</p>
-<p>Now we have the tools to start looking at some additional datasets. Another reasonable expectation is that metabolism may be driven by nutrients. We can us the same tools above to import, combine, and evaluate relationships of metabolism with nutrients.</p>
+<p>Now we have the tools to start looking at some additional datasets. Another reasonable expectation is that metabolism may be driven by nutrients. We can use the same tools above to import, combine, and evaluate relationships of metabolism with nutrients.</p>
 <p>Let’s import nutrient data from the dry bar station using <code>import_local</code> from SWMPr. The <code>apadbnut</code> station data are in the data folder that you downloaded for these lessons.</p>
 <pre class="r"><code>library(SWMPr)
 
@@ -567,7 +599,7 @@ head(apadbnut)</code></pre>
 ## 5 2017-05-02 10:29:00    NA 0.003   NA   NA 0.033   11.0
 ## 6 2017-06-08 12:20:00    NA 0.022   NA   NA 0.089   10.0</code></pre>
 <p>If we want to compare any of the nutrient data to metabolism, we need to aggregate or combine the information at a time scale that allows comparison. The metabolism results are daily, but the nutrient data are collected once a month.</p>
-<p>We can first try joining the nutrient data to metabolism by day. We have metabolism estimates for every day in our dataset, so we’re essentially taking a slice of the metabolism data that corresponds to the days when we have nutrient data. First we need to create a date column for the nutrients since the <code>datetimestamp</code> column shows date and time.</p>
+<p>We can first try joining the nutrient data to metabolism by day. We have metabolism estimates for every day in our dataset, so we’re essentially taking a slice of the metabolism data that corresponds to the days when we have nutrient data. First we need to create a date column for the nutrients since the <code>datetimestamp</code> column shows date and time. We use <code>mutate</code> and <code>date</code> as before.</p>
 <pre class="r"><code>apadbnut &lt;- mutate(apadbnut, Date = date(datetimestamp))</code></pre>
 <p>Now we can join by date. We use <code>inner_join</code> from dplyr to combine by dates that are shared between the two datasets.</p>
 <pre class="r"><code>apajoin &lt;- inner_join(apaeco, apadbnut, by = &#39;Date&#39;)
@@ -589,7 +621,7 @@ head(apajoin)</code></pre>
 <p>We can now plot the metabolism estimates against the various nutrient observations. Here’s an example looking at chlorophyll.</p>
 <pre class="r"><code>ggplot(apajoin, aes(x = chla_n, y = Pg)) + 
   geom_point()</code></pre>
-<p><img src="understanding_files/figure-html/unnamed-chunk-21-1.png" width="480" /></p>
+<p><img src="understanding_files/figure-html/unnamed-chunk-22-1.png" width="480" /></p>
 <p>Again, not super interesting. As a final attempt at comparing these data, we can try averaging results to a common unit of time, such as month. This may reduce some of the variability in the data and also provide a more general comparison by evaluating average conditions as opposed to “instantaneous” comparisons at the daily scale.</p>
 <p>For both the metabolism and nutrient data, we can “floor” the dates to the first of each month, group by date, then summarize average values. Although technically we’re changing the dates, we are retaining the date class in the date column which can sometimes help with plotting or other downstream analysis. We use the <code>floor_date</code> function from lubridate.</p>
 <pre class="r"><code># floor nutrient dates
@@ -617,7 +649,7 @@ apajoin &lt;- summarise(apajoin,
 <p>Now plot as before. Here we’re looking at average Production vs chlorophyll using the monthly summaries.</p>
 <pre class="r"><code>ggplot(apajoin, aes(x = chla_n, y = Pg)) + 
   geom_point()</code></pre>
-<p><img src="understanding_files/figure-html/unnamed-chunk-24-1.png" width="480" /></p>
+<p><img src="understanding_files/figure-html/unnamed-chunk-25-1.png" width="480" /></p>
 </div>
 <div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
@@ -626,9 +658,9 @@ apajoin &lt;- summarise(apajoin,
 <li>Import the nutrient data for the <code>sapdcnut</code> station using <code>import_local</code> and <code>qaqc</code>.</li>
 <li>Add a date column to the nutrients data using <code>mutate</code> from dplyr and <code>date</code> from lubridate.</li>
 <li>Floor the date columns in the nutrients data and metabolism data (<code>sapeco</code> from exercise 2) using <code>unit = 'month'</code> with <code>floor_date</code> from lubridate.</li>
-<li>Combine the nutrients and metabolism data by the floored dates using <code>inner_join</code> and <code>by = 'dateflr'</code>.</li>
+<li>Combine the nutrients and metabolism data by the floored dates using <code>inner_join</code> and <code>by = 'dateflr'</code> (or whatever you named the floored date column).</li>
 <li>Group and summarize the joined data by the floored dates using <code>group_by</code> and <code>summarise</code>. For the summaries, take the average of the metabolism estimates and any of the nutrient parameters of your choosing.</li>
-<li>Make a scatterplot in ggplot by mapping the mean nutrients and mean metabolism summaries to the x, y aesthetics.</li>
+<li>Make a scatterplot in ggplot by mapping the mean nutrients and mean metabolism summaries to the x, y aesthetics and using <code>geom_point</code>.</li>
 </ol>
 </div>
 <div id="summary" class="section level2">

@@ -41,6 +41,7 @@ ggplot(apasum, aes(x = mo, y = meanpg)) +
 
 # add a date column
 apasum <- mutate(apadtd, Date = date(DateTimeStamp))
+head(apasum)
 
 # group by date
 apasum <- group_by(apasum, Date)
@@ -50,6 +51,7 @@ apasum <- summarise(apasum, meantemp = mean(Temp, na.rm = T))
 
 # join water quality with metabolism
 apasum <- inner_join(apasum, apaeco, by = 'Date')
+head(apasum)
 
 p <- ggplot(data = apasum, aes(x = meantemp, y = Pg)) + 
   geom_point()
