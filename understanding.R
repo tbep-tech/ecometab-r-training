@@ -58,6 +58,8 @@ p
 ## load(url('https://tbep-tech.github.io/ecometab-r-training/data/sapdtd.RData'))
 ## sapeco <- WtRegDO::ecometab(sapdtd, DO_var = 'DO_nrm', lat = 31.39, long = -81.28, tz = 'America/Jamaica')
 
+library(SWMPr)
+
 apadbnut <- import_local(path = 'data', station_code = 'apadbnut')
 
 apadbnut <- qaqc(apadbnut, qaqc_keep = c('0', '1', '2', '3', '4', '5'))
@@ -66,6 +68,7 @@ head(apadbnut)
 apadbnut <- mutate(apadbnut, Date = date(datetimestamp))
 
 apajoin <- inner_join(apaeco, apadbnut, by = 'Date')
+head(apajoin)
 
 ggplot(apajoin, aes(x = chla_n, y = Pg)) + 
   geom_point()
@@ -80,23 +83,18 @@ apaeco <- mutate(apaeco,
     dateflr = floor_date(Date, unit = 'month')
   )
 
-# group by and summarize apadbnut
-apadbnut <- group_by(apadbnut, dateflr)
-apadbnut <- summarise(apadbnut, 
-  chla_n = mean(chla_n, na.rm = T), 
-  nh4f = mean(nh4f, na.rm = T)
-  )
+# join by the floored dates
+apajoin <- inner_join(apaeco, apadbnut, by = 'dateflr')
 
-# group by and summarize metabolism
-apaeco <- group_by(apaeco, dateflr)
-apaeco <- summarise(apaeco, 
+# group by and summarize
+apajoin <- group_by(apajoin, dateflr)
+apajoin <- summarise(apajoin, 
+  chla_n = mean(chla_n, na.rm = T), 
+  nh4f = mean(nh4f, na.rm = T),
   Pg = mean(Pg, na.rm = T), 
   Rt = mean(Rt, na.rm = T), 
   NEM = mean(NEM, na.rm = T)
   )
-
-# join
-apajoin <- inner_join(apaeco, apadbnut, by = 'dateflr')
 
 ggplot(apajoin, aes(x = chla_n, y = Pg)) + 
   geom_point()
