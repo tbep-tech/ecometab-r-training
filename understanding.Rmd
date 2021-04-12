@@ -218,7 +218,7 @@ Repeat the above examples using the Sapelo Island dataset.
 
 Our last example showed that we couldn't find a very strong relationship of water temperature with production.  That's okay.  We had a hypothesis, checked the data, and then made a general conclusion that temperature isn't a strong driver of production at the Apalachicola dry bar site.  This doesn't mean temperature isn't always important - the limited data we evaluated and our coarse analysis at the daily scale provides us with some clues, but there's much more we can evaluate. 
 
-Now we have the tools to start looking at some additional datasets.  Another reasonable expectation is that metabolism may be driven by nutrients.  We can us the same tools above to import, combine, and evaluate relationships of metabolism with nutrients. 
+Now we have the tools to start looking at some additional datasets.  Another reasonable expectation is that metabolism may be driven by nutrients.  We can use the same tools above to import, combine, and evaluate relationships of metabolism with nutrients. 
 
 Let's import nutrient data from the dry bar station using `import_local` from SWMPr. The `apadbnut` station data are in the data folder that you downloaded for these lessons.
 
@@ -237,7 +237,7 @@ head(apadbnut)
 
 If we want to compare any of the nutrient data to metabolism, we need to aggregate or combine the information at a time scale that allows comparison.  The metabolism results are daily, but the nutrient data are collected once a month.  
 
-We can first try joining the nutrient data to metabolism by day. We have metabolism estimates for every day in our dataset, so we're essentially taking a slice of the metabolism data that corresponds to the days when we have nutrient data.  First we need to create a date column for the nutrients since the `datetimestamp` column shows date and time.
+We can first try joining the nutrient data to metabolism by day. We have metabolism estimates for every day in our dataset, so we're essentially taking a slice of the metabolism data that corresponds to the days when we have nutrient data.  First we need to create a date column for the nutrients since the `datetimestamp` column shows date and time.  We use `mutate` and `date` as before.
 
 ```{r}
 apadbnut <- mutate(apadbnut, Date = date(datetimestamp))
@@ -304,9 +304,9 @@ Repeat the above examples using the Sapelo Island dataset.
 1. Import the nutrient data for the `sapdcnut` station using `import_local` and `qaqc`. 
 1. Add a date column to the nutrients data using `mutate` from dplyr and `date` from lubridate. 
 1. Floor the date columns in the nutrients data and metabolism data (`sapeco` from exercise 2) using `unit = 'month'` with  `floor_date` from lubridate.
-1. Combine the nutrients and metabolism data by the floored dates using `inner_join` and `by = 'dateflr'`. 
+1. Combine the nutrients and metabolism data by the floored dates using `inner_join` and `by = 'dateflr'` (or whatever you named the floored date column). 
 1. Group and summarize the joined data by the floored dates using `group_by` and `summarise`.  For the summaries, take the average of the metabolism estimates and any of the nutrient parameters of your choosing. 
-1. Make a scatterplot in ggplot by mapping the mean nutrients and mean metabolism summaries to the x, y aesthetics. 
+1. Make a scatterplot in ggplot by mapping the mean nutrients and mean metabolism summaries to the x, y aesthetics and using `geom_point`. 
 
 ## Summary
 
